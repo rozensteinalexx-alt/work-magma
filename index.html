@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Учет Работ (Magma Secure)</title>
+    <title>Учет Работ (Magma Pro)</title>
     <style>
         :root {
             --bg-magma: #0f0a0a; 
@@ -37,17 +37,19 @@
         }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d6cfcf; }
         
-        select, input[type="text"] {
+        select, input[type="text"], input[type="password"] {
             width: 100%; padding: 14px; margin-bottom: 20px;
             border: 2px solid var(--carbon-border); border-radius: 8px;
             font-size: 16px; box-sizing: border-box; background: #241919;
             color: var(--fire-yellow); transition: 0.3s; color-scheme: dark; font-weight: 500;
             appearance: none; 
+        }
+        /* Стрелка для селекта */
+        select {
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffae00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;
         }
-        select option { background-color: #1a1212; color: #ffebd1; }
-        select:focus { outline: none; border-color: var(--fire-orange); box-shadow: 0 0 15px rgba(255, 95, 31, 0.3); background-color: #2e1e1e; }
+        select:focus, input:focus { outline: none; border-color: var(--fire-orange); box-shadow: 0 0 15px rgba(255, 95, 31, 0.3); background-color: #2e1e1e; }
 
         .checkbox-wrapper { display: flex; align-items: center; margin-bottom: 25px; cursor: pointer; user-select: none; }
         .checkbox-wrapper input { display: none; }
@@ -89,9 +91,18 @@
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.85em; color: #666; cursor: pointer; padding: 10px; }
         .admin-link:hover { color: var(--fire-orange); }
 
+        /* --- АДМИНКА --- */
         #adminPanel { display: none; margin-top: 30px; border-top: 2px dashed var(--carbon-border); padding-top: 20px; }
-        .refresh { float: right; cursor: pointer; font-size: 1.4em; color: var(--fire-orange); padding: 0 10px;}
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .refresh { cursor: pointer; font-size: 1.4em; color: var(--fire-orange); padding: 0 10px;}
         
+        /* КНОПКА PDF */
+        .btn-pdf {
+            background: #241919; border: 1px solid var(--fire-yellow); color: var(--fire-yellow);
+            padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.9em;
+        }
+        .btn-pdf:hover { background: var(--fire-yellow); color: #000; }
+
         .card { background: #241919; border-left: 4px solid var(--fire-orange); border-radius: 4px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .card-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8em; color: #888; }
         .card-body { font-size: 1.1em; font-weight: 600; margin-bottom: 10px; color: var(--text-warm); }
@@ -103,6 +114,17 @@
         .btn-no { background: #552222; color: #ffaaaa; border: 1px solid #552222; }
         .loader { width: 30px; height: 30px; border: 3px solid #333; border-top-color: var(--fire-orange); border-radius: 50%; animation: spin 1s infinite linear; margin: 30px auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- МОДАЛЬНОЕ ОКНО ПАРОЛЯ --- */
+        #authModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: var(--card-magma); padding: 30px; border-radius: 16px; width: 90%; max-width: 350px;
+            border: 1px solid var(--fire-orange); text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -137,19 +159,41 @@
         <button type="submit" class="main-btn" id="sBtn">Отправить</button>
     </form>
     <div id="msg"></div>
-    <div class="admin-link" onclick="auth()">Вход для администратора</div>
+    <div class="admin-link" onclick="openAuth()">Вход для администратора</div>
 
     <div id="adminPanel">
-        <h3 style="margin-top:0; color:var(--fire-orange);">На проверке <span class="refresh" onclick="load()">↻</span></h3>
+        <div class="admin-header">
+            <h3 style="margin:0; color:var(--fire-orange);">На проверке</h3>
+            <div>
+                <button class="btn-pdf" onclick="downloadPDF()">📄 PDF</button>
+                <span class="refresh" onclick="load()">↻</span>
+            </div>
+        </div>
         <div class="loader" id="loader"></div>
         <div id="list"></div>
     </div>
 </div>
 
+<div id="authModal">
+    <div class="modal-content">
+        <h3 style="color:var(--fire-yellow)">🔐 Вход Админа</h3>
+        <input type="password" id="adminPass" placeholder="Введите пароль">
+        
+        <label class="checkbox-wrapper" style="margin-bottom: 15px; justify-content: center;">
+            <input type="checkbox" id="keepLoggedIn">
+            <span class="custom-check" style="width:18px; height:18px;"></span>
+            <span class="check-text" style="font-size:0.9em">Запомнить</span>
+        </label>
+
+        <button class="main-btn" onclick="checkPass()">Войти</button>
+        <button onclick="closeAuth()" style="background:none; border:none; color:#666; margin-top:10px; cursor:pointer;">Отмена</button>
+    </div>
+</div>
+
 <script>
     // ============================================================
-    // 👇 ВСТАВЬ СЮДА ССЫЛКУ API 👇
-    const API = "https://script.google.com/macros/s/AKfycby6Krw6eE12c9EWyWr68qB6MzUCME6wn70w9dk_1i3kPMhGyPvpqWSeu64pz402UyHjfw/exec"; 
+    // 👇 ВСТАВЬ СЮДА СВОЮ НОВУЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
+    const API = "https://script.google.com/macros/s/AKfycbzg81PWG7uOoQO3nmffDllU7c0vxbnp19w79sfgkYgWWWOvgAQXKqAFXkW9x4nX9wkxBQ/exec"; 
     // ============================================================
 
     const f = document.getElementById('wForm');
@@ -158,11 +202,10 @@
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
 
-    // 1. ПОЛУЧЕНИЕ ИЛИ СОЗДАНИЕ UUID (ПАСПОРТ ТЕЛЕФОНА)
+    // 1. УПРАВЛЕНИЕ УСТРОЙСТВОМ (UUID)
     function getDeviceUUID() {
         let uuid = localStorage.getItem('device_uuid');
         if (!uuid) {
-            // Генерируем случайный ID
             uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
                 return v.toString(16);
@@ -172,10 +215,16 @@
         return uuid;
     }
 
-    // ЗАГРУЗКА ПРИ СТАРТЕ
+    // ЗАГРУЗКА
     window.addEventListener('load', () => {
-        // Проверяем наличие UUID
         getDeviceUUID(); 
+        
+        // Авто-вход админа
+        if (localStorage.getItem('admin_auth') === 'true') {
+            document.querySelector('.admin-link').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            load();
+        }
 
         fetch(API + "?action=get_employees")
             .then(res => res.json())
@@ -184,18 +233,13 @@
                 if(res.data && res.data.length > 0){
                     res.data.forEach(name => {
                         const opt = document.createElement('option');
-                        opt.value = name;
-                        opt.innerText = name;
+                        opt.value = name; opt.innerText = name;
                         nameSelect.appendChild(opt);
                     });
                 } else {
                     nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
                 }
                 restoreMemory();
-            })
-            .catch(err => {
-                nameSelect.innerHTML = '<option value="" disabled>Ошибка загрузки списка</option>';
-                console.error(err);
             });
     });
 
@@ -208,18 +252,16 @@
         }
     }
 
+    // Сохранение работника
     function saveToMemory() {
         if (rememberMe.checked) {
             localStorage.setItem('rememberStatus', 'true');
             localStorage.setItem('workerName', nameSelect.value);
             localStorage.setItem('workerCount', countSelect.value);
         } else {
-            localStorage.removeItem('rememberStatus');
-            localStorage.removeItem('workerName');
-            localStorage.removeItem('workerCount');
+            localStorage.removeItem('rememberStatus'); localStorage.removeItem('workerName'); localStorage.removeItem('workerCount');
         }
     }
-
     rememberMe.addEventListener('change', saveToMemory);
     nameSelect.addEventListener('change', saveToMemory);
     countSelect.addEventListener('change', saveToMemory);
@@ -230,15 +272,14 @@
         const b = document.getElementById('sBtn');
         b.disabled = true; b.innerText = "Проверка..."; m.innerText = ""; m.className = "";
         
+        const isRemembered = rememberMe.checked;
         const currentName = nameSelect.value;
         const currentCount = countSelect.value;
-        const isRemembered = rememberMe.checked;
-        const myUUID = getDeviceUUID(); // Берем ключ телефона
 
         const fd = new FormData(f);
         const p = new URLSearchParams();
         p.append('action', 'create');
-        p.append('uuid', myUUID); // Отправляем ключ вместе с данными
+        p.append('uuid', getDeviceUUID());
         for(const [k,v] of fd) p.append(k,v);
 
         fetch(API, {method:'POST', body:p})
@@ -247,15 +288,13 @@
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
                 if(isRemembered) {
-                    nameSelect.value = currentName;
-                    countSelect.value = currentCount;
-                    rememberMe.checked = true;
+                    nameSelect.value = currentName; countSelect.value = currentCount; rememberMe.checked = true;
                 }
                 document.getElementById('type1').checked = true;
             } else if (d.result === "duplicate") {
                 m.className="error"; m.innerText = "⛔ " + d.message;
             } else if (d.result === "fraud") {
-                m.className="error"; m.innerText = d.message; // Сообщение о мошенничестве
+                m.className="error"; m.innerText = d.message;
             } else { throw new Error(); }
         }).catch(()=>{
             m.className="error"; m.innerText="❌ Ошибка связи";
@@ -266,16 +305,26 @@
         });
     };
 
-    // АДМИНКА
-    function auth(){
-        if(prompt("Пароль:")==="westprom123"){
-            document.getElementById('adminPanel').style.display='block';
-            document.querySelector('.admin-link').style.display='none';
+    // --- ЛОГИКА АДМИНКИ ---
+    function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
+    function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+
+    function checkPass() {
+        const pass = document.getElementById('adminPass').value;
+        const keep = document.getElementById('keepLoggedIn').checked;
+        
+        if (pass === "westprom123") {
+            closeAuth();
+            if (keep) localStorage.setItem('admin_auth', 'true');
+            document.querySelector('.admin-link').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
             load();
-        } else alert("Неверно");
+        } else {
+            alert("Неверный пароль");
+        }
     }
 
-    function load(){
+    function load() {
         const l = document.getElementById('list');
         const spin = document.getElementById('loader');
         l.innerHTML=""; spin.style.display="block";
@@ -283,10 +332,9 @@
             spin.style.display="none";
             if(!d.data.length) { l.innerHTML="<div style='text-align:center;opacity:0.6;margin-top:20px'>Нет заявок на проверку</div>"; return; }
             d.data.reverse().forEach(x=>{
-                let date = new Date(x['Дата']).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
                 let el = document.createElement('div'); el.className = 'card';
                 el.innerHTML = `
-                    <div class="card-head"><span>🕒 ${date}</span><span class="badge b-wait">Ждет</span></div>
+                    <div class="card-head"><span>🕒 ${x['Дата']}</span><span class="badge b-wait">Ждет</span></div>
                     <div class="card-body">${x['Фамилия Имя']}</div>
                     <div style="margin-bottom:10px; opacity: 0.8">Людей: <b style="color:var(--fire-yellow)">${x['Кол-во людей']}</b> • Тип: <b style="color:var(--fire-yellow)">${x['Вид работ']}</b></div>
                     <div class="card-footer">
@@ -299,11 +347,26 @@
         });
     }
 
-    function upd(btn, id, st){
+    function upd(btn, id, st) {
         let card = btn.closest('.card'); card.style.opacity = "0.5";
         btn.parentElement.innerHTML="<span style='color:#888'>Обработка...</span>";
         const p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
         fetch(API, {method:'POST', body:p}).then(()=>load());
+    }
+
+    function downloadPDF() {
+        const btn = document.querySelector('.btn-pdf');
+        btn.innerText = "⏳...";
+        fetch(API + "?action=get_pdf")
+            .then(res => res.json())
+            .then(data => {
+                btn.innerText = "📄 PDF";
+                if(data.result === "success") {
+                    window.open(data.url, '_blank');
+                } else {
+                    alert("Ошибка: " + data.message);
+                }
+            });
     }
 </script>
 </body>
