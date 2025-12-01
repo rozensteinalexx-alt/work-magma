@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f0a0a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon.png">
+    
     <title>Учет Работ (Magma Pro)</title>
     <style>
         :root {
@@ -23,6 +29,7 @@
             background-size: cover; margin: 0; padding: 15px;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             color: var(--text-warm); -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
         .container {
             background: var(--card-magma); width: 100%; max-width: 480px; padding: 25px;
@@ -183,9 +190,15 @@
 
 <script>
     // ============================================================
-    // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
+    // 👇 ВАША ССЫЛКА API 👇
     const API = "https://script.google.com/macros/s/AKfycby7T5UlYO6-4iYA7KzYPGWqKb4mNIrI_YkZQuz5XbVUzWfbRPbWbvYfYEd9VSGwOToTyA/exec"; 
     // ============================================================
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Failed', err));
+        });
+    }
 
     const f = document.getElementById('wForm');
     const m = document.getElementById('msg');
@@ -215,10 +228,17 @@
             loadRequests();
         }
 
-        // Загрузка сотрудников
         fetch(API + "?action=get_employees").then(res => res.json()).then(res => {
-            nameSelect.innerHTML = '<option value="" disabled selected>Выберите сотрудника</option>';
-            if(res.data) res.data.forEach(n => nameSelect.innerHTML += `<option>${n}</option>`);
+            nameSelect.innerHTML = '<option value="" disabled selected>Выберите себя из списка</option>';
+            if(res.data && res.data.length > 0){
+                res.data.forEach(name => {
+                    const opt = document.createElement('option');
+                    opt.value = name; opt.innerText = name;
+                    nameSelect.appendChild(opt);
+                });
+            } else {
+                nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
+            }
             restoreMemory();
         });
     });
@@ -226,7 +246,8 @@
     function restoreMemory() {
         if (localStorage.getItem('rememberStatus') === 'true') {
             rememberMe.checked = true;
-            nameSelect.value = localStorage.getItem('workerName') || "";
+            const savedName = localStorage.getItem('workerName');
+            if (savedName) nameSelect.value = savedName;
             countSelect.value = localStorage.getItem('workerCount') || "1";
         }
     }
@@ -282,6 +303,7 @@
         });
     };
 
+    // --- ЛОГИКА АДМИНКИ ---
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
