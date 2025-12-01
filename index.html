@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Учет Работ (Objects)</title>
+    <title>Учет Работ (Magma Pro)</title>
     <style>
         :root {
             --bg-magma: #0f0a0a; 
@@ -90,6 +90,7 @@
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.85em; color: #666; cursor: pointer; padding: 10px; }
         .admin-link:hover { color: var(--fire-orange); }
 
+        /* --- АДМИНКА --- */
         #adminPanel { display: none; margin-top: 30px; border-top: 2px dashed var(--carbon-border); padding-top: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap:10px; }
         .refresh { cursor: pointer; font-size: 1.4em; color: var(--fire-orange); padding: 0 10px;}
@@ -126,9 +127,6 @@
         <form id="wForm">
             <label>Фамилия Имя</label>
             <select id="nameSelect" name="name" required><option value="" disabled selected>Загрузка...</option></select>
-
-            <label>Объект</label>
-            <select id="objectSelect" name="object" required><option value="" disabled selected>Загрузка...</option></select>
 
             <label class="checkbox-wrapper">
                 <input type="checkbox" id="rememberMe">
@@ -186,13 +184,12 @@
 <script>
     // ============================================================
     // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
-    const API = "https://script.google.com/macros/s/AKfycbxTwFk_dd8JSYfQh4dZL8raq8FJ_gnaC8hx5dTbaAJ_liA_PqNYBkOuNvHqcjnSCkL6aw/exec"; 
+    const API = "https://script.google.com/macros/s/XXXXXXXXXXXXXXXXXXXXXXXXX/exec"; 
     // ============================================================
 
     const f = document.getElementById('wForm');
     const m = document.getElementById('msg');
     const nameSelect = document.getElementById('nameSelect');
-    const objectSelect = document.getElementById('objectSelect');
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
     let currentAdminView = 'requests';
@@ -223,12 +220,6 @@
             nameSelect.innerHTML = '<option value="" disabled selected>Выберите сотрудника</option>';
             if(res.data) res.data.forEach(n => nameSelect.innerHTML += `<option>${n}</option>`);
             restoreMemory();
-        });
-
-        // Загрузка объектов
-        fetch(API + "?action=get_objects").then(res => res.json()).then(res => {
-            objectSelect.innerHTML = '<option value="" disabled selected>Выберите объект</option>';
-            if(res.data) res.data.forEach(n => objectSelect.innerHTML += `<option>${n}</option>`);
         });
     });
 
@@ -341,7 +332,6 @@
                     <div class="card-head"><span>🕒 ${x['Дата']}</span><span class="badge b-wait">Ждет</span></div>
                     <div class="card-body">${x['Фамилия Имя']}</div>
                     <div style="margin-bottom:10px; opacity: 0.8">
-                        📍 <b>${x['Объект']}</b><br>
                         Людей: <b style="color:var(--fire-yellow)">${x['Кол-во людей']}</b> • Тип: <b style="color:var(--fire-yellow)">${x['Вид работ']}</b>
                     </div>
                     <div class="card-footer">
@@ -388,7 +378,7 @@
     }
 
     function downloadPDF() {
-        const btn = document.querySelector('.btn-mini'); // Берет первую кнопку (которая в шапке)
+        const btn = document.querySelector('.btn-mini'); 
         btn.innerText = "⏳...";
         fetch(API + "?action=get_pdf").then(res => res.json()).then(data => {
             btn.innerText = "📄 PDF";
