@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Учет Работ (Magma)</title>
+    <title>Учет Работ (Magma Secure)</title>
     <style>
         :root {
             --bg-magma: #0f0a0a; 
@@ -37,13 +37,12 @@
         }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d6cfcf; }
         
-        /* Стили для Select такие же как для Input */
         select, input[type="text"] {
             width: 100%; padding: 14px; margin-bottom: 20px;
             border: 2px solid var(--carbon-border); border-radius: 8px;
             font-size: 16px; box-sizing: border-box; background: #241919;
             color: var(--fire-yellow); transition: 0.3s; color-scheme: dark; font-weight: 500;
-            appearance: none; /* Убираем стандартную стрелку браузера */
+            appearance: none; 
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffae00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;
         }
@@ -150,7 +149,7 @@
 <script>
     // ============================================================
     // 👇 ВСТАВЬ СЮДА ССЫЛКУ API 👇
-    const API = "https://script.google.com/macros/s/AKfycbwLt_1XpzoRrTw9aqjL364AcRC73r3jVxbeqIGTr_QQID-D5egp20xhFQZNqhGlLlvq1w/exec"; 
+    const API = "https://script.google.com/macros/s/AKfycby6Krw6eE12c9EWyWr68qB6MzUCME6wn70w9dk_1i3kPMhGyPvpqWSeu64pz402UyHjfw/exec"; 
     // ============================================================
 
     const f = document.getElementById('wForm');
@@ -159,9 +158,25 @@
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
 
+    // 1. ПОЛУЧЕНИЕ ИЛИ СОЗДАНИЕ UUID (ПАСПОРТ ТЕЛЕФОНА)
+    function getDeviceUUID() {
+        let uuid = localStorage.getItem('device_uuid');
+        if (!uuid) {
+            // Генерируем случайный ID
+            uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            localStorage.setItem('device_uuid', uuid);
+        }
+        return uuid;
+    }
+
     // ЗАГРУЗКА ПРИ СТАРТЕ
     window.addEventListener('load', () => {
-        // 1. Загружаем список сотрудников
+        // Проверяем наличие UUID
+        getDeviceUUID(); 
+
         fetch(API + "?action=get_employees")
             .then(res => res.json())
             .then(res => {
@@ -174,10 +189,8 @@
                         nameSelect.appendChild(opt);
                     });
                 } else {
-                    nameSelect.innerHTML = '<option value="" disabled>Список пуст (Заполните лист Employees)</option>';
+                    nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
                 }
-                
-                // 2. После загрузки списка - восстанавливаем память
                 restoreMemory();
             })
             .catch(err => {
@@ -207,9 +220,8 @@
         }
     }
 
-    // Слушатели событий
     rememberMe.addEventListener('change', saveToMemory);
-    nameSelect.addEventListener('change', saveToMemory); // Теперь change, а не input
+    nameSelect.addEventListener('change', saveToMemory);
     countSelect.addEventListener('change', saveToMemory);
     
     // ОТПРАВКА
@@ -221,10 +233,12 @@
         const currentName = nameSelect.value;
         const currentCount = countSelect.value;
         const isRemembered = rememberMe.checked;
+        const myUUID = getDeviceUUID(); // Берем ключ телефона
 
         const fd = new FormData(f);
         const p = new URLSearchParams();
         p.append('action', 'create');
+        p.append('uuid', myUUID); // Отправляем ключ вместе с данными
         for(const [k,v] of fd) p.append(k,v);
 
         fetch(API, {method:'POST', body:p})
@@ -232,7 +246,6 @@
             if(d.result==="success"){
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
-                // Восстановление после сброса
                 if(isRemembered) {
                     nameSelect.value = currentName;
                     countSelect.value = currentCount;
@@ -241,6 +254,8 @@
                 document.getElementById('type1').checked = true;
             } else if (d.result === "duplicate") {
                 m.className="error"; m.innerText = "⛔ " + d.message;
+            } else if (d.result === "fraud") {
+                m.className="error"; m.innerText = d.message; // Сообщение о мошенничестве
             } else { throw new Error(); }
         }).catch(()=>{
             m.className="error"; m.innerText="❌ Ошибка связи";
