@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Учет Работ (Magma Pro)</title>
+    <title>Учет Работ (Objects)</title>
     <style>
         :root {
             --bg-magma: #0f0a0a; 
@@ -90,18 +90,12 @@
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.85em; color: #666; cursor: pointer; padding: 10px; }
         .admin-link:hover { color: var(--fire-orange); }
 
-        /* --- АДМИНКА --- */
         #adminPanel { display: none; margin-top: 30px; border-top: 2px dashed var(--carbon-border); padding-top: 20px; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap:10px; }
         .refresh { cursor: pointer; font-size: 1.4em; color: var(--fire-orange); padding: 0 10px;}
         
-        /* КНОПКИ АДМИНА */
-        .btn-mini {
-            background: #241919; border: 1px solid var(--fire-yellow); color: var(--fire-yellow);
-            padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.9em;
-        }
+        .btn-mini { background: #241919; border: 1px solid var(--fire-yellow); color: var(--fire-yellow); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.9em; }
         .btn-mini:hover { background: var(--fire-yellow); color: #000; }
-        
         .btn-reset { border-color: #d12222; color: #d12222; font-size:0.8em; padding: 5px 10px; margin-left: 10px;}
         .btn-reset:hover { background: #d12222; color: #fff; }
 
@@ -117,23 +111,11 @@
         .loader { width: 30px; height: 30px; border: 3px solid #333; border-top-color: var(--fire-orange); border-radius: 50%; animation: spin 1s infinite linear; margin: 30px auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* СПИСОК СОТРУДНИКОВ */
-        .emp-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px; border-bottom: 1px solid #333; color: #ccc;
-        }
+        .emp-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; color: #ccc; }
         .emp-status { font-size: 1.2em; }
 
-        /* МОДАЛЬНОЕ ОКНО */
-        #authModal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-            display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .modal-content {
-            background: var(--card-magma); padding: 30px; border-radius: 16px; width: 90%; max-width: 350px;
-            border: 1px solid var(--fire-orange); text-align: center;
-        }
+        #authModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--card-magma); padding: 30px; border-radius: 16px; width: 90%; max-width: 350px; border: 1px solid var(--fire-orange); text-align: center; }
     </style>
 </head>
 <body>
@@ -143,14 +125,14 @@
         <h2>🔥 Отчет о работе</h2>
         <form id="wForm">
             <label>Фамилия Имя</label>
-            <select id="nameSelect" name="name" required>
-                <option value="" disabled selected>Загрузка списка...</option>
-            </select>
+            <select id="nameSelect" name="name" required><option value="" disabled selected>Загрузка...</option></select>
+
+            <label>Объект</label>
+            <select id="objectSelect" name="object" required><option value="" disabled selected>Загрузка...</option></select>
 
             <label class="checkbox-wrapper">
                 <input type="checkbox" id="rememberMe">
-                <span class="custom-check"></span>
-                <span class="check-text">Запомнить меня и количество</span>
+                <span class="custom-check"></span><span class="check-text">Запомнить меня</span>
             </label>
             
             <label>Количество людей</label>
@@ -184,9 +166,7 @@
             </div>
         </div>
         <div class="loader" id="loader"></div>
-        
         <div id="list"></div>
-        
         <div id="empList" style="display:none;"></div>
     </div>
 </div>
@@ -195,13 +175,9 @@
     <div class="modal-content">
         <h3 style="color:var(--fire-yellow)">🔐 Вход Админа</h3>
         <input type="password" id="adminPass" placeholder="Введите пароль">
-        
         <label class="checkbox-wrapper" style="margin-bottom: 15px; justify-content: center;">
-            <input type="checkbox" id="keepLoggedIn">
-            <span class="custom-check" style="width:18px; height:18px;"></span>
-            <span class="check-text" style="font-size:0.9em">Запомнить</span>
+            <input type="checkbox" id="keepLoggedIn"><span class="custom-check" style="width:18px; height:18px;"></span><span class="check-text" style="font-size:0.9em">Запомнить</span>
         </label>
-
         <button class="main-btn" onclick="checkPass()">Войти</button>
         <button onclick="closeAuth()" style="background:none; border:none; color:#666; margin-top:10px; cursor:pointer;">Отмена</button>
     </div>
@@ -210,15 +186,16 @@
 <script>
     // ============================================================
     // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
-    const API = "https://script.google.com/macros/s/AKfycbz8YngWd-qkPbORtYZabHKMGmVkT7pHvfJr8x6_B1EI_vITmIXXbMwJdHdnFd5tn1ppyg/exec"; 
+    const API = "https://script.google.com/macros/s/AKfycbxTwFk_dd8JSYfQh4dZL8raq8FJ_gnaC8hx5dTbaAJ_liA_PqNYBkOuNvHqcjnSCkL6aw/exec"; 
     // ============================================================
 
     const f = document.getElementById('wForm');
     const m = document.getElementById('msg');
     const nameSelect = document.getElementById('nameSelect');
+    const objectSelect = document.getElementById('objectSelect');
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
-    let currentAdminView = 'requests'; // 'requests' or 'employees'
+    let currentAdminView = 'requests';
 
     function getDeviceUUID() {
         let uuid = localStorage.getItem('device_uuid');
@@ -241,28 +218,24 @@
             loadRequests();
         }
 
-        fetch(API + "?action=get_employees")
-            .then(res => res.json())
-            .then(res => {
-                nameSelect.innerHTML = '<option value="" disabled selected>Выберите себя из списка</option>';
-                if(res.data && res.data.length > 0){
-                    res.data.forEach(name => {
-                        const opt = document.createElement('option');
-                        opt.value = name; opt.innerText = name;
-                        nameSelect.appendChild(opt);
-                    });
-                } else {
-                    nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
-                }
-                restoreMemory();
-            });
+        // Загрузка сотрудников
+        fetch(API + "?action=get_employees").then(res => res.json()).then(res => {
+            nameSelect.innerHTML = '<option value="" disabled selected>Выберите сотрудника</option>';
+            if(res.data) res.data.forEach(n => nameSelect.innerHTML += `<option>${n}</option>`);
+            restoreMemory();
+        });
+
+        // Загрузка объектов
+        fetch(API + "?action=get_objects").then(res => res.json()).then(res => {
+            objectSelect.innerHTML = '<option value="" disabled selected>Выберите объект</option>';
+            if(res.data) res.data.forEach(n => objectSelect.innerHTML += `<option>${n}</option>`);
+        });
     });
 
     function restoreMemory() {
         if (localStorage.getItem('rememberStatus') === 'true') {
             rememberMe.checked = true;
-            const savedName = localStorage.getItem('workerName');
-            if (savedName) nameSelect.value = savedName;
+            nameSelect.value = localStorage.getItem('workerName') || "";
             countSelect.value = localStorage.getItem('workerCount') || "1";
         }
     }
@@ -318,7 +291,6 @@
         });
     };
 
-    // --- ЛОГИКА АДМИНКИ ---
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
 
@@ -356,7 +328,6 @@
         loadEmployees();
     }
 
-    // ЗАГРУЗКА ЗАЯВОК
     function loadRequests() {
         const l = document.getElementById('list');
         const spin = document.getElementById('loader');
@@ -369,7 +340,10 @@
                 el.innerHTML = `
                     <div class="card-head"><span>🕒 ${x['Дата']}</span><span class="badge b-wait">Ждет</span></div>
                     <div class="card-body">${x['Фамилия Имя']}</div>
-                    <div style="margin-bottom:10px; opacity: 0.8">Людей: <b style="color:var(--fire-yellow)">${x['Кол-во людей']}</b> • Тип: <b style="color:var(--fire-yellow)">${x['Вид работ']}</b></div>
+                    <div style="margin-bottom:10px; opacity: 0.8">
+                        📍 <b>${x['Объект']}</b><br>
+                        Людей: <b style="color:var(--fire-yellow)">${x['Кол-во людей']}</b> • Тип: <b style="color:var(--fire-yellow)">${x['Вид работ']}</b>
+                    </div>
                     <div class="card-footer">
                         <button class="act-btn btn-yes" onclick="upd(this,'${x['ID']}','Подтверждено')">Принять</button>
                         <button class="act-btn btn-no" onclick="upd(this,'${x['ID']}','Отклонено')">Отказать</button>
@@ -380,7 +354,6 @@
         });
     }
 
-    // ЗАГРУЗКА СОТРУДНИКОВ
     function loadEmployees() {
         const l = document.getElementById('empList');
         const spin = document.getElementById('loader');
@@ -390,14 +363,9 @@
             if(!d.data.length) { l.innerHTML="<div style='text-align:center;opacity:0.6;'>Список пуст</div>"; return; }
             d.data.forEach(x=>{
                 let el = document.createElement('div'); el.className = 'emp-item';
-                // isBound приходит из бэкенда (есть ключ или нет)
                 let statusIcon = x.isBound ? '📱' : '⚪';
                 let resetBtn = x.isBound ? `<button class="btn-mini btn-reset" onclick="resetPhone('${x.name}')">Сбросить 🔄</button>` : '';
-                
-                el.innerHTML = `
-                    <div><span class="emp-status">${statusIcon}</span> ${x.name}</div>
-                    <div>${resetBtn}</div>
-                `;
+                el.innerHTML = `<div><span class="emp-status">${statusIcon}</span> ${x.name}</div><div>${resetBtn}</div>`;
                 l.appendChild(el);
             });
         });
@@ -420,15 +388,13 @@
     }
 
     function downloadPDF() {
-        const btn = document.querySelector('.btn-pdf');
+        const btn = document.querySelector('.btn-mini'); // Берет первую кнопку (которая в шапке)
         btn.innerText = "⏳...";
-        fetch(API + "?action=get_pdf")
-            .then(res => res.json())
-            .then(data => {
-                btn.innerText = "📄 PDF";
-                if(data.result === "success") window.open(data.url, '_blank');
-                else alert("Ошибка: " + data.message);
-            });
+        fetch(API + "?action=get_pdf").then(res => res.json()).then(data => {
+            btn.innerText = "📄 PDF";
+            if(data.result === "success") window.open(data.url, '_blank');
+            else alert("Ошибка: " + data.message);
+        });
     }
 </script>
 </body>
