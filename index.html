@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Учет Работ</title>
+    <title>Учет Работ (Magma)</title>
     <style>
-        /* --- STYLES: MAGMA / LAVA --- */
         :root {
             --bg-magma: #0f0a0a; 
             --card-magma: #1a1212; 
@@ -15,43 +14,41 @@
             --text-warm: #ffebd1;   
             --carbon-border: #3d2b2b;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-magma);
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(209, 34, 34, 0.1) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(255, 95, 31, 0.1) 0%, transparent 40%);
-            background-size: cover;
-            margin: 0; padding: 15px;
+            background-size: cover; margin: 0; padding: 15px;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             color: var(--text-warm); -webkit-tap-highlight-color: transparent;
         }
-
         .container {
             background: var(--card-magma); width: 100%; max-width: 480px; padding: 25px;
             border-radius: 16px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.15), inset 0 0 2px rgba(255, 174, 0, 0.1);
-            border: 1px solid var(--carbon-border); border-top: 2px solid var(--fire-orange);
-            box-sizing: border-box;
+            border: 1px solid var(--carbon-border); border-top: 2px solid var(--fire-orange); box-sizing: border-box;
         }
-
         h2 {
             text-align: center; margin: 0 0 25px 0; font-weight: 800; text-transform: uppercase;
             background: linear-gradient(to right, var(--fire-yellow), var(--fire-orange));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             font-size: 1.6rem; filter: drop-shadow(0 0 5px rgba(255, 95, 31, 0.5));
         }
-
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d6cfcf; }
-
-        input[type="text"], select {
+        
+        /* Стили для Select такие же как для Input */
+        select, input[type="text"] {
             width: 100%; padding: 14px; margin-bottom: 20px;
             border: 2px solid var(--carbon-border); border-radius: 8px;
             font-size: 16px; box-sizing: border-box; background: #241919;
             color: var(--fire-yellow); transition: 0.3s; color-scheme: dark; font-weight: 500;
+            appearance: none; /* Убираем стандартную стрелку браузера */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffae00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;
         }
         select option { background-color: #1a1212; color: #ffebd1; }
-        input:focus, select:focus { outline: none; border-color: var(--fire-orange); box-shadow: 0 0 15px rgba(255, 95, 31, 0.3); background: #2e1e1e; }
+        select:focus { outline: none; border-color: var(--fire-orange); box-shadow: 0 0 15px rgba(255, 95, 31, 0.3); background-color: #2e1e1e; }
 
         .checkbox-wrapper { display: flex; align-items: center; margin-bottom: 25px; cursor: pointer; user-select: none; }
         .checkbox-wrapper input { display: none; }
@@ -102,11 +99,9 @@
         .card-footer { display: flex; gap: 10px; margin-top: 15px;}
         .badge { padding: 4px 10px; border-radius: 4px; font-size: 0.7em; font-weight: 700; text-transform: uppercase; }
         .b-wait { background: #443300; color: #ffae00; border: 1px solid #ffae00;}
-        
         .act-btn { flex: 1; padding: 10px; border: none; border-radius: 4px; font-weight: 700; cursor: pointer; color: #fff; font-size: 0.85em; text-transform: uppercase; }
         .btn-yes { background: #225522; color: #aaffaa; border: 1px solid #225522; }
         .btn-no { background: #552222; color: #ffaaaa; border: 1px solid #552222; }
-        
         .loader { width: 30px; height: 30px; border: 3px solid #333; border-top-color: var(--fire-orange); border-radius: 50%; animation: spin 1s infinite linear; margin: 30px auto; display: none; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -117,12 +112,14 @@
     <h2>🔥 Отчет о работе</h2>
     <form id="wForm">
         <label>Фамилия Имя</label>
-        <input type="text" id="nameInput" name="name" required placeholder="Иванов Иван">
+        <select id="nameSelect" name="name" required>
+            <option value="" disabled selected>Загрузка списка...</option>
+        </select>
 
         <label class="checkbox-wrapper">
             <input type="checkbox" id="rememberMe">
             <span class="custom-check"></span>
-            <span class="check-text">Запомнить меня</span>
+            <span class="check-text">Запомнить меня и количество</span>
         </label>
         
         <label>Количество людей</label>
@@ -134,7 +131,6 @@
         <div class="radio-group">
             <input type="radio" id="type1" name="type" value="Дневка" checked>
             <label for="type1" class="radio-label">⏱️ Дневка</label>
-
             <input type="radio" id="type2" name="type" value="Объем">
             <label for="type2" class="radio-label">📦 Объем</label>
         </div>
@@ -142,7 +138,6 @@
         <button type="submit" class="main-btn" id="sBtn">Отправить</button>
     </form>
     <div id="msg"></div>
-    
     <div class="admin-link" onclick="auth()">Вход для администратора</div>
 
     <div id="adminPanel">
@@ -154,29 +149,56 @@
 
 <script>
     // ============================================================
-    // ВСТАВЬ СЮДА ССЫЛКУ ИЗ ШАГА 2
-    const API = "https://script.google.com/macros/s/AKfycbyjQAER3ZgaA6YjnHKu2ICsrm6YLTFRs9a_BMwBnup-jrIvi6gWWm7yGAZu6gd9DifnAA/exec"; 
+    // 👇 ВСТАВЬ СЮДА ССЫЛКУ API 👇
+    const API = "https://script.google.com/macros/s/AKfycbwLt_1XpzoRrTw9aqjL364AcRC73r3jVxbeqIGTr_QQID-D5egp20xhFQZNqhGlLlvq1w/exec"; 
     // ============================================================
 
     const f = document.getElementById('wForm');
     const m = document.getElementById('msg');
-    const nameInput = document.getElementById('nameInput');
+    const nameSelect = document.getElementById('nameSelect');
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
 
-    // Логика памяти
+    // ЗАГРУЗКА ПРИ СТАРТЕ
     window.addEventListener('load', () => {
+        // 1. Загружаем список сотрудников
+        fetch(API + "?action=get_employees")
+            .then(res => res.json())
+            .then(res => {
+                nameSelect.innerHTML = '<option value="" disabled selected>Выберите себя из списка</option>';
+                if(res.data && res.data.length > 0){
+                    res.data.forEach(name => {
+                        const opt = document.createElement('option');
+                        opt.value = name;
+                        opt.innerText = name;
+                        nameSelect.appendChild(opt);
+                    });
+                } else {
+                    nameSelect.innerHTML = '<option value="" disabled>Список пуст (Заполните лист Employees)</option>';
+                }
+                
+                // 2. После загрузки списка - восстанавливаем память
+                restoreMemory();
+            })
+            .catch(err => {
+                nameSelect.innerHTML = '<option value="" disabled>Ошибка загрузки списка</option>';
+                console.error(err);
+            });
+    });
+
+    function restoreMemory() {
         if (localStorage.getItem('rememberStatus') === 'true') {
             rememberMe.checked = true;
-            nameInput.value = localStorage.getItem('workerName') || "";
+            const savedName = localStorage.getItem('workerName');
+            if (savedName) nameSelect.value = savedName;
             countSelect.value = localStorage.getItem('workerCount') || "1";
         }
-    });
+    }
 
     function saveToMemory() {
         if (rememberMe.checked) {
             localStorage.setItem('rememberStatus', 'true');
-            localStorage.setItem('workerName', nameInput.value);
+            localStorage.setItem('workerName', nameSelect.value);
             localStorage.setItem('workerCount', countSelect.value);
         } else {
             localStorage.removeItem('rememberStatus');
@@ -184,17 +206,19 @@
             localStorage.removeItem('workerCount');
         }
     }
+
+    // Слушатели событий
     rememberMe.addEventListener('change', saveToMemory);
-    nameInput.addEventListener('input', saveToMemory);
+    nameSelect.addEventListener('change', saveToMemory); // Теперь change, а не input
     countSelect.addEventListener('change', saveToMemory);
     
-    // Отправка
+    // ОТПРАВКА
     f.onsubmit = e => {
         e.preventDefault();
         const b = document.getElementById('sBtn');
         b.disabled = true; b.innerText = "Проверка..."; m.innerText = ""; m.className = "";
         
-        const currentName = nameInput.value;
+        const currentName = nameSelect.value;
         const currentCount = countSelect.value;
         const isRemembered = rememberMe.checked;
 
@@ -208,8 +232,9 @@
             if(d.result==="success"){
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
+                // Восстановление после сброса
                 if(isRemembered) {
-                    nameInput.value = currentName;
+                    nameSelect.value = currentName;
                     countSelect.value = currentCount;
                     rememberMe.checked = true;
                 }
@@ -226,9 +251,8 @@
         });
     };
 
-    // АДМИНКА С НОВЫМ ПАРОЛЕМ
+    // АДМИНКА
     function auth(){
-        // ПАРОЛЬ ИЗМЕНЕН ЗДЕСЬ
         if(prompt("Пароль:")==="westprom123"){
             document.getElementById('adminPanel').style.display='block';
             document.querySelector('.admin-link').style.display='none';
@@ -240,15 +264,12 @@
         const l = document.getElementById('list');
         const spin = document.getElementById('loader');
         l.innerHTML=""; spin.style.display="block";
-        
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             spin.style.display="none";
             if(!d.data.length) { l.innerHTML="<div style='text-align:center;opacity:0.6;margin-top:20px'>Нет заявок на проверку</div>"; return; }
-            
             d.data.reverse().forEach(x=>{
                 let date = new Date(x['Дата']).toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
-                let el = document.createElement('div');
-                el.className = 'card';
+                let el = document.createElement('div'); el.className = 'card';
                 el.innerHTML = `
                     <div class="card-head"><span>🕒 ${date}</span><span class="badge b-wait">Ждет</span></div>
                     <div class="card-body">${x['Фамилия Имя']}</div>
@@ -264,17 +285,11 @@
     }
 
     function upd(btn, id, st){
-        let card = btn.closest('.card');
-        card.style.opacity = "0.5";
+        let card = btn.closest('.card'); card.style.opacity = "0.5";
         btn.parentElement.innerHTML="<span style='color:#888'>Обработка...</span>";
-        
-        const p = new URLSearchParams();
-        p.append('action','update'); p.append('id',id); p.append('status',st);
+        const p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
         fetch(API, {method:'POST', body:p}).then(()=>load());
     }
 </script>
 </body>
-
 </html>
-
-
