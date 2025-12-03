@@ -36,22 +36,15 @@
             border-radius: 16px; box-shadow: 0 0 25px rgba(255, 69, 0, 0.15), inset 0 0 2px rgba(255, 174, 0, 0.1);
             border: 1px solid var(--carbon-border); border-top: 2px solid var(--fire-orange); box-sizing: border-box;
         }
-        
-        /* ЗАГОЛОВОК */
         h2 {
-            text-align: center; margin: 0; font-weight: 800; text-transform: uppercase;
+            text-align: center; margin: 0 0 25px 0; font-weight: 800; text-transform: uppercase;
             background: linear-gradient(to right, var(--fire-yellow), var(--fire-orange));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             font-size: 1.8rem; filter: drop-shadow(0 0 5px rgba(255, 95, 31, 0.5));
         }
-        .subtitle {
-            text-align: center; color: var(--fire-orange); margin-top: 5px; margin-bottom: 25px;
-            font-size: 1em; opacity: 0.8; letter-spacing: 1px;
-        }
-
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d6cfcf; }
         
-        select, input[type="text"], input[type="password"] {
+        select, input[type="text"], input[type="password"], input[type="tel"] {
             width: 100%; padding: 14px; margin-bottom: 20px;
             border: 2px solid var(--carbon-border); border-radius: 8px;
             font-size: 16px; box-sizing: border-box; background: #241919;
@@ -63,18 +56,6 @@
             background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;
         }
         select:focus, input:focus { outline: none; border-color: var(--fire-orange); box-shadow: 0 0 15px rgba(255, 95, 31, 0.3); background-color: #2e1e1e; }
-
-        .checkbox-wrapper { display: flex; align-items: center; margin-bottom: 25px; cursor: pointer; user-select: none; }
-        .checkbox-wrapper input { display: none; }
-        .custom-check {
-            width: 22px; height: 22px; border: 2px solid var(--carbon-border); border-radius: 6px; margin-right: 12px;
-            display: flex; align-items: center; justify-content: center; background: #241919; flex-shrink: 0; transition: 0.3s;
-        }
-        .custom-check::after { content: '🔥'; font-size: 14px; display: none; filter: drop-shadow(0 0 2px var(--fire-yellow)); }
-        .checkbox-wrapper input:checked + .custom-check { border-color: var(--fire-orange); background: rgba(255, 95, 31, 0.1); box-shadow: 0 0 10px rgba(255, 95, 31, 0.2); }
-        .checkbox-wrapper input:checked + .custom-check::after { display: block; }
-        .check-text { font-size: 0.95em; color: #aaa; transition: 0.3s; }
-        .checkbox-wrapper input:checked ~ .check-text { color: var(--fire-yellow); }
 
         .radio-group { display: flex; gap: 10px; margin-bottom: 25px; }
         .radio-group input[type="radio"] { display: none; }
@@ -131,6 +112,17 @@
 
         #authModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: var(--card-magma); padding: 30px; border-radius: 16px; width: 90%; max-width: 350px; border: 1px solid var(--fire-orange); text-align: center; }
+        
+        /* Чекбокс */
+        .checkbox-wrapper { display: flex; align-items: center; margin-bottom: 25px; cursor: pointer; user-select: none; }
+        .checkbox-wrapper input { display: none; }
+        .custom-check {
+            width: 22px; height: 22px; border: 2px solid var(--carbon-border); border-radius: 6px; margin-right: 12px;
+            display: flex; align-items: center; justify-content: center; background: #241919; flex-shrink: 0; transition: 0.3s;
+        }
+        .custom-check::after { content: '🔥'; font-size: 14px; display: none; filter: drop-shadow(0 0 2px var(--fire-yellow)); }
+        .checkbox-wrapper input:checked + .custom-check { border-color: var(--fire-orange); background: rgba(255, 95, 31, 0.1); box-shadow: 0 0 10px rgba(255, 95, 31, 0.2); }
+        .checkbox-wrapper input:checked + .custom-check::after { display: block; }
     </style>
 </head>
 <body>
@@ -138,15 +130,13 @@
 <div class="container">
     <div id="requestView">
         <h2>WestProm</h2>
-        <div class="subtitle">Отчет каждый день</div>
+        <div style="text-align:center; color:var(--fire-orange); margin-bottom:20px;">Отчет каждый день</div>
         <form id="wForm">
             <label>Фамилия Имя</label>
             <select id="nameSelect" name="name" required><option value="" disabled selected>Загрузка...</option></select>
 
-            <label class="checkbox-wrapper">
-                <input type="checkbox" id="rememberMe">
-                <span class="custom-check"></span><span class="check-text">Запомнить меня</span>
-            </label>
+            <label>Ваш ПИН-код (придумайте при первом входе)</label>
+            <input type="tel" name="pin" required placeholder="Например: 1234" maxlength="6" style="text-align:center; letter-spacing: 5px; font-size: 1.2em;">
             
             <label>Количество людей</label>
             <select name="count" id="countSelect">
@@ -200,7 +190,7 @@
 <script>
     // ============================================================
     // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
-    const API = "https://script.google.com/macros/s/AKfycbxUwT_4_yHIwGZoIB4KdmVV53B48nXWgBIL6sKE9kMRJ8jRawUV5tTUtGOb3NKurdRD-g/exec"; 
+    const API = "https://script.google.com/macros/s/AKfycbzE-fyhhsq0aR4MfnSbrkIGbVtPv-bamAGuU_nkx5zfTW5_qEReFENM50BIb2KqlYJQkw/exec"; 
     // ============================================================
 
     if ('serviceWorker' in navigator) {
@@ -213,24 +203,9 @@
     const m = document.getElementById('msg');
     const nameSelect = document.getElementById('nameSelect');
     const countSelect = document.getElementById('countSelect');
-    const rememberMe = document.getElementById('rememberMe');
     let currentAdminView = 'requests';
 
-    function getDeviceUUID() {
-        let uuid = localStorage.getItem('device_uuid');
-        if (!uuid) {
-            uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-            localStorage.setItem('device_uuid', uuid);
-        }
-        return uuid;
-    }
-
     window.addEventListener('load', () => {
-        getDeviceUUID(); 
-        
         if (localStorage.getItem('admin_auth') === 'true') {
             document.querySelector('.admin-link').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
@@ -248,44 +223,17 @@
             } else {
                 nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
             }
-            restoreMemory();
         });
     });
-
-    function restoreMemory() {
-        if (localStorage.getItem('rememberStatus') === 'true') {
-            rememberMe.checked = true;
-            nameSelect.value = localStorage.getItem('workerName') || "";
-            countSelect.value = localStorage.getItem('workerCount') || "1";
-        }
-    }
-
-    function saveToMemory() {
-        if (rememberMe.checked) {
-            localStorage.setItem('rememberStatus', 'true');
-            localStorage.setItem('workerName', nameSelect.value);
-            localStorage.setItem('workerCount', countSelect.value);
-        } else {
-            localStorage.removeItem('rememberStatus'); localStorage.removeItem('workerName'); localStorage.removeItem('workerCount');
-        }
-    }
-    rememberMe.addEventListener('change', saveToMemory);
-    nameSelect.addEventListener('change', saveToMemory);
-    countSelect.addEventListener('change', saveToMemory);
     
     f.onsubmit = e => {
         e.preventDefault();
         const b = document.getElementById('sBtn');
         b.disabled = true; b.innerText = "Проверка..."; m.innerText = ""; m.className = "";
         
-        const isRemembered = rememberMe.checked;
-        const currentName = nameSelect.value;
-        const currentCount = countSelect.value;
-
         const fd = new FormData(f);
         const p = new URLSearchParams();
         p.append('action', 'create');
-        p.append('uuid', getDeviceUUID());
         for(const [k,v] of fd) p.append(k,v);
 
         fetch(API, {method:'POST', body:p})
@@ -293,9 +241,6 @@
             if(d.result==="success"){
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
-                if(isRemembered) {
-                    nameSelect.value = currentName; countSelect.value = currentCount; rememberMe.checked = true;
-                }
                 document.getElementById('type1').checked = true;
             } else if (d.result === "duplicate") {
                 m.className="error"; m.innerText = "⛔ " + d.message;
@@ -382,8 +327,8 @@
             if(!d.data.length) { l.innerHTML="<div style='text-align:center;opacity:0.6;'>Список пуст</div>"; return; }
             d.data.forEach(x=>{
                 let el = document.createElement('div'); el.className = 'emp-item';
-                let statusIcon = x.isBound ? '📱' : '⚪';
-                let resetBtn = x.isBound ? `<button class="btn-mini btn-reset" onclick="resetPhone('${x.name}')">Сбросить 🔄</button>` : '';
+                let statusIcon = x.isBound ? '🔐' : '⚪';
+                let resetBtn = x.isBound ? `<button class="btn-mini btn-reset" onclick="resetPhone('${x.name}')">Сбросить ПИН</button>` : '';
                 el.innerHTML = `<div><span class="emp-status">${statusIcon}</span> ${x.name}</div><div>${resetBtn}</div>`;
                 l.appendChild(el);
             });
@@ -398,7 +343,7 @@
     }
 
     function resetPhone(name) {
-        if(!confirm(`Сбросить привязку телефона для: ${name}?`)) return;
+        if(!confirm(`Сбросить ПИН-код для: ${name}?`)) return;
         const p = new URLSearchParams(); p.append('action','reset_device'); p.append('name',name);
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
             alert(d.message);
@@ -417,7 +362,7 @@
     }
 
     function downloadExcel() {
-        const btn = document.querySelectorAll('.btn-mini')[1]; // Вторая кнопка
+        const btn = document.querySelectorAll('.btn-mini')[1];
         btn.innerText = "⏳...";
         fetch(API + "?action=get_excel").then(res => res.json()).then(data => {
             btn.innerText = "💾 Excel";
@@ -428,4 +373,3 @@
 </script>
 </body>
 </html>
-
