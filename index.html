@@ -3,202 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WestProm Platinum</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <title>WestProm Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold-light: #fff5c3;
-            --gold-main: #d4af37;
-            --gold-dark: #8a6e18;
+            /* Новая палитра реалистичного золота */
+            --gold-bright: #fff3c5; /* Яркий блик */
+            --gold-mid: #d4af37;    /* Основной цвет */
+            --gold-dark: #997b2f;   /* Тень */
+            --gold-deep: #4a3b0a;   /* Глубокая тень */
+            
+            /* Металлический градиент (используется везде) */
+            --metallic-gold-gradient: linear-gradient(
+                to bottom,
+                var(--gold-bright) 0%,
+                var(--gold-mid) 20%,
+                var(--gold-dark) 50%,
+                var(--gold-mid) 80%,
+                var(--gold-bright) 100%
+            );
         }
 
         body {
             font-family: 'Lato', sans-serif;
-            /* Фон с использованием картинки фасада */
+            /* Фон - темный гранит, имитирующий стену здания */
             background: 
-                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), /* Затемнение */
-                url('https://i.imgur.com/your_image_url_here.jpg') no-repeat center center fixed; /* Ссылка на ваше изображение */
-            background-size: cover;
-            color: #333;
-            margin: 0; padding: 20px;
+                linear-gradient(rgba(15, 15, 15, 0.85), rgba(10, 10, 10, 0.95)),
+                url('https://www.transparenttextures.com/patterns/dark-wall.png'), /* Текстура стены */
+                #1a1a1a;
+            background-attachment: fixed;
+            color: #ccc;
+            margin: 0; padding: 30px 20px;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        /* --- ЛОГОТИП --- */
-        .logo-container {
-            margin-bottom: 20px;
-            text-align: center;
+        /* --- ЛОГОТИП (ТЕКСТ КАК НА ВЫВЕСКЕ) --- */
+        .logo-container { margin-bottom: 30px; text-align: center; }
+        
+        /* Эффект золотой объемной вывески */
+        h1.gold-sign {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 2.8rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            
+            /* Сложный градиент для имитации металла */
+            background: linear-gradient(
+                to bottom,
+                #fffde8 0%, /* Блик сверху */
+                #e3c472 20%,
+                #d4af37 50%,
+                #a0832a 51%, /* Резкий переход для грани */
+                #d4af37 80%,
+                #fffde8 100% /* Блик снизу */
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+            /* Тень для объема (эффект 3D букв на стене) */
+            filter: drop-shadow(0 4px 3px rgba(0,0,0,0.8));
+            position: relative;
         }
-        .logo {
-            max-width: 280px;
-            /* Используем логотип с картинки */
-            content: url('https://i.imgur.com/your_logo_url_here.png'); /* Ссылка на вырезанный логотип */
-            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+        
+        .subtitle-sign {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-mid);
+            font-size: 0.9rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            /* Легкий металлический блеск */
+            background: var(--metallic-gold-gradient);
+             -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+             font-weight: 700;
         }
 
         /* --- ОСНОВНАЯ КАРТОЧКА --- */
         .box {
-            /* Текстура темного камня с золотой окантовкой */
+            /* Текстура темного камня */
             background: 
-                linear-gradient(135deg, rgba(20,20,20,0.9), rgba(40,40,40,0.9));
-            border: 2px solid var(--gold-main);
+                linear-gradient(135deg, rgba(35,35,35,0.95), rgba(20,20,20,0.98)),
+                url('https://www.transparenttextures.com/patterns/concrete-wall.png');
+            
+            /* Металлическая золотая рамка */
+            border: 2px solid;
+            border-image: var(--metallic-gold-gradient) 1;
+            
             box-shadow: 
-                0 0 0 4px #1a1a1a,
-                0 20px 50px rgba(0,0,0,0.8),
-                inset 0 0 30px rgba(255,255,255,0.1);
-            padding: 30px 25px;
-            border-radius: 8px;
-            width: 100%; max-width: 420px;
+                0 0 0 4px #121212, /* Внешняя темная обводка */
+                0 25px 60px rgba(0,0,0,1), /* Глубокая тень */
+                inset 0 0 40px rgba(0,0,0,0.8); /* Внутренняя тень */
+                
+            padding: 35px 30px;
+            border-radius: 2px; /* Более строгие углы как на вывеске */
+            width: 100%; max-width: 440px;
             box-sizing: border-box;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             position: relative;
-        }
-
-        /* Узорные уголки */
-        .box::before {
-            content: ""; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
-            border: 1px solid rgba(212, 175, 55, 0.3); pointer-events: none; border-radius: 6px;
         }
 
         /* --- ПОЛЯ ВВОДА --- */
         label {
-            color: var(--gold-main);
-            font-size: 0.8rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            margin-bottom: 5px; display: block; margin-top: 20px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-            display: flex; align-items: center; gap: 8px;
+            color: var(--gold-mid);
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 8px; display: block; margin-top: 22px;
+            text-shadow: 0 1px 2px rgba(0,0,0,1);
+            display: flex; align-items: center; gap: 10px;
         }
         
+        /* Стиль "вдавленного" металла */
         select, input {
-            width: 100%; padding: 14px 15px;
-            background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
-            border: 1px solid #555;
-            border-bottom: 3px solid var(--gold-main);
-            border-radius: 4px;
-            color: var(--gold-light);
+            width: 100%; padding: 16px 15px;
+            background: #181818;
+            border: 1px solid #333;
+            /* Золотой акцент снизу с металлическим блеском */
+            border-bottom: 3px solid;
+            border-image: var(--metallic-gold-gradient) 1;
+            
+            border-radius: 2px;
+            color: var(--gold-bright);
             font-family: 'Lato', sans-serif; font-size: 16px;
             box-sizing: border-box; outline: none;
-            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
+            /* Внутренняя тень для объема */
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.8);
             transition: 0.3s;
         }
         
         select:focus, input:focus {
-            border-color: var(--gold-main);
-            background: #222;
-            box-shadow: inset 0 5px 10px rgba(0,0,0,0.7), 0 0 15px rgba(212, 175, 55, 0.4);
+             background: #202020;
+             box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2);
         }
         
-        select option { background-color: #1a1a1a; color: var(--gold-light); padding: 12px; }
+        select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
 
-        /* --- ПЕРЕКЛЮЧАТЕЛЬ (КАПСУЛА) --- */
+        /* --- ПЕРЕКЛЮЧАТЕЛЬ --- */
         .radio-group { 
-            display: flex; gap: 0; margin-top: 10px; 
-            background: #1a1a1a;
-            border-radius: 25px; padding: 5px;
-            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
-            border: 1px solid #444;
+            display: flex; gap: 2px; margin-top: 10px; 
+            background: #111;
+            padding: 4px;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8);
+            border: 1px solid #333;
+            border-radius: 4px;
         }
         .radio-lbl { 
-            flex: 1; padding: 12px; 
-            text-align: center; color: #888; cursor: pointer; transition: 0.3s;
+            flex: 1; padding: 14px; 
+            text-align: center; color: #777; cursor: pointer; transition: 0.3s;
             font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em;
-            border-radius: 20px; text-transform: uppercase;
+            text-transform: uppercase;
+            border-radius: 2px;
+             text-shadow: 0 1px 1px rgba(0,0,0,1);
         }
         input[type="radio"] { display: none; }
         
         input[type="radio"]:checked + .radio-lbl { 
-            background: linear-gradient(180deg, #d4af37 0%, #8a6e18 100%);
-            color: #220000;
+            /* Металлический фон для активной кнопки */
+            background: var(--metallic-gold-gradient);
+            color: #2a1a00;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
             text-shadow: 0 1px 0 rgba(255,255,255,0.3);
         }
 
-        /* --- ГЛАВНАЯ КНОПКА (ЗОЛОТОЙ СЛИТОК) --- */
+        /* --- ГЛАВНАЯ КНОПКА (РЕАЛИСТИЧНЫЙ ЗОЛОТОЙ СЛИТОК) --- */
         .btn {
-            width: 100%; padding: 20px; margin-top: 35px;
-            background: linear-gradient(180deg, #ffd700 0%, #b8860b 50%, #8a6e18 100%);
-            border: 1px solid #b8860b;
-            border-radius: 6px;
+            width: 100%; padding: 20px; margin-top: 40px;
+            /* Реалистичный металлический градиент с бликами */
+            background: linear-gradient(
+                to bottom, 
+                #ffeead 0%, 
+                #d4af37 20%, 
+                #a0832a 45%, 
+                #d4af37 55%, 
+                #ffeead 100%
+            );
+            
+            border: 1px solid #a0832a;
+            border-top: 1px solid #ffeead; /* Блик на грани */
+            
+            border-radius: 3px;
             font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px;
-            cursor: pointer; color: #1a0500;
+            cursor: pointer; 
+            color: #3a2a00; /* Темно-золотой текст */
             text-transform: uppercase;
+            
+            /* Тройная тень для объема */
             box-shadow: 
-                0 6px 0 #6e520e,
-                0 15px 20px rgba(0,0,0,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.5);
-            transition: 0.1s;
+                0 8px 0 #4a3b0a, /* Объем слитка */
+                0 15px 20px rgba(0,0,0,0.6), /* Тень на фоне */
+                inset 0 2px 3px rgba(255,255,255,0.5); /* Внутренний блик */
+            
+            transition: 0.15s;
             position: relative; top: 0;
             text-shadow: 0 1px 0 rgba(255,255,255,0.4);
         }
-        .btn:active { 
-            top: 6px; box-shadow: 0 0 0 #6e520e, inset 0 3px 8px rgba(0,0,0,0.5);
-        }
-        .btn:disabled { 
-            background: #333; border-color:#444; color: #666; 
-            box-shadow: none; top: 2px; text-shadow: none;
+        
+        .btn:hover {
+             filter: brightness(1.1); /* Ярче при наведении */
         }
 
-        /* --- СООБЩЕНИЯ --- */
-        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-family: 'Lato', sans-serif; font-size: 0.95em;}
-        .success { color: #4caf50; text-shadow: 0 1px 2px rgba(0,0,0,0.8); } 
-        .error { color: #f44336; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+        .btn:active { 
+            top: 8px; 
+            box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6);
+        }
+        .btn:disabled { 
+            background: #333; border:1px solid #444; color: #666; 
+            box-shadow: none; top: 4px; text-shadow: none;
+        }
+
+        /* --- ССЫЛКИ И СООБЩЕНИЯ --- */
+        .admin-link { 
+            text-align: center; margin-top: 30px; font-size: 0.75em; 
+            color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+
+        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
+        .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } 
+        .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
 
         /* --- АДМИН ПАНЕЛЬ --- */
         #adminPanel { 
             display: none; 
-            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-            border: 1px solid var(--gold-main);
-            box-shadow: 0 0 0 2px #000, 0 15px 40px rgba(0,0,0,0.8);
-            padding: 25px; border-radius: 8px; 
-            width: 100%; max-width: 420px; box-sizing: border-box; 
-            margin-top: 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 1px solid var(--gold-mid);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            padding: 30px; border-radius: 4px; 
+            width: 100%; max-width: 440px; box-sizing: border-box; 
+            margin-top: 20px;
         }
-        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 15px;}
+        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         
-        .admin-title { font-family: 'Cinzel'; color: var(--gold-main); font-weight: bold; font-size: 1em; letter-spacing: 1px; }
+        .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; 
+             background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
         
         .btn-small {
-            padding: 10px 15px; font-size: 0.75em; 
-            background: linear-gradient(180deg, #d4af37 0%, #8a6e18 100%);
-            color: #220000; border: 1px solid #8a6e18;
-            border-radius: 4px; cursor: pointer; text-transform: uppercase; 
-            box-shadow: 0 3px 0 #6e520e;
-            font-family: 'Lato', sans-serif; font-weight: bold;
+            padding: 12px 18px; font-size: 0.75em; 
+            background: var(--metallic-gold-gradient);
+            color: #2a1a00; border: 1px solid #8a6e18;
+            border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3);
+            font-family: 'Lato', sans-serif; font-weight: 900;
+            transition: 0.1s; position: relative; top:0;
         }
-        .btn-small:active { transform: translateY(3px); box-shadow: none; }
-        .btn-small.logout { background: #444; color: #ccc; border-color: #333; box-shadow: 0 3px 0 #222; }
+        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
+        .btn-small:hover { filter: brightness(1.1); }
+        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; }
 
+        /* Карточки заявок */
         .req-card { 
-            background: #2b2b2b; padding: 15px; margin-bottom: 15px; 
-            border: 1px solid #444; border-left: 4px solid var(--gold-main); 
-            border-radius: 4px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            background: #141414; padding: 18px; margin-bottom: 15px; 
+            border: 1px solid #333; border-left: 4px solid var(--gold-mid); 
+            border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
         }
         
-        .btn-act { flex: 1; padding: 10px; border: none; border-radius: 3px; cursor: pointer; font-weight: bold; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); }
-        .btn-yes { background: #2e7d32; color: #fff; border: 1px solid #1b5e20; }
-        .btn-no { background: #c62828; color: #fff; border: 1px solid #b71c1c; }
+        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
+        .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
+        .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
 
         /* --- МОДАЛЬНОЕ ОКНО --- */
-        #authModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 999; }
+        #authModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box { 
-            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-            border: 2px solid var(--gold-main); padding: 35px; width: 320px; text-align: center; border-radius: 8px;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+            background: linear-gradient(135deg, #222 0%, #111 100%);
+            border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.15);
         }
-
-        .admin-link { 
-            text-align: center; margin-top: 25px; font-size: 0.75em; 
-            color: #888; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; 
-        }
-        .admin-link:hover { color: var(--gold-main); }
     </style>
 </head>
 <body>
 
 <div class="logo-container">
-    <img class="logo" src="https://i.imgur.com/your_logo_url_here.png" alt="WestProm Global Industries">
+    <h1 class="gold-sign">WestProm</h1>
+    <div class="subtitle-sign">Global Industries</div>
 </div>
 
 <div class="box">
@@ -236,21 +319,21 @@
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
     
-    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:25px;">
         <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('archive')">🗄 Таблица</button>
     </div>
 
-    <div id="list" style="text-align:center; color:#888; font-size:0.9em;">Ожидание данных...</div>
+    <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
 <div id="authModal">
     <div class="auth-box">
-        <h3 style="color:var(--gold-main); font-family:'Cinzel'; margin-top:0; font-size: 1.5em; letter-spacing: 2px;">SECURITY</h3>
-        <input type="password" id="pass" style="text-align:center; margin-bottom:25px; font-size:1.4em; letter-spacing: 5px;">
-        <button class="btn" onclick="login()" style="margin-top:0; padding: 15px;">Вход</button>
-        <div style="margin-top:25px; color:#666; cursor:pointer; font-size:0.8em; text-transform:uppercase;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
+        <h3 style="font-family:'Cinzel'; margin-top:0; font-size: 1.6em; letter-spacing: 2px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SECURITY</h3>
+        <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;">
+        <button class="btn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
+        <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
     </div>
 </div>
 
@@ -342,15 +425,15 @@
         l.innerHTML="Загрузка списка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px'>Нет новых заявок</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:20px; opacity:0.7;'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div style="margin-bottom:8px;"><span style="font-size:0.8em;color:#888;float:right">${i['Дата']}</span><b style="color:#fff; font-size:1.1em;">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.95em;color:#aaa;">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-main); font-weight:bold;">${i['Вид работ']}</span></div>
+                <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #333;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.95em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> <br> ⚙️ Тип: <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
                 <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
                 </div>`;
                 l.appendChild(div);
             });
