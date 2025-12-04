@@ -75,7 +75,7 @@
             <select id="nameSelect" name="name" required><option value="" disabled selected>Загрузка...</option></select>
 
             <label>Ваш ПИН-код</label>
-            <input type="tel" name="pin" required placeholder="Например: 1234" maxlength="6" style="text-align:center; letter-spacing: 5px; font-size: 1.2em;">
+            <input type="tel" name="pin" required placeholder="****" maxlength="6" style="text-align:center; letter-spacing: 5px; font-size: 1.2em;">
             
             <label>Количество людей</label>
             <select name="count" id="countSelect">
@@ -129,8 +129,8 @@
 
 <script>
     // ============================================================
-    // 👇 ВСТАВЬТЕ СЮДА ССЫЛКУ API 👇
-    const API = "https://script.google.com/macros/s/AKfycbyb9Nvi5dIlzEbxAV3X8o_a1WIbMJ5sDBQaIlAVtsCSFhuUdSdA3TzxZn1azy6w-Nf5mA/exec"; 
+    // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
+    const API = "https://script.google.com/macros/s/AKfycbyF_yxDesYywpXmsJ4MB5YpP2SMC8bRAZqmXjoyl009_sILQTMK6Pmpqou6eEC8-KpKMA/exec"; 
     // ============================================================
 
     if ('serviceWorker' in navigator) {
@@ -208,10 +208,6 @@
         const b = document.getElementById('sBtn');
         b.disabled = true; b.innerText = "Проверка..."; m.innerText = ""; m.className = "";
         
-        const isRemembered = rememberMe.checked;
-        const currentName = nameSelect.value;
-        const currentCount = countSelect.value;
-
         const fd = new FormData(f);
         const p = new URLSearchParams();
         p.append('action', 'create');
@@ -223,8 +219,10 @@
             if(d.result==="success"){
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
-                if(isRemembered) {
-                    nameSelect.value = currentName; countSelect.value = currentCount; rememberMe.checked = true;
+                if(localStorage.getItem('rememberStatus') === 'true') {
+                    nameSelect.value = localStorage.getItem('workerName');
+                    countSelect.value = localStorage.getItem('workerCount');
+                    rememberMe.checked = true;
                 }
                 document.getElementById('type1').checked = true;
             } else if (d.result === "duplicate") {
