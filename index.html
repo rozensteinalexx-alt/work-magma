@@ -7,20 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Палитра на основе фото здания */
-            --bg-stone: #1c1c1c;       /* Темный гранит */
-            --panel-bg: #262626;       /* Светлый камень */
-            --gold-main: #d4af37;      /* Основное золото */
-            --gold-light: #ffe680;     /* Блик золота */
-            --gold-shadow: #8a6e18;    /* Тень золота */
+            --bg-stone: #1c1c1c; 
+            --panel-bg: #262626;
+            --gold-main: #d4af37;
+            --gold-light: #ffe680;
+            --gold-shadow: #8a6e18;
             --text-main: #f0f0f0;
-            --border-glow: 0 0 15px rgba(212, 175, 55, 0.15);
         }
 
         body {
             font-family: 'Lato', sans-serif;
             background-color: var(--bg-stone);
-            /* Текстура камня через градиент */
             background-image: linear-gradient(to bottom right, #2b2b2b, #121212);
             color: var(--text-main);
             margin: 0; padding: 20px;
@@ -28,205 +25,83 @@
             min-height: 100vh;
         }
 
-        /* --- КОНТЕЙНЕР (Как фасад здания) --- */
         .box {
             background: var(--panel-bg);
             border: 1px solid #444;
-            border-top: 2px solid var(--gold-main); /* Золотой карниз сверху */
+            border-top: 2px solid var(--gold-main);
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
             padding: 30px;
-            border-radius: 4px; /* Более строгие углы */
+            border-radius: 4px;
             width: 100%; max-width: 460px;
             box-sizing: border-box;
             margin-bottom: 25px;
-            position: relative;
         }
 
-        /* --- ЛОГОТИП (Как вывеска) --- */
         h2 {
-            font-family: 'Cinzel', serif; /* Шрифт как на фото */
-            text-align: center;
-            margin: 0 0 5px 0;
-            font-size: 2.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            
-            /* Эффект металлического золота */
+            font-family: 'Cinzel', serif;
+            text-align: center; margin: 0 0 5px 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px;
             background: linear-gradient(180deg, var(--gold-light) 10%, var(--gold-main) 50%, var(--gold-shadow) 90%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            
-            /* Эффект подсветки сзади (Backlight) */
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
         }
 
         .subtitle {
-            text-align: center;
-            font-family: 'Cinzel', serif;
-            color: #888;
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            border-bottom: 1px solid #444;
-            padding-bottom: 15px;
+            text-align: center; font-family: 'Cinzel', serif; color: #888; font-size: 0.7rem; letter-spacing: 4px;
+            margin-bottom: 30px; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 15px;
         }
 
-        /* --- ПОЛЯ ВВОДА --- */
-        label {
-            color: var(--gold-main);
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            display: block;
-            margin-top: 20px;
-        }
+        label { color: var(--gold-main); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; margin-top: 20px; }
 
         select, input {
-            width: 100%;
-            padding: 15px;
-            background: #1a1a1a;
-            border: 1px solid #444;
-            border-left: 2px solid var(--gold-main); /* Золотой акцент слева */
-            border-radius: 2px;
-            color: #fff;
-            font-family: 'Lato', sans-serif;
-            font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-            transition: all 0.3s ease;
+            width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #444; border-left: 2px solid var(--gold-main);
+            border-radius: 2px; color: #fff; font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
         }
+        select:focus, input:focus { border-color: var(--gold-main); background: #222; }
+        select option { background-color: #1a1a1a; color: #fff; padding: 10px; }
 
-        select:focus, input:focus {
-            border-color: var(--gold-main);
-            box-shadow: var(--border-glow);
-            background: #222;
-        }
-
-        /* 🔥 ИСПРАВЛЕНИЕ ВЫПАДАЮЩЕГО СПИСКА 🔥 */
-        select option {
-            background-color: #1a1a1a;
-            color: #fff;
-            padding: 10px;
-        }
-
-        /* --- ПЕРЕКЛЮЧАТЕЛЬ --- */
         .radio-group { display: flex; gap: 0; margin-top: 5px; border: 1px solid #444; border-radius: 2px; overflow: hidden; }
         .radio-lbl {
-            flex: 1; padding: 14px;
-            background: #1a1a1a; 
-            text-align: center; color: #777;
-            cursor: pointer; transition: 0.3s;
-            font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em;
-            border-right: 1px solid #333;
+            flex: 1; padding: 14px; background: #1a1a1a; text-align: center; color: #777; cursor: pointer; transition: 0.3s;
+            font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; border-right: 1px solid #333;
         }
         .radio-lbl:last-child { border-right: none; }
-        
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-lbl {
-            background: linear-gradient(45deg, #2b2b2b, #333);
-            color: var(--gold-main);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            background: linear-gradient(45deg, #2b2b2b, #333); color: var(--gold-main);
             text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
         }
 
-        /* --- КНОПКА ОТПРАВКИ (ЗОЛОТОЙ СЛИТОК) --- */
         .btn {
-            width: 100%;
-            padding: 16px;
-            margin-top: 35px;
-            /* Градиент под золото */
+            width: 100%; padding: 16px; margin-top: 35px;
             background: linear-gradient(to bottom, #cfb566, #aa8526);
-            border: 1px solid #ffe680;
-            border-radius: 2px;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 17px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            color: #1a1a1a; /* Темный текст на золоте читается лучше */
-            text-transform: uppercase;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            transition: 0.3s;
+            border: 1px solid #ffe680; border-radius: 2px;
+            font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; letter-spacing: 1px; cursor: pointer; color: #1a1a1a;
+            text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s;
         }
-        
-        .btn:hover {
-            background: linear-gradient(to bottom, #e6cd7a, #c59b2e);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-            transform: translateY(-1px);
-        }
-        .btn:active { transform: scale(0.99); box-shadow: none; }
+        .btn:hover { background: linear-gradient(to bottom, #e6cd7a, #c59b2e); transform: translateY(-1px); }
         .btn:disabled { background: #333; border-color:#444; color: #666; cursor: not-allowed; }
 
-        /* Кнопки админки */
         .btn-small {
-            padding: 10px 15px;
-            font-size: 0.75em;
-            background: #222;
-            color: #aaa;
-            border: 1px solid #444;
-            border-radius: 2px;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.2s;
-            font-family: 'Lato', sans-serif; letter-spacing: 1px;
+            padding: 10px 15px; font-size: 0.75em; background: #222; color: #aaa; border: 1px solid #444;
+            border-radius: 2px; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-family: 'Lato', sans-serif; letter-spacing: 1px;
         }
-        .btn-small:hover {
-            border-color: var(--gold-main);
-            color: var(--gold-main);
-            background: #1a1a1a;
-        }
+        .btn-small:hover { border-color: var(--gold-main); color: var(--gold-main); background: #1a1a1a; }
 
-        /* --- СООБЩЕНИЯ --- */
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-family: 'Cinzel', serif; font-size: 0.9em;}
-        .success { color: #4caf50; text-shadow: 0 0 10px rgba(76, 175, 80, 0.3); }
-        .error { color: #d32f2f; text-shadow: 0 0 10px rgba(211, 47, 47, 0.3); }
+        .success { color: #4caf50; } .error { color: #d32f2f; }
 
-        /* --- АДМИН ПАНЕЛЬ --- */
         #adminPanel { display: none; margin-top: 20px; border-top: 1px solid #444; padding-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        
-        .req-card {
-            background: #1f1f1f;
-            padding: 15px; margin-bottom: 12px;
-            border: 1px solid #333;
-            border-left: 3px solid var(--gold-main);
-        }
+        .req-card { background: #1f1f1f; padding: 15px; margin-bottom: 12px; border: 1px solid #333; border-left: 3px solid var(--gold-main); }
         .req-info { font-size: 1.1rem; color: #e0e0e0; font-family: 'Cinzel', serif; }
-        .req-date { font-size: 0.8em; color: #666; float: right; }
-        .req-detail { font-size: 0.9em; color: var(--gold-main); margin-top: 5px; }
-        
         .req-btns { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-act {
-            flex: 1; padding: 10px; border: none; border-radius: 2px; 
-            cursor: pointer; font-weight: bold; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .btn-act { flex: 1; padding: 10px; border: none; border-radius: 2px; cursor: pointer; font-weight: bold; font-size: 0.75em; text-transform: uppercase; }
         .btn-yes { background: #1b3320; color: #81c784; border: 1px solid #2e7d32; }
-        .btn-yes:hover { background: #2e7d32; color: #fff; }
-        
         .btn-no { background: #331b1b; color: #e57373; border: 1px solid #c62828; }
-        .btn-no:hover { background: #c62828; color: #fff; }
 
-        /* --- МОДАЛЬНОЕ ОКНО --- */
-        #authModal {
-            position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.95);
-            display: none; justify-content: center; align-items: center; z-index: 999;
-        }
-        .auth-box {
-            background: #262626; border: 1px solid var(--gold-main);
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-            padding: 40px; width: 320px; text-align: center;
-        }
-
-        .admin-link {
-            text-align: center; margin-top: 25px; font-size: 0.7em; 
-            color: #555; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 2px;
-        }
+        #authModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .auth-box { background: #262626; border: 1px solid var(--gold-main); padding: 40px; width: 320px; text-align: center; }
+        .admin-link { text-align: center; margin-top: 25px; font-size: 0.7em; color: #555; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; }
         .admin-link:hover { color: var(--gold-main); }
     </style>
 </head>
@@ -235,29 +110,21 @@
 <div class="box">
     <h2>WestProm</h2>
     <div class="subtitle">Global Industries</div>
-    
     <form id="wForm">
         <label>Сотрудник</label>
-        <select id="nSelect" name="name" required onchange="saveUser()"><option>Инициализация...</option></select>
-        
+        <select id="nSelect" name="name" required onchange="saveUser()"><option>Загрузка...</option></select>
         <label>ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="• • • •" maxlength="6" style="text-align:center; letter-spacing:10px; font-size: 1.2em;" oninput="saveUser()">
-
         <label>Количество (Чел.)</label>
         <select name="count">
             <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=1;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
-
         <label>Тип работ</label>
         <div class="radio-group">
-            <input type="radio" id="t1" name="type" value="Дневка" checked>
-            <label for="t1" class="radio-lbl">Дневка</label>
-            
-            <input type="radio" id="t2" name="type" value="Объем">
-            <label for="t2" class="radio-lbl">Объем</label>
+            <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
+            <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-
         <button class="btn" id="sBtn">Отправить отчет</button>
     </form>
     <div id="msg"></div>
@@ -269,13 +136,11 @@
         <span style="font-family:'Cinzel'; color:var(--gold-main); font-size:1.1em;">Admin Control</span>
         <button class="btn-small" style="border-color:#5c2e2e; color:#e57373;" onclick="logout()">Выход</button>
     </div>
-    
     <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
         <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
-        <button class="btn-small" onclick="dl('archive')" style="color:#777;">🗄 Архив</button>
+        <button class="btn-small" onclick="dl('archive')" style="color:#aaa;">🗄 Архив (Таблица)</button>
     </div>
-
     <div id="list" style="text-align:center; color:#555; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
@@ -289,9 +154,9 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ССЫЛКУ API ЗДЕСЬ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzua2FpBhSf6zMd2etqV053HGrv79KKbY4w9fBLQ0A4eZwW_YEpQ8OIzlhb3tqp2sj5Uw/exec";
-    // 👆👆 --------------------------- 👆👆
+    // 👇 ВСТАВЬТЕ ВАШУ ССЫЛКУ СЮДА 👇
+    const API = "https://script.google.com/macros/s/AKfycbwv0VmDRJbrM6UYBVOTDmVKWEXzGJSra0_rxOgp2pNN10CtOe90R3Lv0m8DceSHhl9U/exec";
+    // 👆 ------------------------- 👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
@@ -323,20 +188,16 @@
         let b = document.getElementById('sBtn');
         let m = document.getElementById('msg');
         b.disabled=true; b.innerText="Обработка..."; m.innerText="";
-        
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
         for(let [k,v] of fd) p.append(k,v);
-
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 m.className="success"; m.innerText="✅ Отчет принят";
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); m.innerText=""; }, 2000);
-            } else {
-                m.className="error"; m.innerText= "⛔ " + d.message;
-            }
-        }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; m.className="error"; m.innerText="Ошибка связи с сервером"; });
+            } else { m.className="error"; m.innerText= "⛔ " + d.message; }
+        }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; m.className="error"; m.innerText="Ошибка связи"; });
     };
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
@@ -349,10 +210,7 @@
         } else alert("Доступ запрещен");
     }
     function logout() {
-        if(confirm("Завершить сеанс администратора?")) {
-            localStorage.removeItem('wp_admin_auth');
-            location.reload();
-        }
+        if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); }
     }
 
     function loadReq() {
@@ -364,8 +222,8 @@
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div><span class="req-date">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
-                <div class="req-detail">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
+                <div><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.9em;color:var(--gold-main);margin-top:5px">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
                 <div class="req-btns">
                     <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
                     <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
@@ -382,9 +240,14 @@
     }
 
     function dl(type) {
-        let act = (type==='excel') ? 'get_excel' : 'archive';
-        if(type==='archive' && !confirm("⚠️ Внимание!\nТекущий месяц будет закрыт и перенесен в архив.\nНачать новый месяц?")) return;
-        window.open(API+"?action="+act, '_blank');
+        if(type === 'archive') {
+             // Открываем ссылку на саму Google таблицу
+             fetch(API+"?action=open_archive").then(r=>r.json()).then(d=>{
+                 if(d.url) window.open(d.url, '_blank');
+             });
+             return;
+        }
+        window.open(API+"?action=get_excel", '_blank');
     }
 </script>
 
