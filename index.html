@@ -37,14 +37,18 @@
             border: 1px solid var(--carbon-border); border-top: 2px solid var(--fire-orange); box-sizing: border-box;
         }
         h2 {
-            text-align: center; margin: 0 0 25px 0; font-weight: 800; text-transform: uppercase;
+            text-align: center; margin: 0; font-weight: 800; text-transform: uppercase;
             background: linear-gradient(to right, var(--fire-yellow), var(--fire-orange));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             font-size: 1.8rem; filter: drop-shadow(0 0 5px rgba(255, 95, 31, 0.5));
         }
+        .subtitle {
+            text-align: center; color: var(--fire-orange); margin-top: 5px; margin-bottom: 25px;
+            font-size: 1em; opacity: 0.8; letter-spacing: 1px;
+        }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d6cfcf; }
         
-        select, input[type="text"], input[type="password"], input[type="tel"] {
+        select, input[type="text"], input[type="password"], input[type="tel"], input[type="number"] {
             width: 100%; padding: 14px; margin-bottom: 20px;
             border: 2px solid var(--carbon-border); border-radius: 8px;
             font-size: 16px; box-sizing: border-box; background: #241919;
@@ -102,10 +106,12 @@
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap:10px; }
         .refresh { cursor: pointer; font-size: 1.4em; color: var(--fire-orange); padding: 0 10px;}
         
-        .btn-mini { background: #241919; border: 1px solid var(--fire-yellow); color: var(--fire-yellow); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.9em; margin-right: 5px; }
+        .btn-mini { background: #241919; border: 1px solid var(--fire-yellow); color: var(--fire-yellow); padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.9em; margin-right: 5px; margin-bottom: 5px; }
         .btn-mini:hover { background: var(--fire-yellow); color: #000; }
         .btn-reset { border-color: #d12222; color: #d12222; font-size:0.8em; padding: 5px 10px; margin-left: 10px;}
         .btn-reset:hover { background: #d12222; color: #fff; }
+        .btn-pay { border-color: #55ff55; color: #55ff55; }
+        .btn-pay:hover { background: #55ff55; color: #000; }
 
         .card { background: #241919; border-left: 4px solid var(--fire-orange); border-radius: 4px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .card-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.8em; color: #888; }
@@ -122,7 +128,8 @@
         .emp-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; color: #ccc; }
         .emp-status { font-size: 1.2em; }
 
-        #authModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        /* МОДАЛЬНЫЕ ОКНА */
+        #authModal, #payModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: var(--card-magma); padding: 30px; border-radius: 16px; width: 90%; max-width: 350px; border: 1px solid var(--fire-orange); text-align: center; }
     </style>
 </head>
@@ -131,12 +138,12 @@
 <div class="container">
     <div id="requestView">
         <h2>WestProm</h2>
-        <div style="text-align:center; color:var(--fire-orange); margin-bottom:20px;">Отчет каждый день</div>
+        <div class="subtitle">Отчет каждый день</div>
         <form id="wForm">
             <label>Фамилия Имя</label>
             <select id="nameSelect" name="name" required><option value="" disabled selected>Загрузка...</option></select>
 
-            <label>Ваш ПИН-код (придумайте при первом входе)</label>
+            <label>Ваш ПИН-код</label>
             <input type="tel" name="pin" required placeholder="Например: 1234" maxlength="6" style="text-align:center; letter-spacing: 5px; font-size: 1.2em;">
             
             <label>Количество людей</label>
@@ -164,6 +171,7 @@
             <div style="margin-bottom:10px;">
                 <button class="btn-mini" onclick="showRequests()">📋 Заявки</button>
                 <button class="btn-mini" onclick="showEmployees()">👥 Сотрудники</button>
+                <button class="btn-mini btn-pay" onclick="openPay()">💰 Выдать деньги</button>
             </div>
             <div>
                 <button class="btn-mini" onclick="downloadPDF()">📄 PDF</button>
@@ -189,10 +197,24 @@
     </div>
 </div>
 
+<div id="payModal" style="display:none;">
+    <div class="modal-content">
+        <h3 style="color:#55ff55">💰 Выплата денег</h3>
+        <label>Кому:</label>
+        <select id="payNameSelect"><option>Загрузка...</option></select>
+        
+        <label>Сумма (руб):</label>
+        <input type="number" id="payAmount" placeholder="5000">
+        
+        <button class="main-btn" id="payBtnSubmit" onclick="sendPayment()">Записать</button>
+        <button onclick="closePay()" style="background:none; border:none; color:#666; margin-top:10px; cursor:pointer;">Отмена</button>
+    </div>
+</div>
+
 <script>
     // ============================================================
-    // 👇 ССЫЛКА ИЗ ВАШЕГО КОДА 👇
-    const API = "https://script.google.com/macros/s/AKfycbxfDhjQGPqKsNePBkmKmzjfCFZzhY3lpo93rIPcrL1ZecFiR56jDDSovSgAY0EOXkCjCw/exec"; 
+    // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
+    const API = "https://script.google.com/macros/s/AKfycbxljl9LzHIMuheaEr49PQXAaSLMwixw2bYOpF_-mTcYD4GfYPb8kd7-3mcqGHXLtf6QfQ/exec"; 
     // ============================================================
 
     if ('serviceWorker' in navigator) {
@@ -206,9 +228,24 @@
     const nameSelect = document.getElementById('nameSelect');
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
+    const payNameSelect = document.getElementById('payNameSelect'); // Для выплат
     let currentAdminView = 'requests';
 
+    function getDeviceUUID() {
+        let uuid = localStorage.getItem('device_uuid');
+        if (!uuid) {
+            uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+            localStorage.setItem('device_uuid', uuid);
+        }
+        return uuid;
+    }
+
     window.addEventListener('load', () => {
+        getDeviceUUID(); 
+        
         if (localStorage.getItem('admin_auth') === 'true') {
             document.querySelector('.admin-link').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
@@ -217,26 +254,60 @@
 
         fetch(API + "?action=get_employees").then(res => res.json()).then(res => {
             nameSelect.innerHTML = '<option value="" disabled selected>Выберите сотрудника</option>';
+            payNameSelect.innerHTML = ''; // Очищаем список для выплат
             if(res.data && res.data.length > 0){
                 res.data.forEach(name => {
+                    // Для главной формы
                     const opt = document.createElement('option');
                     opt.value = name; opt.innerText = name;
                     nameSelect.appendChild(opt);
+                    
+                    // Для формы выплат
+                    const opt2 = document.createElement('option');
+                    opt2.value = name; opt2.innerText = name;
+                    payNameSelect.appendChild(opt2);
                 });
             } else {
                 nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
             }
+            restoreMemory();
         });
     });
+
+    function restoreMemory() {
+        if (localStorage.getItem('rememberStatus') === 'true') {
+            rememberMe.checked = true;
+            nameSelect.value = localStorage.getItem('workerName') || "";
+            countSelect.value = localStorage.getItem('workerCount') || "1";
+        }
+    }
+
+    function saveToMemory() {
+        if (rememberMe.checked) {
+            localStorage.setItem('rememberStatus', 'true');
+            localStorage.setItem('workerName', nameSelect.value);
+            localStorage.setItem('workerCount', countSelect.value);
+        } else {
+            localStorage.removeItem('rememberStatus'); localStorage.removeItem('workerName'); localStorage.removeItem('workerCount');
+        }
+    }
+    rememberMe.addEventListener('change', saveToMemory);
+    nameSelect.addEventListener('change', saveToMemory);
+    countSelect.addEventListener('change', saveToMemory);
     
     f.onsubmit = e => {
         e.preventDefault();
         const b = document.getElementById('sBtn');
         b.disabled = true; b.innerText = "Проверка..."; m.innerText = ""; m.className = "";
         
+        const isRemembered = rememberMe.checked;
+        const currentName = nameSelect.value;
+        const currentCount = countSelect.value;
+
         const fd = new FormData(f);
         const p = new URLSearchParams();
         p.append('action', 'create');
+        p.append('uuid', getDeviceUUID());
         for(const [k,v] of fd) p.append(k,v);
 
         fetch(API, {method:'POST', body:p})
@@ -244,6 +315,9 @@
             if(d.result==="success"){
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
+                if(isRemembered) {
+                    nameSelect.value = currentName; countSelect.value = currentCount; rememberMe.checked = true;
+                }
                 document.getElementById('type1').checked = true;
             } else if (d.result === "duplicate") {
                 m.className="error"; m.innerText = "⛔ " + d.message;
@@ -261,6 +335,31 @@
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     function closeAuth() { document.getElementById('authModal').style.display = 'none'; }
+
+    // --- ФУНКЦИИ ВЫПЛАТЫ ---
+    function openPay() { document.getElementById('payModal').style.display = 'flex'; }
+    function closePay() { document.getElementById('payModal').style.display = 'none'; }
+    
+    function sendPayment() {
+        const name = payNameSelect.value;
+        const amount = document.getElementById('payAmount').value;
+        if(!amount) { alert("Введите сумму!"); return; }
+        
+        const btn = document.getElementById('payBtnSubmit');
+        btn.innerText = "Запись..."; btn.disabled = true;
+        
+        const p = new URLSearchParams();
+        p.append('action', 'add_payment');
+        p.append('name', name);
+        p.append('amount', amount);
+        
+        fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
+            alert(d.message);
+            document.getElementById('payAmount').value = "";
+            closePay();
+            btn.innerText = "Записать"; btn.disabled = false;
+        });
+    }
 
     function checkPass() {
         const pass = document.getElementById('adminPass').value;
@@ -376,9 +475,3 @@
 </script>
 </body>
 </html>
-
-
-
-
-
-
