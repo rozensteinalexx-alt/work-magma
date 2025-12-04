@@ -68,12 +68,17 @@
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Кнопки админки */
         .btn-small {
-            padding: 12px 18px; font-size: 0.75em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0;
+            width: 100%;
         }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
-        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; }
+        .btn-small:hover { filter: brightness(1.1); }
+        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
+        
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
         .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
@@ -123,10 +128,11 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:25px;">
+    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:25px;">
         <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
-        <button class="btn-small" onclick="dl('archive')">🗄 Таблица</button>
+        <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
+        <button class="btn-small" onclick="dl('archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
     </div>
     <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
@@ -142,8 +148,8 @@
 
 <script>
     // ========================================================
-    // 👇👇 ВСТАВЬТЕ ВАШУ НОВУЮ ССЫЛКУ ПОСЛЕ ДЕПЛОЯ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwBN3KUaWvfPvZ_7FhFUnMv5HTBkeKKzjqpxDBU7pxFqakUp6P6hVTHUkdh71Odk3wR/exec";
+    // 👇👇 ВСТАВЬТЕ НОВУЮ ССЫЛКУ НИЖЕ 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbw2GtTFh324UBNuf6WjdoxkEICZzchlse7-K8T4ueyBz67eKnLhVM1QQKqOAo7khGVk1w/exec";
     // ========================================================
 
     const ns = document.getElementById('nSelect');
@@ -222,9 +228,9 @@
 
     function dl(type) {
         if(type === 'archive') {
-             fetch(API+"?action=open_archive").then(r=>r.json()).then(d=>{ if(d.url) window.open(d.url, '_blank'); }); return;
+             fetch(API+"?action=get_archive").then(r=>r.json()).then(d=>{ if(d.url) window.open(d.url, '_blank'); }); return;
         }
-        window.open(API+"?action=get_excel", '_blank');
+        window.open(API+"?action=get_" + type, '_blank');
     }
 </script>
 
