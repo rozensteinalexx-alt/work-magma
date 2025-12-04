@@ -3,40 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WestProm</title>
+    <title>WestProm Neon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #121212; --card: #1e1e1e; --primary: #ff9900; --text: #fff; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); padding: 10px; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        
-        .box { background: var(--card); padding: 20px; border-radius: 12px; width: 100%; max-width: 450px; box-sizing: border-box; margin-bottom: 20px; border: 1px solid #333; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: var(--primary); margin: 0 0 20px 0; text-transform: uppercase; }
-        
-        label { color: #aaa; font-size: 0.85em; display: block; margin-bottom: 5px; margin-top: 15px; }
-        select, input { width: 100%; padding: 12px; background: #2c2c2c; border: 1px solid #444; border-radius: 8px; color: #fff; font-size: 16px; box-sizing: border-box; outline: none; }
-        select:focus, input:focus { border-color: var(--primary); }
-        
-        .radio-group { display: flex; gap: 10px; }
-        .radio-lbl { flex: 1; padding: 12px; background: #2c2c2c; border: 1px solid #444; border-radius: 8px; text-align: center; color: #aaa; cursor: pointer; }
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(20, 20, 20, 0.85);
+            --neon-orange: #ff9d00;
+            --neon-red: #ff2a2a;
+            --neon-green: #00ff41;
+            --text-main: #ffffff;
+            --text-muted: #aaaaaa;
+            --glass-border: 1px solid rgba(255, 157, 0, 0.3);
+            --shadow-glow: 0 0 15px rgba(255, 157, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 42, 42, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(255, 157, 0, 0.15) 0%, transparent 50%);
+            color: var(--text-main);
+            margin: 0; padding: 15px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- КОНТЕЙНЕРЫ И КАРТОЧКИ --- */
+        .box {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+            padding: 25px;
+            border-radius: 16px;
+            width: 100%; max-width: 450px;
+            box-sizing: border-box;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Декоративная линия сверху */
+        .box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
+            box-shadow: 0 0 10px var(--neon-orange);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin: 0 0 25px 0;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--neon-orange), 0 0 20px var(--neon-red);
+        }
+
+        /* --- ПОЛЯ ВВОДА --- */
+        label {
+            color: var(--neon-orange);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+            margin-top: 20px;
+            text-shadow: 0 0 5px rgba(255, 157, 0, 0.5);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+            border-bottom: 2px solid var(--neon-orange);
+            border-radius: 4px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            background: rgba(255, 157, 0, 0.05);
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 15px rgba(255, 157, 0, 0.3);
+        }
+
+        /* --- ПЕРЕКЛЮЧАТЕЛЬ (РАДИО) --- */
+        .radio-group {
+            display: flex; gap: 15px; margin-top: 5px;
+        }
+        .radio-lbl {
+            flex: 1;
+            padding: 15px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            border-radius: 4px;
+            text-align: center;
+            color: #666;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9em;
+            position: relative;
+            overflow: hidden;
+        }
         input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .radio-lbl { background: rgba(255,153,0,0.1); border-color: var(--primary); color: var(--primary); }
-
-        .btn { width: 100%; padding: 14px; margin-top: 25px; background: var(--primary); border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; color: #000; }
-        .btn:disabled { opacity: 0.6; }
-        .btn-small { padding: 5px 10px; font-size: 0.85em; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px; cursor: pointer; }
         
-        #msg { text-align: center; margin-top: 15px; font-weight: bold; min-height: 20px; }
-        .success { color: var(--primary); } .error { color: #ff4444; }
+        input[type="radio"]:checked + .radio-lbl {
+            background: rgba(255, 157, 0, 0.1);
+            border: 1px solid var(--neon-orange);
+            color: var(--neon-orange);
+            box-shadow: inset 0 0 15px rgba(255, 157, 0, 0.2), 0 0 10px rgba(255, 157, 0, 0.4);
+            text-shadow: 0 0 5px var(--neon-orange);
+        }
 
-        /* Админ панель */
-        #adminPanel { display: none; border-top: 3px solid var(--primary); }
-        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .req-card { background: #2a2a2a; padding: 10px; margin-bottom: 8px; border-left: 3px solid var(--primary); border-radius: 4px; }
-        .req-btns { display: flex; gap: 5px; margin-top: 8px; }
-        .btn-yes { flex:1; background: #2e7d32; border:none; color:#fff; padding:8px; border-radius:4px; cursor:pointer;}
-        .btn-no { flex:1; background: #c62828; border:none; color:#fff; padding:8px; border-radius:4px; cursor:pointer;}
+        /* --- КНОПКИ --- */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            margin-top: 30px;
+            background: linear-gradient(135deg, #a31818, #ff5e00);
+            border: none;
+            border-radius: 4px; /* Более острые углы для киберпанка */
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            color: #fff;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.4);
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 94, 0, 0.6);
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { background: #333; color: #777; box-shadow: none; cursor: not-allowed; }
 
-        #authModal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index:99; }
-        .auth-box { background: var(--card); padding: 30px; border-radius: 12px; text-align: center; border: 1px solid var(--primary); }
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.8em;
+            background: rgba(0,0,0,0.5);
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .btn-small:hover {
+            background: var(--neon-orange);
+            color: #000;
+            box-shadow: 0 0 10px var(--neon-orange);
+        }
+
+        /* --- СООБЩЕНИЯ --- */
+        #msg { text-align: center; margin-top: 20px; font-weight: bold; min-height: 20px; font-family: 'Orbitron', sans-serif;}
+        .success { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
+        .error { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+
+        /* --- АДМИН ПАНЕЛЬ --- */
+        #adminPanel { display: none; margin-top: 20px; border-top: 1px solid var(--neon-orange); }
+        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;}
+        
+        .req-card {
+            background: linear-gradient(90deg, rgba(20,20,20,1) 0%, rgba(35,35,35,1) 100%);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid var(--neon-orange);
+            border-radius: 0 4px 4px 0;
+            position: relative;
+        }
+        .req-info { font-size: 1rem; color: #fff; margin-bottom: 5px; }
+        .req-date { font-size: 0.8em; color: #777; float: right; }
+        .req-detail { font-size: 0.9em; color: #aaa; }
+        
+        .req-btns { display: flex; gap: 10px; margin-top: 12px; }
+        
+        .btn-yes, .btn-no {
+            flex: 1; padding: 10px; border: none; border-radius: 4px; 
+            cursor: pointer; font-weight: bold; text-transform: uppercase; font-family: 'Orbitron', sans-serif; font-size: 0.8em;
+            transition: 0.3s;
+        }
+        .btn-yes { background: rgba(0, 255, 65, 0.1); color: var(--neon-green); border: 1px solid var(--neon-green); }
+        .btn-yes:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
+        
+        .btn-no { background: rgba(255, 42, 42, 0.1); color: var(--neon-red); border: 1px solid var(--neon-red); }
+        .btn-no:hover { background: var(--neon-red); color: #fff; box-shadow: 0 0 15px var(--neon-red); }
+
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        #authModal {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 999;
+        }
+        .auth-box {
+            background: #111; border: 1px solid var(--neon-orange);
+            box-shadow: 0 0 30px rgba(255, 157, 0, 0.3);
+            padding: 40px; border-radius: 10px; text-align: center;
+        }
+
+        /* --- ССЫЛКА АДМИНА --- */
+        .admin-link {
+            text-align: center; margin-top: 20px; font-size: 0.8em; 
+            color: #444; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .admin-link:hover { color: var(--neon-orange); text-shadow: 0 0 5px var(--neon-orange); }
+
+        /* Скроллбар */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-orange); }
     </style>
 </head>
 <body>
@@ -44,51 +237,54 @@
 <div class="box">
     <h2>WestProm</h2>
     <form id="wForm">
-        <label>Фамилия Имя</label>
-        <select id="nSelect" name="name" required onchange="saveUser()"><option>Загрузка...</option></select>
+        <label>Сотрудник</label>
+        <select id="nSelect" name="name" required onchange="saveUser()"><option>Загрузка системы...</option></select>
         
-        <label>ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="****" maxlength="6" style="text-align:center; letter-spacing:4px;" oninput="saveUser()">
+        <label>ПИН-код доступа</label>
+        <input type="tel" id="nPin" name="pin" required placeholder="• • • •" maxlength="6" style="text-align:center; letter-spacing:8px; font-size: 1.2em;" oninput="saveUser()">
 
-        <label>Количество</label>
+        <label>Количество (Чел.)</label>
         <select name="count">
-            <option value="0.5">0.5 (Полдня)</option>
+            <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=1;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
 
-        <label>Тип работ</label>
+        <label>Режим работы</label>
         <div class="radio-group">
-            <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">⏱ Дневка</label>
-            <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">📦 Объем</label>
+            <input type="radio" id="t1" name="type" value="Дневка" checked>
+            <label for="t1" class="radio-lbl">⏱ Дневка</label>
+            
+            <input type="radio" id="t2" name="type" value="Объем">
+            <label for="t2" class="radio-lbl">📦 Объем</label>
         </div>
 
-        <button class="btn" id="sBtn">ОТПРАВИТЬ</button>
+        <button class="btn" id="sBtn">ОТПРАВИТЬ ОТЧЕТ</button>
     </form>
     <div id="msg"></div>
-    <div style="text-align:center; margin-top:20px; font-size:0.8em; color:#555; cursor:pointer;" onclick="openAuth()">Администратор ▼</div>
+    <div class="admin-link" onclick="openAuth()">Система Администратора ▼</div>
 </div>
 
 <div class="box" id="adminPanel">
     <div class="admin-head">
-        <span style="font-weight:bold; color:var(--primary)">АДМИНКА</span>
-        <button class="btn-small" style="background:#d32f2f; border:none;" onclick="logout()">Выход</button>
+        <span style="font-family:'Orbitron'; color:var(--neon-orange); text-shadow: 0 0 10px var(--neon-orange);">PANEL v2.0</span>
+        <button class="btn-small" style="border-color:var(--neon-red); color:var(--neon-red);" onclick="logout()">EXIT</button>
     </div>
     
-    <div style="display:flex; gap:5px; flex-wrap:wrap; justify-content:center; margin-bottom:15px;">
-        <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
-        <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
-        <button class="btn-small" onclick="dl('archive')" style="border-color:#777;">🗄 Архив месяца</button>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
+        <button class="btn-small" onclick="loadReq()">↻ REFRESH</button>
+        <button class="btn-small" onclick="dl('excel')">💾 EXCEL</button>
+        <button class="btn-small" onclick="dl('archive')" style="border-color:#555; color:#aaa;">🗄 ARCHIVE</button>
     </div>
 
-    <div id="list">Загрузка...</div>
+    <div id="list">Checking data...</div>
 </div>
 
 <div id="authModal">
     <div class="auth-box">
-        <h3>Пароль</h3>
-        <input type="password" id="pass" style="text-align:center; margin-bottom:15px;">
-        <button class="btn" onclick="login()">ВОЙТИ</button>
-        <div style="margin-top:15px; color:#888; cursor:pointer" onclick="document.getElementById('authModal').style.display='none'">Отмена</div>
+        <h3 style="color:#fff; font-family:'Orbitron'; margin-top:0;">ACCESS CODE</h3>
+        <input type="password" id="pass" style="text-align:center; margin-bottom:20px; font-size:1.2em; letter-spacing: 5px;">
+        <button class="btn" onclick="login()" style="margin-top:0;">LOGIN</button>
+        <div style="margin-top:20px; color:#666; cursor:pointer; font-size:0.8em;" onclick="document.getElementById('authModal').style.display='none'">[ CANCEL ]</div>
     </div>
 </div>
 
@@ -100,70 +296,60 @@
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     
-    // Инициализация
     window.onload = () => {
-        // 1. Загружаем сотрудников
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
-            ns.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
+            ns.innerHTML = '<option value="" disabled selected>ВЫБЕРИТЕ СЕБЯ</option>';
             d.data.forEach(n=>{
                 let op = document.createElement('option');
                 op.value=n; op.innerText=n;
                 ns.appendChild(op);
             });
-            // Восстанавливаем выбор пользователя
             if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
         });
-
-        // 2. Восстанавливаем ПИН
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
-
-        // 3. Проверяем админа
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block';
             loadReq();
         }
     };
 
-    // Сохранение данных пользователя при вводе
     function saveUser() {
         localStorage.setItem('wp_user', ns.value);
         localStorage.setItem('wp_pin', pin.value);
     }
 
-    // Отправка формы
     document.getElementById('wForm').onsubmit = e => {
         e.preventDefault();
         let b = document.getElementById('sBtn');
         let m = document.getElementById('msg');
-        b.disabled=true; b.innerText="⏳..."; m.innerText="";
+        b.disabled=true; b.innerText="SENDING..."; m.innerText="";
         
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
         for(let [k,v] of fd) p.append(k,v);
 
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
-            b.disabled=false; b.innerText="ОТПРАВИТЬ";
+            b.disabled=false; b.innerText="ОТПРАВИТЬ ОТЧЕТ";
             if(d.result==="success"){
-                m.className="success"; m.innerText="✅ Принято!";
+                m.className="success"; m.innerText="✅ ACCESS GRANTED / SAVED";
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); m.innerText=""; }, 2000);
             } else {
-                m.className="error"; m.innerText=d.message;
+                m.className="error"; m.innerText= "⛔ " + d.message;
             }
-        }).catch(()=>{ b.disabled=false; b.innerText="ОТПРАВИТЬ"; m.className="error"; m.innerText="Ошибка сети"; });
+        }).catch(()=>{ b.disabled=false; b.innerText="ОТПРАВИТЬ ОТЧЕТ"; m.className="error"; m.innerText="CONNECTION ERROR"; });
     };
 
-    // Админка
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     function login() {
         if(document.getElementById('pass').value==="westprom123") {
-            localStorage.setItem('wp_admin_auth', 'true'); // Запоминаем навсегда
+            localStorage.setItem('wp_admin_auth', 'true');
             document.getElementById('authModal').style.display='none';
             document.getElementById('adminPanel').style.display='block';
             loadReq();
-        } else alert("Неверно");
+        } else alert("ACCESS DENIED");
     }
     function logout() {
-        if(confirm("Выйти из админки?")) {
+        if(confirm("TERMINATE SESSION?")) {
             localStorage.removeItem('wp_admin_auth');
             location.reload();
         }
@@ -171,19 +357,20 @@
 
     function loadReq() {
         let l = document.getElementById('list');
-        l.innerHTML="Загрузка...";
+        l.innerHTML="<div style='text-align:center; color:#555;'>CONNECTING...</div>";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='text-align:center;color:#666'>Нет заявок</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='text-align:center;color:#444; margin-top:10px;'>NO DATA FOUND</div>"; return;}
             d.data.reverse().forEach(i=>{
-                let d = document.createElement('div'); d.className='req-card';
-                d.innerHTML=`<div><b>${i['Фамилия Имя']}</b> <span style="color:#888;font-size:0.8em">${i['Дата']}</span></div>
-                <div style="font-size:0.9em; margin-top:5px;">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
+                let div = document.createElement('div'); div.className='req-card';
+                div.innerHTML=`
+                <div><span class="req-date">${i['Дата']}</span><b style="color:#fff; font-size:1.1em;">${i['Фамилия Имя']}</b></div>
+                <div class="req-detail" style="margin-top:5px;">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--neon-orange)">${i['Вид работ']}</span></div>
                 <div class="req-btns">
-                    <button class="btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
-                    <button class="btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
+                    <button class="btn-yes" onclick="upd('${i.ID}','Подтверждено')">ACCEPT</button>
+                    <button class="btn-no" onclick="upd('${i.ID}','Отклонено')">DENY</button>
                 </div>`;
-                l.appendChild(d);
+                l.appendChild(div);
             });
         });
     }
@@ -196,8 +383,7 @@
 
     function dl(type) {
         let act = (type==='excel') ? 'get_excel' : 'archive';
-        if(type==='archive' && !confirm("⚠️ Внимание!\nТекущий отчет будет переименован и убран в архив.\nБудет создан новый пустой отчет.\nПродолжить?")) return;
-        
+        if(type==='archive' && !confirm("⚠️ WARNING\nARCHIVING DATA...\nPROCEED?")) return;
         window.open(API+"?action="+act, '_blank');
     }
 </script>
