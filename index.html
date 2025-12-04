@@ -90,40 +90,24 @@
 </div>
 
 <script>
-    // ========================================================
-    // 👇👇 ВСТАВЬТЕ СЮДА НОВУЮ ССЫЛКУ ПОСЛЕ ПУБЛИКАЦИИ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbyDgi9w6ud0-VpK_JWs6F1CTpv2O1MbuwYihJ9aG4xr30WMXuuMJ5_aa4qNdLsO2IBN/exec";
-    // ========================================================
+    // 👇👇 ВАША ССЫЛКА УЖЕ ЗДЕСЬ 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbx-ahxmI3eei7P-kLW5Q4gvPNrTXTNV1IHKh4oS8_eZsYflH6Hy49yNWSJRkMfi2Ey7/exec";
+    // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     
     window.onload = () => {
-        if(!API || API.includes("ВСТАВЬТЕ")) {
-            ns.innerHTML = "<option>Ошибка: Вставьте ссылку API</option>";
-            return;
-        }
-
-        fetch(API+"?action=get_employees")
-        .then(r => r.json())
-        .then(d => {
-            if(d.result === "success") {
-                ns.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
-                d.data.forEach(n => {
-                    let op = document.createElement('option');
-                    op.value=n; op.innerText=n;
-                    ns.appendChild(op);
-                });
-                if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
-            } else {
-                ns.innerHTML = "<option>Ошибка сервера (Попробуйте позже)</option>";
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            ns.innerHTML = "<option>Нет связи (Проверьте интернет)</option>";
-        });
-
+        fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
+            ns.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
+            if(d.data) d.data.forEach(n=>{
+                let op = document.createElement('option');
+                op.value=n; op.innerText=n;
+                ns.appendChild(op);
+            });
+            if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
+        }).catch(e => console.log(e));
+        
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
         
         if(localStorage.getItem('wp_admin_auth') === 'true') {
@@ -142,21 +126,16 @@
         let b = document.getElementById('sBtn');
         let m = document.getElementById('msg');
         b.disabled=true; b.innerText="Обработка..."; m.innerText="";
-        
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
         for(let [k,v] of fd) p.append(k,v);
-
-        fetch(API, {method:'POST', body:p})
-        .then(r=>r.json())
-        .then(d=>{
+        fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 m.className="success"; m.innerText="✅ Отчет принят";
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); m.innerText=""; }, 2000);
             } else { m.className="error"; m.innerText= "⛔ " + d.message; }
-        })
-        .catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; m.className="error"; m.innerText="Ошибка связи"; });
+        }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; m.className="error"; m.innerText="Ошибка связи"; });
     };
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
@@ -189,7 +168,7 @@
                 </div>`;
                 l.appendChild(div);
             });
-        }).catch(() => { l.innerHTML = "Ошибка загрузки данных"; });
+        });
     }
 
     function upd(id, st) {
@@ -211,4 +190,3 @@
 
 </body>
 </html>
-
