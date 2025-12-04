@@ -3,87 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WestProm Neon</title>
+    <title>WestProm Neon v2</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #050505;
-            --card-bg: rgba(20, 20, 20, 0.85);
-            --neon-orange: #ff9d00;
+            --card-bg: rgba(20, 20, 20, 0.9);
+            --neon-orange: #ff9d00; /* Основной оранжевый */
+            --btn-color: #cc7a00;   /* Спокойный оранжевый для кнопок */
             --neon-red: #ff2a2a;
             --neon-green: #00ff41;
-            --text-main: #ffffff;
-            --text-muted: #aaaaaa;
-            --glass-border: 1px solid rgba(255, 157, 0, 0.3);
-            --shadow-glow: 0 0 15px rgba(255, 157, 0, 0.4);
+            --glass-border: 1px solid rgba(255, 157, 0, 0.2);
         }
 
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 42, 42, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 90% 80%, rgba(255, 157, 0, 0.15) 0%, transparent 50%);
-            color: var(--text-main);
+            background-image: radial-gradient(circle at 50% 50%, rgba(204, 122, 0, 0.1) 0%, transparent 60%);
+            color: #ffffff;
             margin: 0; padding: 15px;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
         }
 
-        /* --- КОНТЕЙНЕРЫ И КАРТОЧКИ --- */
+        /* --- КОНТЕЙНЕРЫ --- */
         .box {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: var(--glass-border);
-            box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             padding: 25px;
-            border-radius: 16px;
+            border-radius: 12px;
             width: 100%; max-width: 450px;
             box-sizing: border-box;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             position: relative;
-            overflow: hidden;
-        }
-
-        /* Декоративная линия сверху */
-        .box::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-orange), transparent);
-            box-shadow: 0 0 10px var(--neon-orange);
         }
 
         h2 {
             font-family: 'Orbitron', sans-serif;
             text-align: center;
-            margin: 0 0 25px 0;
-            color: #fff;
+            margin: 0 0 20px 0;
+            color: var(--neon-orange);
             text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--neon-orange), 0 0 20px var(--neon-red);
+            letter-spacing: 2px;
+            /* Легкое, не агрессивное свечение текста */
+            text-shadow: 0 0 8px rgba(255, 157, 0, 0.3);
         }
 
         /* --- ПОЛЯ ВВОДА --- */
         label {
-            color: var(--neon-orange);
+            color: #aaa; /* Более спокойный цвет лейблов */
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 8px;
             display: block;
-            margin-top: 20px;
-            text-shadow: 0 0 5px rgba(255, 157, 0, 0.5);
+            margin-top: 15px;
         }
 
         select, input {
             width: 100%;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #333;
-            border-bottom: 2px solid var(--neon-orange);
-            border-radius: 4px;
+            padding: 14px;
+            background: #151515;
+            border: 1px solid #444;
+            border-radius: 6px;
             color: #fff;
-            font-family: 'Orbitron', sans-serif;
+            font-family: 'Roboto', sans-serif;
             font-size: 16px;
             box-sizing: border-box;
             outline: none;
@@ -91,119 +78,110 @@
         }
 
         select:focus, input:focus {
-            background: rgba(255, 157, 0, 0.05);
             border-color: var(--neon-orange);
-            box-shadow: 0 0 15px rgba(255, 157, 0, 0.3);
+            box-shadow: 0 0 8px rgba(255, 157, 0, 0.2); /* Мягкое свечение фокуса */
         }
 
-        /* --- ПЕРЕКЛЮЧАТЕЛЬ (РАДИО) --- */
-        .radio-group {
-            display: flex; gap: 15px; margin-top: 5px;
+        /* 🔥 ИСПРАВЛЕНИЕ ВЫПАДАЮЩЕГО СПИСКА 🔥 */
+        select option {
+            background-color: #111; /* Темный фон для опций */
+            color: #fff;            /* Белый текст */
+            padding: 10px;
         }
+
+        /* --- ПЕРЕКЛЮЧАТЕЛЬ --- */
+        .radio-group { display: flex; gap: 10px; margin-top: 5px; }
         .radio-lbl {
-            flex: 1;
-            padding: 15px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid #333;
-            border-radius: 4px;
-            text-align: center;
-            color: #666;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9em;
-            position: relative;
-            overflow: hidden;
+            flex: 1; padding: 12px;
+            background: #151515; border: 1px solid #444;
+            border-radius: 6px; text-align: center; color: #888;
+            cursor: pointer; transition: 0.3s;
+            font-family: 'Orbitron', sans-serif; font-size: 0.9em;
         }
         input[type="radio"] { display: none; }
-        
         input[type="radio"]:checked + .radio-lbl {
-            background: rgba(255, 157, 0, 0.1);
-            border: 1px solid var(--neon-orange);
+            border-color: var(--neon-orange);
             color: var(--neon-orange);
-            box-shadow: inset 0 0 15px rgba(255, 157, 0, 0.2), 0 0 10px rgba(255, 157, 0, 0.4);
-            text-shadow: 0 0 5px var(--neon-orange);
+            background: rgba(255, 157, 0, 0.05);
+            box-shadow: inset 0 0 5px rgba(255, 157, 0, 0.1);
         }
 
-        /* --- КНОПКИ --- */
+        /* --- КНОПКИ (ИСПРАВЛЕННЫЕ) --- */
         .btn {
             width: 100%;
-            padding: 18px;
-            margin-top: 30px;
-            background: linear-gradient(135deg, #a31818, #ff5e00);
+            padding: 16px;
+            margin-top: 25px;
+            /* Единый цвет (темно-оранжевый) */
+            background: var(--btn-color); 
             border: none;
-            border-radius: 4px; /* Более острые углы для киберпанка */
+            border-radius: 6px;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 18px;
-            letter-spacing: 2px;
+            font-size: 16px;
+            letter-spacing: 1px;
             cursor: pointer;
-            color: #fff;
+            color: #fff; /* Белый текст */
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.4);
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
+            /* Убрано сильное свечение, оставлена легкая тень */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(255, 94, 0, 0.6);
+            background: var(--neon-orange); /* При наведении чуть ярче */
+            /* Легкое свечение только при наведении */
+            box-shadow: 0 0 12px rgba(255, 157, 0, 0.4); 
+            transform: translateY(-1px);
         }
         .btn:active { transform: scale(0.98); }
-        .btn:disabled { background: #333; color: #777; box-shadow: none; cursor: not-allowed; }
+        .btn:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
 
         .btn-small {
-            padding: 8px 15px;
-            font-size: 0.8em;
-            background: rgba(0,0,0,0.5);
-            color: var(--neon-orange);
-            border: 1px solid var(--neon-orange);
+            padding: 8px 12px;
+            font-size: 0.75em;
+            background: #222;
+            color: #ccc;
+            border: 1px solid #444;
             border-radius: 4px;
             cursor: pointer;
             text-transform: uppercase;
-            transition: 0.3s;
+            transition: 0.2s;
             font-family: 'Orbitron', sans-serif;
         }
         .btn-small:hover {
-            background: var(--neon-orange);
-            color: #000;
-            box-shadow: 0 0 10px var(--neon-orange);
+            border-color: var(--neon-orange);
+            color: var(--neon-orange);
         }
 
         /* --- СООБЩЕНИЯ --- */
         #msg { text-align: center; margin-top: 20px; font-weight: bold; min-height: 20px; font-family: 'Orbitron', sans-serif;}
-        .success { color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
-        .error { color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); }
+        .success { color: var(--neon-green); }
+        .error { color: var(--neon-red); }
 
         /* --- АДМИН ПАНЕЛЬ --- */
-        #adminPanel { display: none; margin-top: 20px; border-top: 1px solid var(--neon-orange); }
-        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px;}
+        #adminPanel { display: none; margin-top: 20px; border-top: 2px solid #333; }
+        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         
         .req-card {
-            background: linear-gradient(90deg, rgba(20,20,20,1) 0%, rgba(35,35,35,1) 100%);
-            padding: 15px;
-            margin-bottom: 15px;
+            background: #1a1a1a;
+            padding: 12px; margin-bottom: 10px;
             border-left: 3px solid var(--neon-orange);
-            border-radius: 0 4px 4px 0;
-            position: relative;
+            border-radius: 4px;
         }
-        .req-info { font-size: 1rem; color: #fff; margin-bottom: 5px; }
-        .req-date { font-size: 0.8em; color: #777; float: right; }
-        .req-detail { font-size: 0.9em; color: #aaa; }
+        .req-info { font-size: 1rem; color: #fff; }
+        .req-date { font-size: 0.8em; color: #666; float: right; }
+        .req-detail { font-size: 0.9em; color: #aaa; margin-top: 5px; }
         
-        .req-btns { display: flex; gap: 10px; margin-top: 12px; }
-        
+        .req-btns { display: flex; gap: 8px; margin-top: 10px; }
         .btn-yes, .btn-no {
-            flex: 1; padding: 10px; border: none; border-radius: 4px; 
-            cursor: pointer; font-weight: bold; text-transform: uppercase; font-family: 'Orbitron', sans-serif; font-size: 0.8em;
-            transition: 0.3s;
+            flex: 1; padding: 8px; border: none; border-radius: 4px; 
+            cursor: pointer; font-weight: bold; font-size: 0.8em; text-transform: uppercase;
         }
-        .btn-yes { background: rgba(0, 255, 65, 0.1); color: var(--neon-green); border: 1px solid var(--neon-green); }
-        .btn-yes:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 15px var(--neon-green); }
+        .btn-yes { background: #1b3a1b; color: #4caf50; border: 1px solid #2e5c2e; }
+        .btn-yes:hover { background: #2e5c2e; color: #fff; }
         
-        .btn-no { background: rgba(255, 42, 42, 0.1); color: var(--neon-red); border: 1px solid var(--neon-red); }
-        .btn-no:hover { background: var(--neon-red); color: #fff; box-shadow: 0 0 15px var(--neon-red); }
+        .btn-no { background: #3a1b1b; color: #f44336; border: 1px solid #5c2e2e; }
+        .btn-no:hover { background: #5c2e2e; color: #fff; }
 
         /* --- МОДАЛЬНОЕ ОКНО --- */
         #authModal {
@@ -212,24 +190,17 @@
             display: none; justify-content: center; align-items: center; z-index: 999;
         }
         .auth-box {
-            background: #111; border: 1px solid var(--neon-orange);
-            box-shadow: 0 0 30px rgba(255, 157, 0, 0.3);
-            padding: 40px; border-radius: 10px; text-align: center;
+            background: #111; border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 30px; border-radius: 8px; text-align: center; width: 300px;
         }
 
-        /* --- ССЫЛКА АДМИНА --- */
         .admin-link {
-            text-align: center; margin-top: 20px; font-size: 0.8em; 
-            color: #444; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 2px;
+            text-align: center; margin-top: 20px; font-size: 0.75em; 
+            color: #555; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .admin-link:hover { color: var(--neon-orange); text-shadow: 0 0 5px var(--neon-orange); }
-
-        /* Скроллбар */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-orange); }
+        .admin-link:hover { color: var(--neon-orange); }
     </style>
 </head>
 <body>
@@ -266,32 +237,32 @@
 
 <div class="box" id="adminPanel">
     <div class="admin-head">
-        <span style="font-family:'Orbitron'; color:var(--neon-orange); text-shadow: 0 0 10px var(--neon-orange);">PANEL v2.0</span>
-        <button class="btn-small" style="border-color:var(--neon-red); color:var(--neon-red);" onclick="logout()">EXIT</button>
+        <span style="font-family:'Orbitron'; color:#888;">PANEL v2.1</span>
+        <button class="btn-small" style="color:#f44336; border-color:#5c2e2e;" onclick="logout()">ВЫЙТИ</button>
     </div>
     
     <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
-        <button class="btn-small" onclick="loadReq()">↻ REFRESH</button>
+        <button class="btn-small" onclick="loadReq()">↻ ОБНОВИТЬ</button>
         <button class="btn-small" onclick="dl('excel')">💾 EXCEL</button>
-        <button class="btn-small" onclick="dl('archive')" style="border-color:#555; color:#aaa;">🗄 ARCHIVE</button>
+        <button class="btn-small" onclick="dl('archive')" style="color:#888;">🗄 АРХИВ</button>
     </div>
 
-    <div id="list">Checking data...</div>
+    <div id="list">Ожидание данных...</div>
 </div>
 
 <div id="authModal">
     <div class="auth-box">
         <h3 style="color:#fff; font-family:'Orbitron'; margin-top:0;">ACCESS CODE</h3>
         <input type="password" id="pass" style="text-align:center; margin-bottom:20px; font-size:1.2em; letter-spacing: 5px;">
-        <button class="btn" onclick="login()" style="margin-top:0;">LOGIN</button>
-        <div style="margin-top:20px; color:#666; cursor:pointer; font-size:0.8em;" onclick="document.getElementById('authModal').style.display='none'">[ CANCEL ]</div>
+        <button class="btn" onclick="login()" style="margin-top:0;">ВОЙТИ</button>
+        <div style="margin-top:20px; color:#666; cursor:pointer; font-size:0.8em;" onclick="document.getElementById('authModal').style.display='none'">[ ОТМЕНА ]</div>
     </div>
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ССЫЛКУ ЗДЕСЬ 👇👇
+    // 👇👇 ВСТАВЬТЕ ССЫЛКУ API ЗДЕСЬ 👇👇
     const API = "https://script.google.com/macros/s/AKfycbzua2FpBhSf6zMd2etqV053HGrv79KKbY4w9fBLQ0A4eZwW_YEpQ8OIzlhb3tqp2sj5Uw/exec";
-    // 👆👆 ------------------- 👆👆
+    // 👆👆 --------------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
@@ -322,7 +293,7 @@
         e.preventDefault();
         let b = document.getElementById('sBtn');
         let m = document.getElementById('msg');
-        b.disabled=true; b.innerText="SENDING..."; m.innerText="";
+        b.disabled=true; b.innerText="ОТПРАВКА..."; m.innerText="";
         
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
@@ -331,12 +302,12 @@
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
             b.disabled=false; b.innerText="ОТПРАВИТЬ ОТЧЕТ";
             if(d.result==="success"){
-                m.className="success"; m.innerText="✅ ACCESS GRANTED / SAVED";
+                m.className="success"; m.innerText="✅ ПРИНЯТО / СОХРАНЕНО";
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); m.innerText=""; }, 2000);
             } else {
                 m.className="error"; m.innerText= "⛔ " + d.message;
             }
-        }).catch(()=>{ b.disabled=false; b.innerText="ОТПРАВИТЬ ОТЧЕТ"; m.className="error"; m.innerText="CONNECTION ERROR"; });
+        }).catch(()=>{ b.disabled=false; b.innerText="ОТПРАВИТЬ ОТЧЕТ"; m.className="error"; m.innerText="ОШИБКА СВЯЗИ"; });
     };
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
@@ -346,10 +317,10 @@
             document.getElementById('authModal').style.display='none';
             document.getElementById('adminPanel').style.display='block';
             loadReq();
-        } else alert("ACCESS DENIED");
+        } else alert("НЕВЕРНЫЙ ПАРОЛЬ");
     }
     function logout() {
-        if(confirm("TERMINATE SESSION?")) {
+        if(confirm("Выйти из админки?")) {
             localStorage.removeItem('wp_admin_auth');
             location.reload();
         }
@@ -357,18 +328,18 @@
 
     function loadReq() {
         let l = document.getElementById('list');
-        l.innerHTML="<div style='text-align:center; color:#555;'>CONNECTING...</div>";
+        l.innerHTML="<div style='text-align:center; color:#555;'>Загрузка данных...</div>";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='text-align:center;color:#444; margin-top:10px;'>NO DATA FOUND</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='text-align:center;color:#444; margin-top:10px;'>НЕТ ЗАЯВОК</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
                 <div><span class="req-date">${i['Дата']}</span><b style="color:#fff; font-size:1.1em;">${i['Фамилия Имя']}</b></div>
-                <div class="req-detail" style="margin-top:5px;">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--neon-orange)">${i['Вид работ']}</span></div>
+                <div class="req-detail">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:#ff9d00">${i['Вид работ']}</span></div>
                 <div class="req-btns">
-                    <button class="btn-yes" onclick="upd('${i.ID}','Подтверждено')">ACCEPT</button>
-                    <button class="btn-no" onclick="upd('${i.ID}','Отклонено')">DENY</button>
+                    <button class="btn-yes" onclick="upd('${i.ID}','Подтверждено')">ПРИНЯТЬ</button>
+                    <button class="btn-no" onclick="upd('${i.ID}','Отклонено')">ОТКАЗАТЬ</button>
                 </div>`;
                 l.appendChild(div);
             });
@@ -383,7 +354,7 @@
 
     function dl(type) {
         let act = (type==='excel') ? 'get_excel' : 'archive';
-        if(type==='archive' && !confirm("⚠️ WARNING\nARCHIVING DATA...\nPROCEED?")) return;
+        if(type==='archive' && !confirm("⚠️ ВНИМАНИЕ\nТекущий отчет будет перенесен в архив.\nНачать новый месяц?")) return;
         window.open(API+"?action="+act, '_blank');
     }
 </script>
