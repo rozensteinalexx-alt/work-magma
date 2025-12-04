@@ -15,10 +15,10 @@
 
         body {
             font-family: 'Lato', sans-serif;
-            background: linear-gradient(rgba(15, 15, 15, 0.85), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a;
+            background: linear-gradient(rgba(15, 15, 15, 0.9), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a;
             background-attachment: fixed;
             color: #ccc;
-            margin: 0; padding: 30px 20px;
+            margin: 0; padding: 20px;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
@@ -161,7 +161,7 @@
 <script>
     // ========================================================
     // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwKnlWMzmItByU2zQhEfFbVFC42VmPKTbqsjLdLvWhG6fdC_c7kjUa_WVVld7-mKoJX/exec";
+    const API = "https://script.google.com/macros/s/AKfycbzCSJemr2030EPs0l6NJ0j5uHwt_JO087XfEobmDFyBuTktoikrDWmKWFn5eAk7IBE/exec";
     // ========================================================
 
     const ns = document.getElementById('nSelect');
@@ -185,12 +185,12 @@
                 });
                 if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
             } else {
-                ns.innerHTML = "<option>Ошибка сервера (Попробуйте позже)</option>";
+                ns.innerHTML = "<option>Ошибка сервера</option>";
             }
         })
         .catch(err => {
             console.error(err);
-            ns.innerHTML = "<option>Нет связи (Проверьте интернет)</option>";
+            ns.innerHTML = "<option>Нет связи</option>";
         });
 
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
@@ -246,15 +246,15 @@
         l.innerHTML="Загрузка списка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:20px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#888;float:right">${i['Дата']}</span><b style="color:#fff; font-size:1.1em">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-main); font-weight:bold">${i['Вид работ']}</span></div>
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
+                <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #333;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.95em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> <br> ⚙️ Тип: <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
                 </div>`;
                 l.appendChild(div);
             });
@@ -280,5 +280,3 @@
 
 </body>
 </html>
-
-
