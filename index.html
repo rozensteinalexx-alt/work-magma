@@ -3,296 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WestProm Отчет</title>
+    <title>WestProm</title>
     <style>
         :root {
-            --bg: #0f0a0a;
-            --card: #1a1212;
-            --accent: #ffae00; /* Желтый огонь */
-            --accent-dark: #d12222; /* Красный огонь */
-            --text: #ffebd1;
-            --border: #3d2b2b;
+            --bg: #121212;
+            --card: #1e1e1e;
+            --primary: #ff9900;
+            --text: #ffffff;
+            --border: #333;
         }
         body {
-            font-family: Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0; padding: 20px;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg); color: var(--text);
+            margin: 0; padding: 15px;
+            display: flex; justify-content: center; min-height: 100vh;
         }
         .container {
-            background: var(--card);
-            width: 100%; max-width: 450px;
-            padding: 30px; border-radius: 16px;
-            border: 1px solid var(--border);
-            border-top: 3px solid var(--accent);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%; max-width: 480px; margin-top: 20px;
         }
-        h2 { text-align: center; color: var(--accent); margin-top: 0; text-transform: uppercase; letter-spacing: 2px;}
-        label { display: block; margin-bottom: 8px; font-size: 0.9em; color: #aaa; margin-top: 15px;}
-        
-        select, input {
-            width: 100%; padding: 15px;
-            background: #241919; border: 2px solid var(--border);
-            border-radius: 8px; color: #fff; font-size: 16px;
-            box-sizing: border-box; outline: none; transition: 0.3s;
+        /* Карточка */
+        .box {
+            background: var(--card); padding: 25px; border-radius: 12px;
+            border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
         }
-        select:focus, input:focus { border-color: var(--accent); }
+        h2 { text-align: center; color: var(--primary); margin-top: 0; text-transform: uppercase;}
         
-        /* Кнопка */
+        label { display: block; margin: 15px 0 5px; color: #aaa; font-size: 0.9em;}
+        input, select {
+            width: 100%; padding: 12px; background: #2c2c2c; border: 1px solid var(--border);
+            border-radius: 8px; color: #fff; font-size: 16px; outline: none; box-sizing: border-box;
+        }
+        input:focus, select:focus { border-color: var(--primary); }
+        
+        /* Кнопка отправки */
         .main-btn {
-            width: 100%; padding: 16px; margin-top: 25px;
-            background: linear-gradient(45deg, var(--accent-dark), var(--accent));
-            border: none; border-radius: 8px;
-            color: #000; font-weight: bold; font-size: 18px; text-transform: uppercase;
-            cursor: pointer; transition: 0.3s;
+            width: 100%; padding: 15px; margin-top: 25px;
+            background: var(--primary); color: #000; font-weight: bold; border: none;
+            border-radius: 8px; font-size: 16px; cursor: pointer; transition: 0.2s;
         }
         .main-btn:active { transform: scale(0.98); }
-        .main-btn:disabled { background: #444; color: #888; cursor: not-allowed;}
+        .main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* Сообщения */
-        #msg { margin-top: 20px; text-align: center; font-weight: bold; min-height: 20px;}
-        .success { color: var(--accent); border: 1px solid var(--accent); padding: 10px; border-radius: 8px;}
-        .error { color: #ff5555; border: 1px solid #ff5555; padding: 10px; border-radius: 8px;}
-
-        /* Радио кнопки */
-        .radio-group { display: flex; gap: 10px; }
+        /* Радио переключатель */
+        .radio-group { display: flex; gap: 10px; margin-top: 5px; }
         .radio-label {
-            flex: 1; padding: 12px; background: #241919; border: 2px solid var(--border);
-            text-align: center; border-radius: 8px; cursor: pointer; color: #888;
+            flex: 1; padding: 12px; background: #2c2c2c; border: 1px solid var(--border);
+            text-align: center; border-radius: 8px; cursor: pointer; color: #aaa; transition: 0.2s;
         }
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-label {
-            border-color: var(--accent); color: #fff; background: rgba(255, 174, 0, 0.1);
+            background: rgba(255, 153, 0, 0.2); border-color: var(--primary); color: var(--primary);
         }
 
         /* Админка */
-        .admin-link { text-align: center; margin-top: 30px; font-size: 0.8em; color: #555; cursor: pointer;}
-        #adminPanel { display: none; margin-top: 30px; border-top: 1px dashed #444; padding-top: 20px;}
-        .card-item { background: #222; padding: 10px; margin-bottom: 10px; border-left: 3px solid var(--accent); border-radius: 4px;}
-        .btn-mini { padding: 5px 10px; font-size: 12px; cursor: pointer; background: #333; color: #fff; border: 1px solid #555; border-radius: 4px; margin-right: 5px;}
+        #adminView { display: none; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .admin-title { font-size: 1.2em; font-weight: bold; color: #fff; }
+        .btn-logout { background: #d32f2f; color: #fff; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8em; }
         
-        /* Авторизация */
+        .admin-actions { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap;}
+        .btn-action { background: #333; color: #fff; border: 1px solid #555; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9em;}
+        .btn-action:hover { border-color: var(--primary); color: var(--primary); }
+
+        .req-card { background: #252525; padding: 12px; margin-bottom: 10px; border-left: 3px solid var(--primary); border-radius: 4px; }
+        .req-info { font-size: 0.9em; color: #ccc; margin-bottom: 8px; }
+        .req-btns { display: flex; gap: 10px; }
+        .btn-yes, .btn-no { flex: 1; padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-yes { background: #2e7d32; color: #fff; }
+        .btn-no { background: #c62828; color: #fff; }
+
+        /* Сообщения */
+        #msg { text-align: center; margin-top: 15px; min-height: 20px; font-weight: bold;}
+        .success { color: var(--primary); }
+        .error { color: #ff5252; }
+        
+        .admin-link { text-align: center; margin-top: 30px; font-size: 0.8em; color: #555; cursor: pointer; }
+        
+        /* Модалка входа */
         #authModal {
             position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.8); display:none; justify-content:center; align-items:center; z-index:999;
+            background: rgba(0,0,0,0.85); display:none; justify-content:center; align-items:center; z-index: 100;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="userView">
+    
+    <div id="userView" class="box">
         <h2>WestProm</h2>
-        
         <form id="wForm">
-            <label>Кто сдает отчет?</label>
-            <select id="nameSelect" name="name" required>
-                <option value="" disabled selected>Загрузка списка...</option>
-            </select>
+            <label>Сотрудник</label>
+            <select id="nameSelect" name="name" required><option>Загрузка...</option></select>
+            
+            <label>ПИН-код</label>
+            <input type="tel" name="pin" required placeholder="****" maxlength="6" style="text-align:center; letter-spacing: 5px;">
 
-            <label>ПИН-код (для защиты)</label>
-            <input type="tel" name="pin" required placeholder="****" maxlength="6" style="text-align:center; letter-spacing: 5px; font-size: 1.2em;">
-
-            <label>Сколько человек работало?</label>
-            <select name="count">
+            <label>Кол-во людей</label>
+            <select name="count" id="countSelect">
                 <option value="0.5">0.5 (Полдня)</option>
-                <script>
-                    for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i} чел.</option>`);
-                </script>
+                <script>for(let i=1; i<=20; i++) document.write(`<option value="${i}">${i}</option>`);</script>
             </select>
 
             <label>Тип работ</label>
             <div class="radio-group">
                 <input type="radio" id="t1" name="type" value="Дневка" checked>
                 <label for="t1" class="radio-label">⏱ Дневка</label>
-                
                 <input type="radio" id="t2" name="type" value="Объем">
                 <label for="t2" class="radio-label">📦 Объем</label>
             </div>
 
-            <button type="submit" id="sBtn" class="main-btn">Отправить отчет</button>
+            <button id="sBtn" class="main-btn">ОТПРАВИТЬ</button>
         </form>
-
         <div id="msg"></div>
-        <div class="admin-link" onclick="openAuth()">Вход для администратора</div>
+        <div class="admin-link" onclick="openAuth()">Администратор</div>
     </div>
 
-    <div id="adminPanel">
-        <h3 style="color:#fff; text-align:center">Заявки на проверке</h3>
-        <div style="text-align:center; margin-bottom:15px;">
-            <button class="btn-mini" onclick="loadRequests()">Обновить</button>
-            <button class="btn-mini" onclick="downloadExcel()">Скачать Excel</button>
+    <div id="adminView" class="box">
+        <div class="admin-header">
+            <div class="admin-title">Админ-панель</div>
+            <button class="btn-logout" onclick="logoutAdmin()">Выйти ✕</button>
         </div>
-        <div id="list">Загрузка...</div>
+        
+        <div class="admin-actions">
+            <button class="btn-action" onclick="loadRequests()">↻ Обновить</button>
+            <button class="btn-action" onclick="downloadFile('excel')">💾 Excel</button>
+            <button class="btn-action" onclick="downloadFile('pdf')">📄 PDF</button>
+        </div>
+
+        <div id="reqList">Загрузка...</div>
     </div>
+
 </div>
 
 <div id="authModal">
-    <div style="background:var(--card); padding:30px; border-radius:10px; text-align:center; border:1px solid var(--accent);">
-        <h3 style="color:var(--text); margin-top:0;">Пароль админа</h3>
-        <input type="password" id="adminPass" style="margin-bottom:15px;">
-        <button class="main-btn" onclick="checkPass()" style="padding:10px; margin-top:0;">Войти</button>
-        <div style="margin-top:10px; color:#888; cursor:pointer;" onclick="document.getElementById('authModal').style.display='none'">Отмена</div>
+    <div class="box" style="width:300px; text-align:center;">
+        <h3>Пароль</h3>
+        <input type="password" id="adminPass" style="margin-bottom:15px; text-align:center;">
+        <button class="main-btn" onclick="loginAdmin()" style="padding:10px; margin-top:5px;">Войти</button>
+        <div style="margin-top:15px; color:#888; cursor:pointer;" onclick="document.getElementById('authModal').style.display='none'">Отмена</div>
     </div>
 </div>
 
 <script>
-    // ============================================================
-    // 👇 ВСТАВЬТЕ СЮДА НОВУЮ ССЫЛКУ ПОСЛЕ ПУБЛИКАЦИИ СКРИПТА 👇
-    const API = "https://script.google.com/macros/s/AKfycbzNy1a8xjpJ3uPNZKp0rWH6ETMD2IFBLGZ_9tgHz_eFkX0UwM8Eium7aY4L0Hd3YFHqug/exec"; 
-    // ============================================================
+    // =======================================================
+    // 👇 ВСТАВЬТЕ СВЕЖУЮ ССЫЛКУ /EXEC ЗДЕСЬ 👇
+    const API = "https://script.google.com/macros/s/AKfycbw_4uDPcfT94aqHLRWHHIpNCw0kuJJb6SOof5Zo1OwS5COMTzzjZbb1UTWuFC4gkco5cg/exec";
+    // =======================================================
 
-    const f = document.getElementById('wForm');
-    const m = document.getElementById('msg');
-    const btn = document.getElementById('sBtn');
+    const userView = document.getElementById('userView');
+    const adminView = document.getElementById('adminView');
     const nameSelect = document.getElementById('nameSelect');
+    const msg = document.getElementById('msg');
+    
+    // ПРОВЕРКА АДМИНА ПРИ ЗАПУСКЕ
+    if(localStorage.getItem('wp_admin') === 'true') {
+        showAdminPanel();
+    } else {
+        loadEmployees();
+    }
 
-    // Загрузка сотрудников при старте
-    window.onload = function() {
-        if(API.includes("ВСТАВЬТЕ")) {
-            alert("Ошибка! Вы не вставили ссылку API в код сайта.");
-            return;
-        }
-
-        // Загрузка имени из памяти
-        const savedName = localStorage.getItem('wp_name');
-        
+    function loadEmployees() {
         fetch(API + "?action=get_employees")
-        .then(res => res.json())
-        .then(data => {
-            if(data.result === "success") {
-                nameSelect.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
-                data.data.forEach(name => {
-                    let opt = document.createElement('option');
-                    opt.value = name;
-                    opt.innerText = name;
-                    if(savedName === name) opt.selected = true;
-                    nameSelect.appendChild(opt);
-                });
-            } else {
-                nameSelect.innerHTML = '<option>Ошибка загрузки</option>';
-            }
-        }).catch(err => {
-            console.error(err);
-            nameSelect.innerHTML = '<option>Нет связи с таблицей</option>';
+        .then(r => r.json())
+        .then(d => {
+            nameSelect.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
+            if(d.data) d.data.forEach(n => {
+                let opt = document.createElement('option');
+                opt.value = n; opt.innerText = n;
+                if(localStorage.getItem('wp_name') === n) opt.selected = true;
+                nameSelect.appendChild(opt);
+            });
         });
+    }
 
-        // Если админ уже был залогинен
-        if(localStorage.getItem('wp_admin') === 'true') {
-            document.getElementById('userView').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            loadRequests();
-        }
-    };
-
-    // ОТПРАВКА ФОРМЫ
-    f.onsubmit = function(e) {
+    // ОТПРАВКА ОТЧЕТА
+    document.getElementById('wForm').onsubmit = e => {
         e.preventDefault();
+        const btn = document.getElementById('sBtn');
+        btn.disabled = true; btn.innerText = "⏳..."; msg.innerText = "";
         
-        // Визуальные эффекты
-        btn.disabled = true;
-        btn.innerText = "⏳ Отправка...";
-        m.className = ""; m.innerText = "";
+        localStorage.setItem('wp_name', nameSelect.value); // Запоминаем имя
 
-        const formData = new FormData(f);
-        // Добавляем action вручную, так как FormData его не берет из HTML атрибутов
-        const params = new URLSearchParams();
-        params.append('action', 'create');
-        for(const [key, value] of formData.entries()) {
-            params.append(key, value);
-        }
+        const fd = new FormData(document.getElementById('wForm'));
+        const p = new URLSearchParams();
+        p.append('action', 'create');
+        for(const [k,v] of fd.entries()) p.append(k,v);
 
-        // Запоминаем имя
-        localStorage.setItem('wp_name', nameSelect.value);
-
-        fetch(API, {
-            method: 'POST',
-            body: params
-        })
-        .then(response => response.json())
-        .then(data => {
-            btn.disabled = false;
-            btn.innerText = "Отправить отчет";
-            
-            if (data.result === "success") {
-                m.className = "success";
-                m.innerHTML = "✅ Отчет принят!<br>ID: " + data.id.substring(0,5);
-                f.reset();
-                // Восстанавливаем имя после сброса
-                nameSelect.value = localStorage.getItem('wp_name');
-            } else if (data.result === "duplicate") {
-                m.className = "error";
-                m.innerText = "⚠️ " + data.message;
+        fetch(API, {method:'POST', body:p})
+        .then(r => r.json())
+        .then(d => {
+            btn.disabled = false; btn.innerText = "ОТПРАВИТЬ";
+            if(d.result === "success") {
+                msg.className = "success"; msg.innerText = "✅ Принято! ID: " + d.id.slice(0,4);
+                setTimeout(() => { document.getElementById('wForm').reset(); nameSelect.value = localStorage.getItem('wp_name'); msg.innerText="";}, 2000);
             } else {
-                m.className = "error";
-                m.innerText = "⛔ Ошибка: " + data.message;
+                msg.className = "error"; msg.innerText = d.message;
             }
-        })
-        .catch(error => {
-            btn.disabled = false;
-            btn.innerText = "Отправить отчет";
-            m.className = "error";
-            m.innerText = "❌ Ошибка связи. Проверьте интернет или ссылку API.";
-            console.error('Error:', error);
-        });
+        }).catch(() => { btn.disabled = false; btn.innerText = "ОТПРАВИТЬ"; msg.className="error"; msg.innerText="Ошибка связи"; });
     };
 
     // --- ФУНКЦИИ АДМИНА ---
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     
-    function checkPass() {
-        const p = document.getElementById('adminPass').value;
-        if(p === "westprom123") { // Ваш пароль
+    function loginAdmin() {
+        if(document.getElementById('adminPass').value === "westprom123") {
             localStorage.setItem('wp_admin', 'true');
-            location.reload();
-        } else {
-            alert("Неверно");
-        }
+            document.getElementById('authModal').style.display = 'none';
+            showAdminPanel();
+        } else alert("Неверный пароль");
+    }
+
+    function logoutAdmin() {
+        localStorage.removeItem('wp_admin');
+        location.reload(); // Перезагрузка страницы вернет в режим юзера
+    }
+
+    function showAdminPanel() {
+        userView.style.display = 'none';
+        adminView.style.display = 'block';
+        loadRequests();
     }
 
     function loadRequests() {
-        const list = document.getElementById('list');
+        const list = document.getElementById('reqList');
         list.innerHTML = "Загрузка...";
-        
-        fetch(API + "?action=get")
-        .then(r => r.json())
-        .then(d => {
-            if(!d.data || d.data.length === 0) {
-                list.innerHTML = "<div style='text-align:center; color:#666'>Нет заявок на проверку</div>";
-                return;
-            }
-            let html = "";
+        fetch(API + "?action=get").then(r => r.json()).then(d => {
+            list.innerHTML = "";
+            if(!d.data || d.data.length === 0) { list.innerHTML = "<div style='text-align:center;color:#666'>Пусто</div>"; return; }
+            
             d.data.reverse().forEach(item => {
-                html += `
-                <div class="card-item">
-                    <div style="font-size:0.8em; color:#888">${item['Дата']}</div>
-                    <div style="font-size:1.1em; color:#fff; font-weight:bold">${item['Фамилия Имя']}</div>
-                    <div style="margin:5px 0">Людей: <b style="color:var(--accent)">${item['Кол-во людей']}</b> • ${item['Вид работ']}</div>
-                    <div>
-                        <button class="btn-mini" style="border-color:#4caf50; color:#4caf50" onclick="setStatus('${item['ID']}', 'Подтверждено')">✅ Принять</button>
-                        <button class="btn-mini" style="border-color:#f44336; color:#f44336" onclick="setStatus('${item['ID']}', 'Отклонено')">❌ Отказать</button>
+                let div = document.createElement('div');
+                div.className = 'req-card';
+                div.innerHTML = `
+                    <div class="req-info"><b>${item['Фамилия Имя']}</b> (${item['Дата']})</div>
+                    <div style="margin-bottom:10px">Людей: <b style="color:#fff">${item['Кол-во людей']}</b> | ${item['Вид работ']}</div>
+                    <div class="req-btns">
+                        <button class="btn-yes" onclick="setStatus('${item.ID}','Подтверждено')">Принять</button>
+                        <button class="btn-no" onclick="setStatus('${item.ID}','Отклонено')">Отказать</button>
                     </div>
-                </div>`;
+                `;
+                list.appendChild(div);
             });
-            list.innerHTML = html;
         });
     }
 
-    function setStatus(id, status) {
-        if(!confirm(status + "?")) return;
-        const p = new URLSearchParams();
-        p.append('action', 'update');
-        p.append('id', id);
-        p.append('status', status);
-        
-        fetch(API, {method:'POST', body:p})
-        .then(r => r.json())
-        .then(() => loadRequests());
+    function setStatus(id, st) {
+        if(!confirm(st + "?")) return;
+        const p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
+        fetch(API, {method:'POST', body:p}).then(() => loadRequests());
     }
 
-    function downloadExcel() {
-        window.open(API + "?action=get_excel", '_blank');
+    function downloadFile(type) {
+        const action = type === 'excel' ? 'get_excel' : 'get_pdf';
+        const btn = event.target; 
+        const oldText = btn.innerText;
+        btn.innerText = "⏳...";
+        
+        fetch(API + "?action=" + action)
+        .then(r => r.json())
+        .then(d => {
+            btn.innerText = oldText;
+            if(d.result === "success") window.open(d.url, '_blank');
+            else alert("Ошибка создания файла");
+        });
     }
 </script>
 
