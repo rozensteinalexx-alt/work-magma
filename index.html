@@ -15,16 +15,16 @@
 
         body {
             font-family: 'Lato', sans-serif;
-            background: linear-gradient(rgba(15, 15, 15, 0.9), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a;
+            background: linear-gradient(rgba(15, 15, 15, 0.85), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a;
             background-attachment: fixed;
             color: #ccc;
-            margin: 0; padding: 20px;
+            margin: 0; padding: 30px 20px;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
 
-        /* ЛОГОТИП */
-        .logo-container { margin-bottom: 25px; text-align: center; }
+        .logo-container { margin-bottom: 30px; text-align: center; }
         h1.gold-sign {
             font-family: 'Cinzel', serif; font-weight: 900; font-size: 2.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
             background: linear-gradient(to bottom, #fffde8 0%, #e3c472 20%, #d4af37 50%, #a0832a 51%, #d4af37 80%, #fffde8 100%);
@@ -35,30 +35,26 @@
             background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;
         }
 
-        /* КАРТОЧКА */
         .box {
             background: linear-gradient(135deg, rgba(35,35,35,0.95), rgba(20,20,20,0.98)), url('https://www.transparenttextures.com/patterns/concrete-wall.png');
             border: 2px solid; border-image: var(--metallic-gold-gradient) 1;
             box-shadow: 0 0 0 4px #121212, 0 25px 60px rgba(0,0,0,1), inset 0 0 40px rgba(0,0,0,0.8);
-            padding: 30px; border-radius: 2px; width: 100%; max-width: 440px; box-sizing: border-box; margin-bottom: 25px;
+            padding: 35px 30px; border-radius: 2px; width: 100%; max-width: 440px; box-sizing: border-box; margin-bottom: 30px;
         }
 
-        /* ЛЕЙБЛЫ */
         label {
             color: var(--gold-mid); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 8px; display: block; margin-top: 20px; text-shadow: 0 1px 2px rgba(0,0,0,1); display: flex; align-items: center; gap: 8px;
+            margin-bottom: 8px; display: block; margin-top: 22px; text-shadow: 0 1px 2px rgba(0,0,0,1); display: flex; align-items: center; gap: 10px;
         }
         
-        /* ПОЛЯ */
         select, input {
-            width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1;
+            width: 100%; padding: 16px 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1;
             border-radius: 2px; color: var(--gold-bright); font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none;
             box-shadow: inset 0 3px 10px rgba(0,0,0,0.8); transition: 0.3s;
         }
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
 
-        /* ПЕРЕКЛЮЧАТЕЛЬ */
         .radio-group { display: flex; gap: 2px; margin-top: 10px; background: #111; padding: 4px; box-shadow: inset 0 3px 8px rgba(0,0,0,0.8); border: 1px solid #333; border-radius: 4px; }
         .radio-lbl { 
             flex: 1; padding: 14px; text-align: center; color: #777; cursor: pointer; transition: 0.3s;
@@ -67,9 +63,8 @@
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-lbl { background: var(--metallic-gold-gradient); color: #2a1a00; box-shadow: 0 2px 5px rgba(0,0,0,0.5); text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
 
-        /* КНОПКА */
         .btn {
-            width: 100%; padding: 20px; margin-top: 35px;
+            width: 100%; padding: 20px; margin-top: 40px;
             background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%);
             border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px;
             font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase;
@@ -79,7 +74,6 @@
         .btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
 
-        /* АДМИНКА */
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
@@ -119,7 +113,7 @@
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
         
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN (4 цифры)" maxlength="6" style="text-align:center; letter-spacing:10px; font-size: 1.3em;" oninput="saveUser()">
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
 
         <label>👥 Количество (Чел.)</label>
         <select name="count">
@@ -166,8 +160,8 @@
 
 <script>
     // ========================================================
-    // 👇👇 ВСТАВЬТЕ СЮДА НОВУЮ ССЫЛКУ ПОСЛЕ ПУБЛИКАЦИИ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwY57igLpxBgHMaNFCTkRTWk6-vYglK8OZyIAQtSNm1CRCX47SdU6RnaR_3xORGRdRd/exec";
+    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbx4WhnqUg6ldZKkzoQg5rN1yZQVevJQsAoiLrM2M4muHKNp5YYQumdOrPji8ITekWqw/exec";
     // ========================================================
 
     const ns = document.getElementById('nSelect');
@@ -191,12 +185,12 @@
                 });
                 if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
             } else {
-                ns.innerHTML = "<option>Ошибка сервера</option>";
+                ns.innerHTML = "<option>Ошибка сервера (Попробуйте позже)</option>";
             }
         })
         .catch(err => {
             console.error(err);
-            ns.innerHTML = "<option>Нет связи</option>";
+            ns.innerHTML = "<option>Нет связи (Проверьте интернет)</option>";
         });
 
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
@@ -252,15 +246,15 @@
         l.innerHTML="Загрузка списка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:20px; opacity:0.6'>Нет новых заявок</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #333;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.95em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> <br> ⚙️ Тип: <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
+                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#888;float:right">${i['Дата']}</span><b style="color:#fff; font-size:1.1em">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-main); font-weight:bold">${i['Вид работ']}</span></div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
                 </div>`;
                 l.appendChild(div);
             });
