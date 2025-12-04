@@ -11,6 +11,7 @@
     
     <title>WestProm</title>
     <style>
+        /* --- СТИЛИ (MAGMA THEME) --- */
         :root {
             --bg-magma: #0f0a0a; 
             --card-magma: #1a1212; 
@@ -29,7 +30,7 @@
             background-size: cover; margin: 0; padding: 15px;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
             color: var(--text-warm); -webkit-tap-highlight-color: transparent;
-            user-select: none;
+            user-select: none; /* Чтобы выглядело как приложение */
         }
         .container {
             background: var(--card-magma); width: 100%; max-width: 480px; padding: 25px;
@@ -48,6 +49,7 @@
         }
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #d6cfcf; }
         
+        /* Поля ввода */
         select, input[type="text"], input[type="password"], input[type="tel"], input[type="number"] {
             width: 100%; padding: 14px; margin-bottom: 20px;
             border: 2px solid var(--carbon-border); border-radius: 8px;
@@ -61,6 +63,7 @@
         }
         select:focus, input:focus { outline: none; border-color: var(--fire-orange); box-shadow: 0 0 15px rgba(255, 95, 31, 0.3); background-color: #2e1e1e; }
 
+        /* Чекбокс */
         .checkbox-wrapper { display: flex; align-items: center; margin-bottom: 25px; cursor: pointer; user-select: none; }
         .checkbox-wrapper input { display: none; }
         .custom-check {
@@ -73,6 +76,7 @@
         .check-text { font-size: 0.95em; color: #aaa; transition: 0.3s; }
         .checkbox-wrapper input:checked ~ .check-text { color: var(--fire-yellow); }
 
+        /* Радио кнопки (Дневка/Объем) */
         .radio-group { display: flex; gap: 10px; margin-bottom: 25px; }
         .radio-group input[type="radio"] { display: none; }
         .radio-label {
@@ -85,6 +89,7 @@
             box-shadow: 0 4px 15px rgba(209, 34, 34, 0.4); transform: translateY(-1px);
         }
 
+        /* Основная кнопка */
         button.main-btn {
             width: 100%; padding: 16px; background: linear-gradient(to right, var(--fire-orange), var(--fire-yellow));
             color: #2b0a0a; border: none; border-radius: 8px; font-size: 18px; font-weight: 800;
@@ -202,10 +207,8 @@
         <h3 style="color:#55ff55">💰 Выплата денег</h3>
         <label>Кому:</label>
         <select id="payNameSelect"><option>Загрузка...</option></select>
-        
         <label>Сумма (руб):</label>
         <input type="number" id="payAmount" placeholder="5000">
-        
         <button class="main-btn" id="payBtnSubmit" onclick="sendPayment()">Записать</button>
         <button onclick="closePay()" style="background:none; border:none; color:#666; margin-top:10px; cursor:pointer;">Отмена</button>
     </div>
@@ -213,8 +216,8 @@
 
 <script>
     // ============================================================
-    // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
-    const API = "https://script.google.com/macros/s/AKfycbxljl9LzHIMuheaEr49PQXAaSLMwixw2bYOpF_-mTcYD4GfYPb8kd7-3mcqGHXLtf6QfQ/exec"; 
+    // 👇 ВСТАВЬ СЮДА СВОЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
+    const API = "https://script.google.com/macros/s/AKfycbxurpRQM2mpxYIX2IBRLP4rX9IbZopAhD1INbALUJcmcnJISr_q1dRZAAFVQS4xQ--_Sw/exec"; 
     // ============================================================
 
     if ('serviceWorker' in navigator) {
@@ -228,7 +231,7 @@
     const nameSelect = document.getElementById('nameSelect');
     const countSelect = document.getElementById('countSelect');
     const rememberMe = document.getElementById('rememberMe');
-    const payNameSelect = document.getElementById('payNameSelect'); // Для выплат
+    const payNameSelect = document.getElementById('payNameSelect');
     let currentAdminView = 'requests';
 
     function getDeviceUUID() {
@@ -254,15 +257,14 @@
 
         fetch(API + "?action=get_employees").then(res => res.json()).then(res => {
             nameSelect.innerHTML = '<option value="" disabled selected>Выберите сотрудника</option>';
-            payNameSelect.innerHTML = ''; // Очищаем список для выплат
+            payNameSelect.innerHTML = ''; 
             if(res.data && res.data.length > 0){
                 res.data.forEach(name => {
-                    // Для главной формы
+                    // Для формы
                     const opt = document.createElement('option');
                     opt.value = name; opt.innerText = name;
                     nameSelect.appendChild(opt);
-                    
-                    // Для формы выплат
+                    // Для выплат
                     const opt2 = document.createElement('option');
                     opt2.value = name; opt2.innerText = name;
                     payNameSelect.appendChild(opt2);
