@@ -66,6 +66,8 @@
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
+        .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
         
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
@@ -74,12 +76,6 @@
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .d-item { text-align: center; width: 32%; }
-        .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
-        .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-
         .btn-small {
             padding: 12px 5px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%;
@@ -96,7 +92,7 @@
         .auth-box, .qr-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         
         /* Стили для QR изображения */
-        .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; }
+        .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
     </style>
 </head>
 <body>
@@ -140,10 +136,19 @@
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
 
-    <div class="dashboard-stats">
-        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
-        <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
-        <div class="d-item"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали</span></div>
+    <div class="dashboard-stats" style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding-bottom:15px; margin-bottom:20px;">
+        <div class="d-item" style="text-align:center; width:33%;">
+            <span class="d-val" id="st-dnevka" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
+            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Дневка</span>
+        </div>
+        <div class="d-item" style="text-align:center; width:33%;">
+            <span class="d-val" id="st-volume" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
+            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Объем</span>
+        </div>
+        <div class="d-item" style="text-align:center; width:33%;">
+            <span class="d-val" id="st-miss" style="font-size:1.4em; font-weight:bold; color:#e57373; display:block; font-family:'Cinzel'">-</span>
+            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Не сдали</span>
+        </div>
     </div>
 
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
@@ -167,10 +172,11 @@
     </div>
 </div>
 
-<div id="qrModal">
+<div id="qrModal" style="display:none;">
     <div class="qr-box">
-        <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel'">SCAN TO ENTER</h3>
+        <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel'; margin-bottom:20px;">SCAN TO ENTER</h3>
         <img id="qrImage" class="qr-img" src="" alt="QR Code">
+        
         <div style="color:#aaa; font-size:0.8em; margin-bottom:20px;">Наведите камеру телефона</div>
         <button class="btn-small" onclick="document.getElementById('qrModal').style.display='none'" style="width: auto; padding: 10px 30px;">ЗАКРЫТЬ</button>
     </div>
@@ -269,14 +275,15 @@
         fetch(API + "?action=" + action).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.url) window.open(d.url, '_blank');
-            else alert("Ошибка файла");
+            else alert("Ошибка файла: " + (d.message || "Неизвестная ошибка"));
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
 
-    // --- ГЕНЕРАТОР QR ---
+    // --- ИСПРАВЛЕННЫЙ ГЕНЕРАТОР QR ---
     function showQR() {
-        var url = window.location.href; // Берет текущую ссылку сайта
-        var qrUrl = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" + encodeURIComponent(url) + "&choe=UTF-8";
+        var url = window.location.href;
+        // Используем надежный API для QR
+        var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
         document.getElementById('qrImage').src = qrUrl;
         document.getElementById('qrModal').style.display = 'flex';
     }
