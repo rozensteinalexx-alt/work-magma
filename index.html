@@ -6,71 +6,24 @@
     <title>WestProm Premium</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-stone: #1c1c1c; 
-            --panel-bg: #262626;
-            --gold-main: #d4af37;
-            --gold-light: #ffe680;
-            --gold-shadow: #8a6e18;
-            --text-main: #f0f0f0;
-        }
-        body {
-            font-family: 'Lato', sans-serif;
-            background-color: var(--bg-stone);
-            background-image: linear-gradient(to bottom right, #2b2b2b, #121212);
-            color: var(--text-main);
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh;
-        }
-        .box {
-            background: var(--panel-bg);
-            border: 1px solid #444; border-top: 2px solid var(--gold-main);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
-            padding: 30px; border-radius: 4px;
-            width: 100%; max-width: 460px; box-sizing: border-box; margin-bottom: 25px;
-        }
-        h2 {
-            font-family: 'Cinzel', serif; text-align: center; margin: 0 0 5px 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px;
-            background: linear-gradient(180deg, var(--gold-light) 10%, var(--gold-main) 50%, var(--gold-shadow) 90%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
-        }
-        .subtitle {
-            text-align: center; font-family: 'Cinzel', serif; color: #888; font-size: 0.7rem; letter-spacing: 4px;
-            margin-bottom: 30px; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 15px;
-        }
+        :root { --bg-stone: #1c1c1c; --panel-bg: #262626; --gold-main: #d4af37; --gold-light: #ffe680; --gold-shadow: #8a6e18; --text-main: #f0f0f0; }
+        body { font-family: 'Lato', sans-serif; background-color: var(--bg-stone); background-image: linear-gradient(to bottom right, #2b2b2b, #121212); color: var(--text-main); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .box { background: var(--panel-bg); border: 1px solid #444; border-top: 2px solid var(--gold-main); box-shadow: 0 10px 40px rgba(0,0,0,0.7); padding: 30px; border-radius: 4px; width: 100%; max-width: 460px; box-sizing: border-box; margin-bottom: 25px; }
+        h2 { font-family: 'Cinzel', serif; text-align: center; margin: 0 0 5px 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(180deg, var(--gold-light) 10%, var(--gold-main) 50%, var(--gold-shadow) 90%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4)); }
+        .subtitle { text-align: center; font-family: 'Cinzel', serif; color: #888; font-size: 0.7rem; letter-spacing: 4px; margin-bottom: 30px; text-transform: uppercase; border-bottom: 1px solid #444; padding-bottom: 15px; }
         label { color: var(--gold-main); font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; margin-top: 20px; }
-        select, input {
-            width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #444; border-left: 2px solid var(--gold-main);
-            border-radius: 2px; color: #fff; font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s;
-        }
+        select, input { width: 100%; padding: 15px; background: #1a1a1a; border: 1px solid #444; border-left: 2px solid var(--gold-main); border-radius: 2px; color: #fff; font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.3s; }
         select:focus, input:focus { border-color: var(--gold-main); background: #222; }
         select option { background-color: #1a1a1a; color: #fff; padding: 10px; }
         .radio-group { display: flex; gap: 0; margin-top: 5px; border: 1px solid #444; border-radius: 2px; overflow: hidden; }
-        .radio-lbl {
-            flex: 1; padding: 14px; background: #1a1a1a; text-align: center; color: #777; cursor: pointer; transition: 0.3s;
-            font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; border-right: 1px solid #333;
-        }
+        .radio-lbl { flex: 1; padding: 14px; background: #1a1a1a; text-align: center; color: #777; cursor: pointer; transition: 0.3s; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; border-right: 1px solid #333; }
         .radio-lbl:last-child { border-right: none; }
         input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .radio-lbl {
-            background: linear-gradient(45deg, #2b2b2b, #333); color: var(--gold-main);
-            text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
-        }
-        .btn {
-            width: 100%; padding: 16px; margin-top: 35px;
-            background: linear-gradient(to bottom, #cfb566, #aa8526);
-            border: 1px solid #ffe680; border-radius: 2px;
-            font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; letter-spacing: 1px; cursor: pointer; color: #1a1a1a;
-            text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s;
-        }
+        input[type="radio"]:checked + .radio-lbl { background: linear-gradient(45deg, #2b2b2b, #333); color: var(--gold-main); text-shadow: 0 0 5px rgba(212, 175, 55, 0.4); }
+        .btn { width: 100%; padding: 16px; margin-top: 35px; background: linear-gradient(to bottom, #cfb566, #aa8526); border: 1px solid #ffe680; border-radius: 2px; font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; letter-spacing: 1px; cursor: pointer; color: #1a1a1a; text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
         .btn:hover { background: linear-gradient(to bottom, #e6cd7a, #c59b2e); transform: translateY(-1px); }
         .btn:disabled { background: #333; border-color:#444; color: #666; cursor: not-allowed; }
-        .btn-small {
-            padding: 10px 15px; font-size: 0.75em; background: #222; color: #aaa; border: 1px solid #444;
-            border-radius: 2px; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-family: 'Lato', sans-serif; letter-spacing: 1px;
-        }
+        .btn-small { padding: 10px 15px; font-size: 0.75em; background: #222; color: #aaa; border: 1px solid #444; border-radius: 2px; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-family: 'Lato', sans-serif; letter-spacing: 1px; }
         .btn-small:hover { border-color: var(--gold-main); color: var(--gold-main); background: #1a1a1a; }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-family: 'Cinzel', serif; font-size: 0.9em;}
         .success { color: #4caf50; } .error { color: #d32f2f; }
@@ -138,14 +91,13 @@
 
 <script>
     // ========================================================
-    // 👇👇 ОБЯЗАТЕЛЬНО ОБНОВИТЕ ССЫЛКУ ПОСЛЕ DEPLOY 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbz76DEZrLcuaon4kylY5aQ__Kijr8_HjXOB99LGmur1pjlXGRPQUzy6oBVwHpirayGL/exec";
+    // 👇👇 ВСТАВЬТЕ СЮДА НОВУЮ ССЫЛКУ ПОСЛЕ ПУБЛИКАЦИИ 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbxphiOYFnv2vDorlPM1f3ES9-CX4cPHUYsTufMRIQWnlDjChd-W_zvwun8lmFrTJbAI/exec";
     // ========================================================
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     
-    // Безопасная загрузка
     window.onload = () => {
         if(!API || API.includes("ВСТАВЬТЕ")) {
             ns.innerHTML = "<option>Ошибка: Вставьте ссылку API</option>";
@@ -164,12 +116,12 @@
                 });
                 if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
             } else {
-                ns.innerHTML = "<option>Ошибка сервера</option>";
+                ns.innerHTML = "<option>Ошибка сервера (Попробуйте позже)</option>";
             }
         })
         .catch(err => {
             console.error(err);
-            ns.innerHTML = "<option>Нет связи (Проверьте ссылку)</option>";
+            ns.innerHTML = "<option>Нет связи (Проверьте интернет)</option>";
         });
 
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
@@ -248,7 +200,6 @@
 
     function dl(type) {
         if(type === 'archive') {
-             // Открываем таблицу
              fetch(API+"?action=open_archive").then(r=>r.json()).then(d=>{
                  if(d.url) window.open(d.url, '_blank');
              });
