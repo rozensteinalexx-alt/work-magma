@@ -4,117 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WestProm Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold-bright: #fff3c5;
-            --gold-mid: #d4af37;
-            --gold-dark: #997b2f;
-            --gold-deep: #4a3b0a;
-            --metallic-gold-gradient: linear-gradient(to bottom, var(--gold-bright) 0%, var(--gold-mid) 20%, var(--gold-dark) 50%, var(--gold-mid) 80%, var(--gold-bright) 100%);
+            --gold-main: #d4af37;
+            --gold-light: #fff5c3;
+            --dark-bg: #1a1a1a;
+            --card-bg: #222;
         }
 
         body {
             font-family: 'Lato', sans-serif;
-            background: linear-gradient(rgba(15, 15, 15, 0.85), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a;
-            background-attachment: fixed;
+            background-color: #121212;
             color: #ccc;
-            margin: 0; padding: 30px 20px;
+            margin: 0; padding: 20px;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
-            box-sizing: border-box;
         }
 
-        .logo-container { margin-bottom: 30px; text-align: center; }
-        h1.gold-sign {
-            font-family: 'Cinzel', serif; font-weight: 900; font-size: 2.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
-            background: linear-gradient(to bottom, #fffde8 0%, #e3c472 20%, #d4af37 50%, #a0832a 51%, #d4af37 80%, #fffde8 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.8));
+        /* ЗАГОЛОВОК */
+        h2 {
+            font-family: 'Cinzel', serif; text-align: center; margin: 0;
+            font-size: 2.2rem; text-transform: uppercase; letter-spacing: 2px;
+            background: linear-gradient(180deg, #fff 0%, var(--gold-main) 50%, #8a6e18 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.6));
         }
-        .subtitle-sign {
-            font-family: 'Cinzel', serif; color: var(--gold-mid); font-size: 0.9rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 5px;
-            background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;
+        .subtitle {
+            text-align: center; font-family: 'Cinzel', serif; color: #666; 
+            font-size: 0.7rem; letter-spacing: 4px; margin-bottom: 25px; 
+            text-transform: uppercase;
         }
 
+        /* КАРТОЧКА */
         .box {
-            background: linear-gradient(135deg, rgba(35,35,35,0.95), rgba(20,20,20,0.98)), url('https://www.transparenttextures.com/patterns/concrete-wall.png');
-            border: 2px solid; border-image: var(--metallic-gold-gradient) 1;
-            box-shadow: 0 0 0 4px #121212, 0 25px 60px rgba(0,0,0,1), inset 0 0 40px rgba(0,0,0,0.8);
-            padding: 35px 30px; border-radius: 2px; width: 100%; max-width: 440px; box-sizing: border-box; margin-bottom: 30px;
+            background: #202020;
+            border: 2px solid var(--gold-main);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2), inset 0 0 50px rgba(0,0,0,0.8);
+            padding: 30px; border-radius: 8px; width: 100%; max-width: 400px;
+            box-sizing: border-box; margin-bottom: 25px;
         }
 
+        /* ЛЕЙБЛЫ */
         label {
-            color: var(--gold-mid); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 8px; display: block; margin-top: 22px; text-shadow: 0 1px 2px rgba(0,0,0,1); display: flex; align-items: center; gap: 10px;
+            color: var(--gold-main); font-size: 0.75rem; font-weight: bold; 
+            text-transform: uppercase; margin-bottom: 8px; display: block; margin-top: 20px;
+            display: flex; align-items: center; gap: 8px;
         }
-        
-        select, input {
-            width: 100%; padding: 16px 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1;
-            border-radius: 2px; color: var(--gold-bright); font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none;
-            box-shadow: inset 0 3px 10px rgba(0,0,0,0.8); transition: 0.3s;
-        }
-        select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
-        select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
 
-        .radio-group { display: flex; gap: 2px; margin-top: 10px; background: #111; padding: 4px; box-shadow: inset 0 3px 8px rgba(0,0,0,0.8); border: 1px solid #333; border-radius: 4px; }
-        .radio-lbl { 
-            flex: 1; padding: 14px; text-align: center; color: #777; cursor: pointer; transition: 0.3s;
-            font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; text-transform: uppercase; border-radius: 2px; text-shadow: 0 1px 1px rgba(0,0,0,1);
+        /* ПОЛЯ ВВОДА */
+        select, input {
+            width: 100%; padding: 14px; background: #151515; 
+            border: 1px solid #444; border-radius: 4px; color: #fff; 
+            font-family: 'Lato', sans-serif; font-size: 16px; 
+            box-sizing: border-box; outline: none; transition: 0.3s;
+        }
+        select:focus, input:focus {
+            border-color: var(--gold-main); box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        /* Убираем белые углы в Safari */
+        select { -webkit-appearance: none; appearance: none; }
+
+        /* ПЕРЕКЛЮЧАТЕЛЬ (КАПСУЛА) */
+        .radio-group {
+            display: flex; background: #111; padding: 5px; 
+            border-radius: 12px; border: 1px solid #333; margin-top: 5px;
+        }
+        .radio-lbl {
+            flex: 1; padding: 12px; text-align: center; color: #666; cursor: pointer;
+            font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em;
+            text-transform: uppercase; transition: 0.3s; border-radius: 8px;
         }
         input[type="radio"] { display: none; }
-        input[type="radio"]:checked + .radio-lbl { background: var(--metallic-gold-gradient); color: #2a1a00; box-shadow: 0 2px 5px rgba(0,0,0,0.5); text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
+        input[type="radio"]:checked + .radio-lbl {
+            background: linear-gradient(180deg, #d4af37 0%, #997512 100%);
+            color: #1a0a00; box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
 
+        /* ГЛАВНАЯ КНОПКА */
         .btn {
-            width: 100%; padding: 20px; margin-top: 40px;
-            background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%);
-            border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px;
-            font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase;
-            box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+            width: 100%; padding: 18px; margin-top: 35px;
+            background: linear-gradient(180deg, #ffd700 0%, #b8860b 100%);
+            border: 1px solid #ffe680; border-radius: 6px;
+            font-family: 'Cinzel', serif; font-weight: bold; font-size: 16px; letter-spacing: 2px;
+            cursor: pointer; color: #2a1a00; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.2s;
         }
-        .btn:hover { filter: brightness(1.1); }
-        .btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
-        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
+        .btn:active { transform: scale(0.98); }
+        .btn:disabled { background: #333; color: #555; border-color: #444; }
 
-        .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-        .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
-        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
-        .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
+        /* СООБЩЕНИЯ */
+        #msg { text-align: center; margin-top: 20px; min-height: 20px; font-weight: bold; }
+        .success { color: #4caf50; } .error { color: #f44336; }
 
-        #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
-        .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
-        .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* АДМИНКА */
+        .admin-link {
+            text-align: center; margin-top: 30px; font-size: 0.7em; color: #555; 
+            text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
+        }
+        #adminPanel {
+            display: none; background: #1a1a1a; border: 1px solid #333;
+            padding: 20px; border-radius: 4px; width: 100%; max-width: 400px;
+            box-sizing: border-box; margin-top: 20px;
+        }
+        .admin-head { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .admin-title { color: var(--gold-main); font-family: 'Cinzel'; }
         
-        .btn-small {
-            padding: 12px 18px; font-size: 0.75em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
-            box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0;
+        .btn-mini {
+            padding: 8px 12px; background: #222; border: 1px solid #444; 
+            color: #aaa; text-transform: uppercase; font-size: 0.7em; cursor: pointer;
         }
-        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
-        .btn-small:hover { filter: brightness(1.1); }
-        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; }
+        .btn-mini:hover { border-color: var(--gold-main); color: var(--gold-main); }
+        
+        .req-card { 
+            background: #222; padding: 12px; margin-bottom: 10px; border-radius: 4px;
+            border-left: 3px solid var(--gold-main);
+        }
+        .btn-act { padding: 8px; flex: 1; border: none; cursor: pointer; font-weight: bold; }
+        .btn-yes { background: #2e7d32; color: #fff; margin-right: 5px; }
+        .btn-no { background: #c62828; color: #fff; margin-left: 5px; }
 
-        .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
-        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
-        .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
-        .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
-
-        #authModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .auth-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
+        /* МОДАЛКА */
+        #authModal {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 999;
+        }
+        .auth-box {
+            background: #222; border: 1px solid var(--gold-main); padding: 30px; 
+            width: 300px; text-align: center; border-radius: 6px;
+        }
     </style>
 </head>
 <body>
 
-<div class="logo-container">
-    <h1 class="gold-sign">WestProm</h1>
-    <div class="subtitle-sign">Global Industries</div>
-</div>
-
 <div class="box">
+    <h2>WestProm</h2>
+    <div class="subtitle">Global Industries</div>
+    
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
         
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN (4 цифры)" maxlength="6" style="text-align:center; letter-spacing:10px; font-size: 1.3em;" oninput="saveUser()">
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
 
         <label>👥 Количество (Чел.)</label>
         <select name="count">
@@ -140,31 +172,29 @@
 <div id="adminPanel">
     <div class="admin-head">
         <span class="admin-title">ADMIN CONTROL</span>
-        <button class="btn-small logout" onclick="logout()">Выход</button>
+        <button class="btn-mini" style="color:#e57373" onclick="logout()">Выход</button>
     </div>
-    
-    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:25px;">
-        <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
-        <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
-        <button class="btn-small" onclick="dl('archive')">🗄 Таблица</button>
+    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:15px;">
+        <button class="btn-mini" onclick="loadReq()">↻ Обновить</button>
+        <button class="btn-mini" onclick="dl('excel')">💾 Excel</button>
+        <button class="btn-mini" onclick="dl('archive')">🗄 Архив</button>
     </div>
-
-    <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
+    <div id="list" style="text-align:center; color:#555; font-size:0.9em;">Ожидание...</div>
 </div>
 
 <div id="authModal">
     <div class="auth-box">
-        <h3 style="font-family:'Cinzel'; margin-top:0; font-size: 1.6em; letter-spacing: 2px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SECURITY</h3>
-        <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;">
-        <button class="btn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
-        <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
+        <h3 style="color:var(--gold-main); font-family:'Cinzel'; margin-top:0;">SECURITY</h3>
+        <input type="password" id="pass" style="text-align:center; margin-bottom:20px; width:100%; padding:10px; background:#111; color:#fff; border:1px solid #444;">
+        <button class="btn" onclick="login()" style="margin-top:0; padding:12px;">Вход</button>
+        <div style="margin-top:20px; color:#555; cursor:pointer; font-size:0.8em;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
     </div>
 </div>
 
 <script>
     // ========================================================
-    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ РАБОЧУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzt6A55RnX0ufmnzTp1jJWhXTTim1FTCvaLVixnKgncYkzjuGaqI2YsaUEwAZKNRw0i/exec";
+    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbwvVy8Uhl8Q6VHa1-R9719jhpcnUN1QPA-krMVGAHcTZj1aBTHA1QIsu2h_AxI5Hn7j/exec";
     // ========================================================
 
     const ns = document.getElementById('nSelect');
@@ -188,12 +218,12 @@
                 });
                 if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
             } else {
-                ns.innerHTML = "<option>Ошибка сервера (Попробуйте позже)</option>";
+                ns.innerHTML = "<option>Ошибка сервера</option>";
             }
         })
         .catch(err => {
             console.error(err);
-            ns.innerHTML = "<option>Нет связи (Проверьте интернет)</option>";
+            ns.innerHTML = "<option>Нет связи</option>";
         });
 
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
@@ -249,15 +279,15 @@
         l.innerHTML="Загрузка списка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:20px; opacity:0.7;'>Нет новых заявок</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #333;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.95em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> <br> ⚙️ Тип: <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
+                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b style="color:#fff; font-size:1.1em">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-main); font-weight:bold">${i['Вид работ']}</span></div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
                 </div>`;
                 l.appendChild(div);
             });
