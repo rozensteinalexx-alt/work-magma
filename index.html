@@ -68,17 +68,13 @@
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* Кнопки админки */
         .btn-small {
-            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            padding: 12px 18px; font-size: 0.75em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0;
-            width: 100%;
         }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
         .btn-small:hover { filter: brightness(1.1); }
-        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
-        
+        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; }
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
         .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
@@ -111,10 +107,8 @@
 
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
-            <input type="radio" id="t1" name="type" value="Дневка" checked>
-            <label for="t1" class="radio-lbl">Дневка</label>
-            <input type="radio" id="t2" name="type" value="Объем">
-            <label for="t2" class="radio-lbl">Объем</label>
+            <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
+            <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
 
         <button class="btn" id="sBtn">Отправить отчет</button>
@@ -128,7 +122,7 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:25px;">
+    <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:25px;">
         <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
@@ -140,44 +134,46 @@
 <div id="authModal">
     <div class="auth-box">
         <h3 style="font-family:'Cinzel'; margin-top:0; font-size: 1.6em; letter-spacing: 2px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SECURITY</h3>
-        <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;">
+        <input type="password" id="pass" style="text-align:center; margin-bottom:25px; font-size:1.3em; letter-spacing: 5px;">
         <button class="btn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
-        <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
+        <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">Отмена</div>
     </div>
 </div>
 
 <script>
-    // ========================================================
-    // 👇👇 ВСТАВЬТЕ НОВУЮ ССЫЛКУ НИЖЕ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbw2GtTFh324UBNuf6WjdoxkEICZzchlse7-K8T4ueyBz67eKnLhVM1QQKqOAo7khGVk1w/exec";
-    // ========================================================
+    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbzyYTLnsfo_uI3LZ9TtYD6TD_eKcxcG5XEKT4Q8fYfOywPqpO0GNjiwWSPtS-K3jrP33g/exec";
+    // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     
     window.onload = () => {
-        if(!API || API.includes("ВСТАВЬТЕ")) {
-            ns.innerHTML = "<option>Ошибка: Вставьте ссылку API</option>"; return;
-        }
-        fetch(API+"?action=get_employees").then(r => r.json()).then(d => {
-            if(d.result === "success") {
-                ns.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
-                d.data.forEach(n => { let op = document.createElement('option'); op.value=n; op.innerText=n; ns.appendChild(op); });
-                if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
-            } else { ns.innerHTML = "<option>Ошибка сервера</option>"; }
-        }).catch(err => { ns.innerHTML = "<option>Нет связи</option>"; });
-
+        fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
+            ns.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
+            if(d.data) d.data.forEach(n=>{
+                let op = document.createElement('option');
+                op.value=n; op.innerText=n;
+                ns.appendChild(op);
+            });
+            if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
+        });
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
         if(localStorage.getItem('wp_admin_auth') === 'true') {
-            document.getElementById('adminPanel').style.display = 'block'; loadReq();
+            document.getElementById('adminPanel').style.display = 'block';
+            loadReq();
         }
     };
 
-    function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); }
+    function saveUser() {
+        localStorage.setItem('wp_user', ns.value);
+        localStorage.setItem('wp_pin', pin.value);
+    }
 
     document.getElementById('wForm').onsubmit = e => {
         e.preventDefault();
-        let b = document.getElementById('sBtn'); let m = document.getElementById('msg');
+        let b = document.getElementById('sBtn');
+        let m = document.getElementById('msg');
         b.disabled=true; b.innerText="Обработка..."; m.innerText="";
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
@@ -196,28 +192,32 @@
         if(document.getElementById('pass').value==="westprom123") {
             localStorage.setItem('wp_admin_auth', 'true');
             document.getElementById('authModal').style.display='none';
-            document.getElementById('adminPanel').style.display='block'; loadReq();
+            document.getElementById('adminPanel').style.display='block';
+            loadReq();
         } else alert("Доступ запрещен");
     }
-    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
+    function logout() {
+        if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); }
+    }
 
     function loadReq() {
-        let l = document.getElementById('list'); l.innerHTML="Загрузка списка...";
+        let l = document.getElementById('list');
+        l.innerHTML="Загрузка списка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
+            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
+                <div><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.9em;color:var(--gold-mid);margin-top:5px">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
+                <div class="req-btns" style="display:flex; margin-top:10px;">
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
                 </div>`;
                 l.appendChild(div);
             });
-        }).catch(() => { l.innerHTML = "Ошибка загрузки данных"; });
+        });
     }
 
     function upd(id, st) {
@@ -226,11 +226,29 @@
         fetch(API,{method:'POST', body:p}).then(()=>loadReq());
     }
 
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ СКАЧИВАНИЯ
     function dl(type) {
-        if(type === 'archive') {
-             fetch(API+"?action=get_archive").then(r=>r.json()).then(d=>{ if(d.url) window.open(d.url, '_blank'); }); return;
-        }
-        window.open(API+"?action=get_" + type, '_blank');
+        const btn = event.target;
+        const oldText = btn.innerText;
+        btn.innerText = "⏳...";
+        
+        let action = "get_" + type;
+        if(type === "archive") action = "get_archive"; // Специальный экшн для архива
+
+        fetch(API + "?action=" + action)
+        .then(r => r.json())
+        .then(d => {
+            btn.innerText = oldText;
+            if(d.result === "success" && d.url) {
+                window.open(d.url, '_blank'); // Открываем ссылку на скачивание
+            } else {
+                alert("Ошибка: " + (d.message || "Не удалось получить ссылку"));
+            }
+        })
+        .catch(e => {
+            btn.innerText = oldText;
+            alert("Ошибка сети");
+        });
     }
 </script>
 
