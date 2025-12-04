@@ -1,11 +1,16 @@
 {
-  "name": "WestProm Учет",
+  "name": "WestProm",
   "short_name": "WestProm",
-  "start_url": "./index.html",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#0f0a0a",
-  "theme_color": "#0f0a0a",
+  "background_color": "#1a1a1a",
+  "theme_color": "#000000",
   "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
     {
       "src": "icon.png",
       "sizes": "512x512",
