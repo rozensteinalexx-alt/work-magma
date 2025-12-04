@@ -66,8 +66,6 @@
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
-        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
-        .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
         
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
@@ -77,14 +75,13 @@
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* DASHBOARD */
         .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
         .d-item { text-align: center; width: 32%; }
         .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
         .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
         .btn-small {
-            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            padding: 12px 5px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%;
         }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
@@ -95,8 +92,11 @@
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
         
-        #authModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .auth-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
+        #authModal, #qrModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .auth-box, .qr-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
+        
+        /* Стили для QR изображения */
+        .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -146,12 +146,15 @@
         <div class="d-item"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали</span></div>
     </div>
 
-    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:25px;">
-        <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
+    <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
+        <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
         <button class="btn-small" onclick="dl('archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
     </div>
+    
+    <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
+
     <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
@@ -161,6 +164,15 @@
         <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;">
         <button class="btn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
         <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
+    </div>
+</div>
+
+<div id="qrModal">
+    <div class="qr-box">
+        <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel'">SCAN TO ENTER</h3>
+        <img id="qrImage" class="qr-img" src="" alt="QR Code">
+        <div style="color:#aaa; font-size:0.8em; margin-bottom:20px;">Наведите камеру телефона</div>
+        <button class="btn-small" onclick="document.getElementById('qrModal').style.display='none'" style="width: auto; padding: 10px 30px;">ЗАКРЫТЬ</button>
     </div>
 </div>
 
@@ -223,13 +235,11 @@
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
-            // Обновляем дашборд
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
                 document.getElementById('st-volume').innerText = d.stats.volume;
                 document.getElementById('st-miss').innerText = d.stats.missing;
             }
-
             l.innerHTML="";
             if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
@@ -255,11 +265,20 @@
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳...";
         let action = "get_" + type;
+        if(type === "archive") action = "get_archive";
         fetch(API + "?action=" + action).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.url) window.open(d.url, '_blank');
             else alert("Ошибка файла");
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
+    }
+
+    // --- ГЕНЕРАТОР QR ---
+    function showQR() {
+        var url = window.location.href; // Берет текущую ссылку сайта
+        var qrUrl = "https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=" + encodeURIComponent(url) + "&choe=UTF-8";
+        document.getElementById('qrImage').src = qrUrl;
+        document.getElementById('qrModal').style.display = 'flex';
     }
 </script>
 
