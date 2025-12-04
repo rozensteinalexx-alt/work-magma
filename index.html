@@ -219,7 +219,7 @@
 
 <script>
     // ============================================================
-    // 👇 ВСТАВЬ СЮДА СВОЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
+    // 👇 ВСТАВЬ СЮДА НОВУЮ ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
     const API = "https://script.google.com/macros/s/AKfycbyyOdRidzZ1BFjTGASIzBvoDD1zK65s2dvg5bASjJc8WbfaR7gLbbOnjxVhuBH_tB86xA/exec"; 
     // ============================================================
 
@@ -249,18 +249,15 @@
         return uuid;
     }
 
-    // 🔥 ИСПРАВЛЕННАЯ ЗАГРУЗКА
     window.addEventListener('load', () => {
         getDeviceUUID(); 
         
-        // Проверка админа
         if (localStorage.getItem('admin_auth') === 'true') {
             document.querySelector('.admin-link').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
-            loadRequests(); // Загружаем админку
+            loadRequests();
         }
 
-        // Загрузка списка сотрудников (ДЛЯ ФОРМЫ)
         fetch(API + "?action=get_employees").then(res => res.json()).then(res => {
             nameSelect.innerHTML = '<option value="" disabled selected>Выберите сотрудника</option>';
             payNameSelect.innerHTML = ''; 
@@ -277,20 +274,17 @@
                     opt2.value = name; opt2.innerText = name;
                     payNameSelect.appendChild(opt2);
                 });
-                
-                // Восстанавливаем память ТОЛЬКО ПОСЛЕ загрузки списка
-                restoreMemory();
             } else {
                 nameSelect.innerHTML = '<option value="" disabled>Список пуст</option>';
             }
+            restoreMemory();
         });
     });
 
     function restoreMemory() {
         if (localStorage.getItem('rememberStatus') === 'true') {
             rememberMe.checked = true;
-            const savedName = localStorage.getItem('workerName');
-            if (savedName) nameSelect.value = savedName; // Теперь список уже загружен, и value сработает
+            nameSelect.value = localStorage.getItem('workerName') || "";
             countSelect.value = localStorage.getItem('workerCount') || "1";
         }
     }
@@ -356,7 +350,7 @@
     function sendPayment() {
         const name = payNameSelect.value;
         const amount = document.getElementById('payAmount').value;
-        const monthOffset = document.getElementById('payMonthSelect').value; // Получаем сдвиг месяца
+        const monthOffset = document.getElementById('payMonthSelect').value; // Получаем значение
 
         if(!amount) { alert("Введите сумму!"); return; }
         
@@ -418,8 +412,6 @@
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             spin.style.display="none";
             if(!d.data.length) { l.innerHTML="<div style='text-align:center;opacity:0.6;margin-top:20px'>Нет заявок на проверку</div>"; return; }
-            // 🔥 Очищаем список перед добавлением, чтобы не было дублей
-            l.innerHTML = ""; 
             d.data.reverse().forEach(x=>{
                 let el = document.createElement('div'); el.className = 'card';
                 el.innerHTML = `
@@ -445,8 +437,6 @@
         fetch(API+"?action=get_employees_admin").then(r=>r.json()).then(d=>{
             spin.style.display="none";
             if(!d.data.length) { l.innerHTML="<div style='text-align:center;opacity:0.6;'>Список пуст</div>"; return; }
-            // 🔥 Очищаем список перед добавлением
-            l.innerHTML = ""; 
             d.data.forEach(x=>{
                 let el = document.createElement('div'); el.className = 'emp-item';
                 let statusIcon = x.isBound ? '🔐' : '⚪';
@@ -495,4 +485,3 @@
 </script>
 </body>
 </html>
-
