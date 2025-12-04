@@ -140,7 +140,7 @@
             <label>Фамилия Имя</label>
             <select id="nameSelect" name="name" required><option value="" disabled selected>Загрузка...</option></select>
 
-            <label>Ваш ПИН-код</label>
+            <label>Ваш ПИН-код (придумайте при первом входе)</label>
             <input type="tel" name="pin" required placeholder="Например: 1234" maxlength="6" style="text-align:center; letter-spacing: 5px; font-size: 1.2em;">
             
             <label>Количество людей</label>
@@ -195,8 +195,8 @@
 
 <script>
     // ============================================================
-    // 👇 ВСТАВЬ СЮДА ССЫЛКУ ИЗ GOOGLE APPS SCRIPT 👇
-    const API = "https://script.google.com/macros/s/AKfycbyVQ1obeuipceyJWJivw0AtZtj-ao46pKuSRD4Y1Fv5CboR57_9j8qJgmJDT4O61Z5WuQ/exec"; 
+    // 👇 ВАША ССЫЛКА API 👇
+    const API = "https://script.google.com/macros/s/AKfycbzV_ZbphraisGIGJvANTWgPyrgxS1oV_My3zfmujIOdZgyV0b6zyghlO3NBHTnwljYJlQ/exec"; 
     // ============================================================
 
     if ('serviceWorker' in navigator) {
@@ -212,21 +212,7 @@
     const rememberMe = document.getElementById('rememberMe');
     let currentAdminView = 'requests';
 
-    function getDeviceUUID() {
-        let uuid = localStorage.getItem('device_uuid');
-        if (!uuid) {
-            uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
-            localStorage.setItem('device_uuid', uuid);
-        }
-        return uuid;
-    }
-
     window.addEventListener('load', () => {
-        getDeviceUUID(); 
-        
         if (localStorage.getItem('admin_auth') === 'true') {
             document.querySelector('.admin-link').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
@@ -274,14 +260,9 @@
         const b = document.getElementById('sBtn');
         b.disabled = true; b.innerText = "Проверка..."; m.innerText = ""; m.className = "";
         
-        const isRemembered = rememberMe.checked;
-        const currentName = nameSelect.value;
-        const currentCount = countSelect.value;
-
         const fd = new FormData(f);
         const p = new URLSearchParams();
         p.append('action', 'create');
-        p.append('uuid', getDeviceUUID());
         for(const [k,v] of fd) p.append(k,v);
 
         fetch(API, {method:'POST', body:p})
@@ -289,10 +270,13 @@
             if(d.result==="success"){
                 m.className="success"; m.innerText = "🔥 Отчет принят!";
                 f.reset();
-                if(isRemembered) {
-                    nameSelect.value = currentName; countSelect.value = currentCount; rememberMe.checked = true;
-                }
                 document.getElementById('type1').checked = true;
+                // Восстановление памяти после сброса формы
+                if(localStorage.getItem('rememberStatus') === 'true') {
+                    nameSelect.value = localStorage.getItem('workerName');
+                    countSelect.value = localStorage.getItem('workerCount');
+                    rememberMe.checked = true;
+                }
             } else if (d.result === "duplicate") {
                 m.className="error"; m.innerText = "⛔ " + d.message;
             } else if (d.result === "fraud") {
