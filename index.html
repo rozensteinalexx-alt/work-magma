@@ -76,8 +76,14 @@
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .d-item { text-align: center; width: 32%; }
+        .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
+        .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
         .btn-small {
-            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            padding: 12px 5px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%;
         }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
@@ -105,18 +111,23 @@
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
+        
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
+
         <label>👥 Количество (Чел.)</label>
-        <select name="count">
+        <select name="count" id="countSelect" onchange="saveUser()">
+            <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
-            <script>for(let i=1;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
+            <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
+
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
+
         <button class="btn" id="sBtn">Отправить отчет</button>
     </form>
     <div id="msg"></div>
@@ -130,13 +141,22 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
+
+    <div class="dashboard-stats">
+        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
+        <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
+        <div class="d-item"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали</span></div>
+    </div>
+
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
-        <button class="btn-small" onclick="dl('get_archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
+        <button class="btn-small" onclick="dl('archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
     </div>
+    
     <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
+
     <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
@@ -165,6 +185,7 @@
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
+    const countSelect = document.getElementById('countSelect');
     
     window.onload = () => {
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
@@ -173,13 +194,26 @@
             if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
         }).catch(err => { ns.innerHTML = "<option>Нет связи</option>"; });
 
+        // Восстановление ПИН-кода
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
+        
+        // Восстановление Количества или Установка по умолчанию 1
+        if(localStorage.getItem('wp_count')) {
+            countSelect.value = localStorage.getItem('wp_count');
+        } else {
+            countSelect.value = "1"; // По умолчанию 1
+        }
+
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
 
-    function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); }
+    function saveUser() { 
+        localStorage.setItem('wp_user', ns.value); 
+        localStorage.setItem('wp_pin', pin.value);
+        localStorage.setItem('wp_count', countSelect.value); // Сохраняем выбор количества
+    }
 
     function showToast(text, isErr=false) {
         var t = document.getElementById("toast");
@@ -199,7 +233,17 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); }, 1000);
+                setTimeout(()=>{ 
+                    // Сбрасываем форму, но восстанавливаем сохраненные значения
+                    document.getElementById('wForm').reset(); 
+                    ns.value=localStorage.getItem('wp_user'); 
+                    pin.value=localStorage.getItem('wp_pin');
+                    
+                    // Восстанавливаем количество
+                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
+                    else countSelect.value = "1";
+                    
+                }, 1000);
             } else { showToast("⛔ " + d.message, true); }
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
@@ -217,6 +261,11 @@
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
+            if(d.stats) {
+                document.getElementById('st-dnevka').innerText = d.stats.dnevka;
+                document.getElementById('st-volume').innerText = d.stats.volume;
+                document.getElementById('st-miss').innerText = d.stats.missing;
+            }
             l.innerHTML="";
             if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
@@ -241,10 +290,8 @@
 
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳...";
-        
-        // Исправленная логика вызова API
-        let action = (type === "get_archive") ? "get_archive" : "get_" + type;
-
+        let action = "get_" + type;
+        if(type === "archive") action = "get_archive";
         fetch(API + "?action=" + action).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.url) window.open(d.url, '_blank');
