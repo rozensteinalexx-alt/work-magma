@@ -43,6 +43,12 @@
         .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
+        
+        .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
+        .d-item { text-align: center; width: 32%; }
+        .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
+        .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
         #authModal, #qrModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
@@ -59,19 +65,23 @@
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
+        
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
+
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
             <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
+
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
+
         <button class="btn" id="sBtn">Отправить отчет</button>
     </form>
     <div id="msg"></div>
@@ -85,25 +95,17 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-    <div class="dashboard-stats" style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding-bottom:15px; margin-bottom:20px;">
-        <div class="d-item" style="text-align:center; width:33%;">
-            <span class="d-val" id="st-dnevka" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
-            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Дневка</span>
-        </div>
-        <div class="d-item" style="text-align:center; width:33%;">
-            <span class="d-val" id="st-volume" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
-            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Объем</span>
-        </div>
-        <div class="d-item" style="text-align:center; width:33%;">
-            <span class="d-val" id="st-miss" style="font-size:1.4em; font-weight:bold; color:#e57373; display:block; font-family:'Cinzel'">-</span>
-            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Не сдали</span>
-        </div>
+    
+    <div class="dashboard-stats">
+        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
+        <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
+        <div class="d-item"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали</span></div>
     </div>
-    <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
-        <button class="btn-small" onclick="loadReq()">↻</button>
+
+    <div style="display:flex; gap:10px; justify-content:center; margin-bottom:15px;">
+        <button class="btn-small" onclick="loadReq()">↻ Обновить</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
-        <button class="btn-small" onclick="dl('archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
     </div>
     <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
     <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
@@ -128,8 +130,8 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ СЮДА НОВУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwD-ZxzlABxCxAQKeDNtN1fuN6qQkujE_phCz-eYcFpR5b1Z7qMavWr30-PvgacdWRkNA/exec";
+    // 👇👇 ВСТАВЬТЕ ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbwqI9xTak3ySP2ni4PvsH6DWoMuWiFDwEtmCuMulV98bOt0ps_0-eqfss6SzrcgXsALbg/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
@@ -145,8 +147,7 @@
 
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-        else countSelect.value = "1";
-
+        
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
@@ -176,13 +177,7 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ 
-                    document.getElementById('wForm').reset(); 
-                    ns.value=localStorage.getItem('wp_user'); 
-                    pin.value=localStorage.getItem('wp_pin');
-                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-                    else countSelect.value = "1";
-                }, 1000);
+                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); countSelect.value = localStorage.getItem('wp_count') || "1"; }, 1000);
             } else { showToast("⛔ " + d.message, true); }
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
@@ -227,13 +222,10 @@
         fetch(API,{method:'POST', body:p}).then(()=>loadReq());
     }
 
-    // ИСПРАВЛЕННАЯ ФУНКЦИЯ СКАЧИВАНИЯ
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
         
-        let action = (type === "archive") ? "get_archive" : "get_" + type;
-
-        fetch(API + "?action=" + action)
+        fetch(API + "?action=get_" + type)
         .then(r => r.json())
         .then(d => {
             btn.innerText = oldText;
@@ -264,4 +256,3 @@
 
 </body>
 </html>
-
