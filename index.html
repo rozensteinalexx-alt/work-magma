@@ -77,7 +77,7 @@
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .btn-small {
-            padding: 12px 5px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%;
         }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
@@ -91,7 +91,6 @@
         #authModal, #qrModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         
-        /* Стили для QR изображения */
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
     </style>
 </head>
@@ -106,22 +105,18 @@
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
-        
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
-
         <label>👥 Количество (Чел.)</label>
         <select name="count">
             <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=1;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
-
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-
         <button class="btn" id="sBtn">Отправить отчет</button>
     </form>
     <div id="msg"></div>
@@ -135,31 +130,13 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-
-    <div class="dashboard-stats" style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding-bottom:15px; margin-bottom:20px;">
-        <div class="d-item" style="text-align:center; width:33%;">
-            <span class="d-val" id="st-dnevka" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
-            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Дневка</span>
-        </div>
-        <div class="d-item" style="text-align:center; width:33%;">
-            <span class="d-val" id="st-volume" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
-            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Объем</span>
-        </div>
-        <div class="d-item" style="text-align:center; width:33%;">
-            <span class="d-val" id="st-miss" style="font-size:1.4em; font-weight:bold; color:#e57373; display:block; font-family:'Cinzel'">-</span>
-            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Не сдали</span>
-        </div>
-    </div>
-
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
-        <button class="btn-small" onclick="dl('archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
+        <button class="btn-small" onclick="dl('get_archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
     </div>
-    
     <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
-
     <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
@@ -176,7 +153,6 @@
     <div class="qr-box">
         <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel'; margin-bottom:20px;">SCAN TO ENTER</h3>
         <img id="qrImage" class="qr-img" src="" alt="QR Code">
-        
         <div style="color:#aaa; font-size:0.8em; margin-bottom:20px;">Наведите камеру телефона</div>
         <button class="btn-small" onclick="document.getElementById('qrModal').style.display='none'" style="width: auto; padding: 10px 30px;">ЗАКРЫТЬ</button>
     </div>
@@ -184,7 +160,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzHm0GOuvY9i_y6lgvD5EJ_6mI5po_Qw98VS6QCeN8r2WrMxm0mN0wE499UWC283eFK2g/exec";
+    const API = "https://script.google.com/macros/s/AKfycbwHf4op58-mCH3qjA1_LSaN58rSEz8X8Mk30O-0sM8R_uX2FAtUXRbKrsjVLyBnZWqLxQ/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
@@ -241,11 +217,6 @@
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
-            if(d.stats) {
-                document.getElementById('st-dnevka').innerText = d.stats.dnevka;
-                document.getElementById('st-volume').innerText = d.stats.volume;
-                document.getElementById('st-miss').innerText = d.stats.missing;
-            }
             l.innerHTML="";
             if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
@@ -270,8 +241,10 @@
 
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳...";
-        let action = "get_" + type;
-        if(type === "archive") action = "get_archive";
+        
+        // Исправленная логика вызова API
+        let action = (type === "get_archive") ? "get_archive" : "get_" + type;
+
         fetch(API + "?action=" + action).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.url) window.open(d.url, '_blank');
@@ -279,10 +252,8 @@
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
 
-    // --- ИСПРАВЛЕННЫЙ ГЕНЕРАТОР QR ---
     function showQR() {
         var url = window.location.href;
-        // Используем надежный API для QR
         var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
         document.getElementById('qrImage').src = qrUrl;
         document.getElementById('qrModal').style.display = 'flex';
