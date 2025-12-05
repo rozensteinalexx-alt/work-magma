@@ -35,10 +35,10 @@
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-small { padding: 12px 18px; font-size: 0.75em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; }
+        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%; }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
         .btn-small:hover { filter: brightness(1.1); }
-        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; }
+        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
         .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
@@ -62,9 +62,10 @@
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
         <label>👥 Количество (Чел.)</label>
-        <select name="count">
+        <select name="count" id="countSelect" onchange="saveUser()">
+            <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
-            <script>for(let i=1;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
+            <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
@@ -83,6 +84,20 @@
     <div class="admin-head">
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
+    </div>
+    <div class="dashboard-stats" style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding-bottom:15px; margin-bottom:20px;">
+        <div class="d-item" style="text-align:center; width:33%;">
+            <span class="d-val" id="st-dnevka" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
+            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Дневка</span>
+        </div>
+        <div class="d-item" style="text-align:center; width:33%;">
+            <span class="d-val" id="st-volume" style="font-size:1.4em; font-weight:bold; color:#fff; display:block; font-family:'Cinzel'">-</span>
+            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Объем</span>
+        </div>
+        <div class="d-item" style="text-align:center; width:33%;">
+            <span class="d-val" id="st-miss" style="font-size:1.4em; font-weight:bold; color:#e57373; display:block; font-family:'Cinzel'">-</span>
+            <span class="d-lbl" style="font-size:0.6em; color:#888; text-transform:uppercase; letter-spacing:1px;">Не сдали</span>
+        </div>
     </div>
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
@@ -113,12 +128,13 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxVTyBUUOx2VjkqTCmjMnPGvP95cxW8Jop9SeSK2P6PkYAMjeXpmx6FpkNJVEmXbblHmw/exec";
+    // 👇👇 ВСТАВЬТЕ СЮДА НОВУЮ ССЫЛКУ 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbxWE4iwBl6_a7SlfPJCLFKdSJZiYp4ztSFvrNiIOcKzH4RdLT0CTB9CGVu6pYLae-Abtg/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
+    const countSelect = document.getElementById('countSelect');
     
     window.onload = () => {
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
@@ -128,12 +144,19 @@
         }).catch(err => { ns.innerHTML = "<option>Нет связи</option>"; });
 
         if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
+        if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
+        else countSelect.value = "1";
+
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
 
-    function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); }
+    function saveUser() { 
+        localStorage.setItem('wp_user', ns.value); 
+        localStorage.setItem('wp_pin', pin.value);
+        localStorage.setItem('wp_count', countSelect.value);
+    }
 
     function showToast(text, isErr=false) {
         var t = document.getElementById("toast");
@@ -153,7 +176,13 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); }, 1000);
+                setTimeout(()=>{ 
+                    document.getElementById('wForm').reset(); 
+                    ns.value=localStorage.getItem('wp_user'); 
+                    pin.value=localStorage.getItem('wp_pin');
+                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
+                    else countSelect.value = "1";
+                }, 1000);
             } else { showToast("⛔ " + d.message, true); }
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
@@ -171,6 +200,11 @@
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
+            if(d.stats) {
+                document.getElementById('st-dnevka').innerText = d.stats.dnevka;
+                document.getElementById('st-volume').innerText = d.stats.volume;
+                document.getElementById('st-miss').innerText = d.stats.missing;
+            }
             l.innerHTML="";
             if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
@@ -193,21 +227,17 @@
         fetch(API,{method:'POST', body:p}).then(()=>loadReq());
     }
 
-    // ИСПРАВЛЕННАЯ ФУНКЦИЯ СКАЧИВАНИЯ (BASE64)
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ СКАЧИВАНИЯ
     function dl(type) {
-        const btn = event.target; 
-        const oldText = btn.innerText; 
-        btn.innerText = "⏳";
+        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
         
-        let action = "get_" + type;
-        if(type === "archive") action = "get_archive";
+        let action = (type === "archive") ? "get_archive" : "get_" + type;
 
         fetch(API + "?action=" + action)
         .then(r => r.json())
         .then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
-                // Создаем виртуальную ссылку для скачивания
                 const link = document.createElement('a');
                 link.href = "data:" + d.mime + ";base64," + d.file;
                 link.download = d.name;
@@ -215,7 +245,7 @@
                 link.click();
                 document.body.removeChild(link);
             } else {
-                alert("Ошибка: " + (d.message || "Неизвестная ошибка"));
+                alert("Ошибка: " + (d.message || "Не удалось получить файл"));
             }
         })
         .catch(e => {
