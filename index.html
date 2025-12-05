@@ -4,101 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WestProm Premium</title>
-    
     <link rel="icon" type="image/png" href="icon.png?v=2">
     <link rel="manifest" href="manifest.json">
-
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold-bright: #fff3c5;
-            --gold-mid: #d4af37;
-            --gold-dark: #997b2f;
+            --gold-bright: #fff3c5; --gold-mid: #d4af37; --gold-dark: #997b2f;
             --metallic-gold-gradient: linear-gradient(to bottom, var(--gold-bright) 0%, var(--gold-mid) 20%, var(--gold-dark) 50%, var(--gold-mid) 80%, var(--gold-bright) 100%);
         }
-        body {
-            font-family: 'Lato', sans-serif;
-            background: linear-gradient(rgba(15, 15, 15, 0.9), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a;
-            color: #ccc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
-        }
+        body { font-family: 'Lato', sans-serif; background: linear-gradient(rgba(15, 15, 15, 0.9), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a; color: #ccc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .logo-container { margin-bottom: 25px; text-align: center; }
-        h1.gold-sign {
-            font-family: 'Cinzel', serif; font-weight: 900; font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: 2px;
-            background: linear-gradient(to bottom, #fffde8 0%, #e3c472 20%, #d4af37 50%, #a0832a 51%, #d4af37 80%, #fffde8 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.8));
-        }
-        .subtitle-sign {
-            font-family: 'Cinzel', serif; color: var(--gold-mid); font-size: 0.8rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 5px;
-            background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;
-        }
-        .box {
-            background: linear-gradient(135deg, rgba(35,35,35,0.95), rgba(20,20,20,0.98)), url('https://www.transparenttextures.com/patterns/concrete-wall.png');
-            border: 2px solid; border-image: var(--metallic-gold-gradient) 1;
-            box-shadow: 0 0 0 4px #121212, 0 25px 60px rgba(0,0,0,1), inset 0 0 40px rgba(0,0,0,0.8);
-            padding: 30px; border-radius: 2px; width: 100%; max-width: 440px; box-sizing: border-box; margin-bottom: 25px;
-        }
-        label {
-            color: var(--gold-mid); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 8px; display: block; margin-top: 20px; text-shadow: 0 1px 2px rgba(0,0,0,1); display: flex; align-items: center; gap: 8px;
-        }
-        select, input {
-            width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1;
-            border-radius: 2px; color: var(--gold-bright); font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none;
-            box-shadow: inset 0 3px 10px rgba(0,0,0,0.8); transition: 0.3s;
-        }
+        h1.gold-sign { font-family: 'Cinzel', serif; font-weight: 900; font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(to bottom, #fffde8 0%, #e3c472 20%, #d4af37 50%, #a0832a 51%, #d4af37 80%, #fffde8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.8)); }
+        .subtitle-sign { font-family: 'Cinzel', serif; color: var(--gold-mid); font-size: 0.8rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 5px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        .box { background: linear-gradient(135deg, rgba(35,35,35,0.95), rgba(20,20,20,0.98)), url('https://www.transparenttextures.com/patterns/concrete-wall.png'); border: 2px solid; border-image: var(--metallic-gold-gradient) 1; box-shadow: 0 0 0 4px #121212, 0 25px 60px rgba(0,0,0,1), inset 0 0 40px rgba(0,0,0,0.8); padding: 30px; border-radius: 2px; width: 100%; max-width: 440px; box-sizing: border-box; margin-bottom: 25px; }
+        label { color: var(--gold-mid); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; margin-top: 20px; text-shadow: 0 1px 2px rgba(0,0,0,1); display: flex; align-items: center; gap: 8px; }
+        select, input { width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1; border-radius: 2px; color: var(--gold-bright); font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none; box-shadow: inset 0 3px 10px rgba(0,0,0,0.8); transition: 0.3s; }
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         .radio-group { display: flex; gap: 2px; margin-top: 10px; background: #111; padding: 4px; box-shadow: inset 0 3px 8px rgba(0,0,0,0.8); border: 1px solid #333; border-radius: 4px; }
-        .radio-lbl { 
-            flex: 1; padding: 14px; text-align: center; color: #777; cursor: pointer; transition: 0.3s;
-            font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; text-transform: uppercase; border-radius: 2px; text-shadow: 0 1px 1px rgba(0,0,0,1);
-        }
+        .radio-lbl { flex: 1; padding: 14px; text-align: center; color: #777; cursor: pointer; transition: 0.3s; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; text-transform: uppercase; border-radius: 2px; text-shadow: 0 1px 1px rgba(0,0,0,1); }
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-lbl { background: var(--metallic-gold-gradient); color: #2a1a00; box-shadow: 0 2px 5px rgba(0,0,0,0.5); text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
-        .btn {
-            width: 100%; padding: 20px; margin-top: 40px;
-            background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%);
-            border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px;
-            font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase;
-            box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4);
-        }
+        .btn { width: 100%; padding: 20px; margin-top: 40px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
         .btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
-        
-        #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
-        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
-        #toast.error { border-color: #c62828; color: #ff8a80; }
-
-        /* БЛОК ИСТОРИИ */
-        #historyBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
-        .h-title { color: #666; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; text-align: center; }
-        .h-item { background: #181818; padding: 10px; border-radius: 2px; margin-bottom: 8px; border-left: 2px solid #333; display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; }
-        .h-date { color: #888; font-size: 0.9em; }
-        .h-status { font-weight: bold; text-transform: uppercase; font-size: 0.8em; }
-        .st-wait { color: var(--gold-mid); }
-        .st-ok { color: #4caf50; }
-        .st-no { color: #f44336; }
-
+        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
+        .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-small {
-            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
-            box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%;
-        }
+        .btn-small { padding: 12px 18px; font-size: 0.75em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
         .btn-small:hover { filter: brightness(1.1); }
-        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
+        .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; }
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
         .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
-        
         #authModal, #qrModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
-        
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
     </style>
 </head>
@@ -113,30 +59,19 @@
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
-        
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
-
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
         <label>👥 Количество (Чел.)</label>
-        <select name="count" id="countSelect" onchange="saveUser()">
-            <option value="1" selected>1 (Стандарт)</option>
+        <select name="count">
             <option value="0.5">0.5 (Половина дня)</option>
-            <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
+            <script>for(let i=1;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
-
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-
         <button class="btn" id="sBtn">Отправить отчет</button>
-        
-        <div id="historyBlock">
-            <div class="h-title">Ваши последние смены</div>
-            <div id="hContent">Загрузка...</div>
-        </div>
-
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
@@ -178,13 +113,12 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ВАШУ ССЫЛКУ СЮДА 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbyfKV7SnU9Y4yanCtFjZuj6IFiM1ouOkkw_MsorjzkWNBunaPhvyNfkyWuebmGFqvaiSw/exec";
+    // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbxVTyBUUOx2VjkqTCmjMnPGvP95cxW8Jop9SeSK2P6PkYAMjeXpmx6FpkNJVEmXbblHmw/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
-    const countSelect = document.getElementById('countSelect');
     
     window.onload = () => {
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
@@ -193,54 +127,13 @@
             if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
         }).catch(err => { ns.innerHTML = "<option>Нет связи</option>"; });
 
-        if(localStorage.getItem('wp_pin')) {
-            pin.value = localStorage.getItem('wp_pin');
-            checkHistory(); // Проверяем историю сразу, если пин сохранен
-        }
-        
-        if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-        else countSelect.value = "1";
-
+        if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
 
-    function saveUser() { 
-        localStorage.setItem('wp_user', ns.value); 
-        localStorage.setItem('wp_pin', pin.value);
-        localStorage.setItem('wp_count', countSelect.value);
-    }
-
-    // ФУНКЦИЯ ПРОВЕРКИ ИСТОРИИ
-    function checkHistory() {
-        var p = pin.value;
-        var n = ns.value;
-        if(p.length >= 4 && n) {
-            document.getElementById('historyBlock').style.display = 'block';
-            fetch(API + "?action=get_user_history&name=" + encodeURIComponent(n) + "&pin=" + p)
-            .then(r => r.json())
-            .then(d => {
-                if(d.result === "success" && d.history.length > 0) {
-                    var html = "";
-                    d.history.forEach(h => {
-                        var stClass = (h.status === "Подтверждено") ? "st-ok" : (h.status === "Отклонено" ? "st-no" : "st-wait");
-                        var statusIcon = (h.status === "Подтверждено") ? "✅" : (h.status === "Отклонено" ? "❌" : "⏳");
-                        html += `<div class="h-item">
-                            <div>
-                                <span class="h-date">${h.date}</span><br>
-                                <span style="color:#fff">${h.type} (${h.count})</span>
-                            </div>
-                            <div class="h-status ${stClass}">${statusIcon}</div>
-                        </div>`;
-                    });
-                    document.getElementById('hContent').innerHTML = html;
-                } else {
-                    document.getElementById('hContent').innerHTML = "<div style='text-align:center; color:#555'>Нет записей</div>";
-                }
-            });
-        }
-    }
+    function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); }
 
     function showToast(text, isErr=false) {
         var t = document.getElementById("toast");
@@ -260,13 +153,7 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ 
-                    document.getElementById('wForm').reset(); 
-                    ns.value=localStorage.getItem('wp_user'); 
-                    pin.value=localStorage.getItem('wp_pin'); 
-                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value="1";
-                    checkHistory(); // Обновляем историю
-                }, 1000);
+                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); }, 1000);
             } else { showToast("⛔ " + d.message, true); }
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
@@ -289,15 +176,15 @@
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.9em;color:var(--gold-mid);margin-top:5px">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
-                <div class="req-btns" style="display:flex; margin-top:10px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
+                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
                 </div>`;
                 l.appendChild(div);
             });
-        });
+        }).catch(() => { l.innerHTML = "Ошибка загрузки"; });
     }
 
     function upd(id, st) {
@@ -306,15 +193,35 @@
         fetch(API,{method:'POST', body:p}).then(()=>loadReq());
     }
 
+    // ИСПРАВЛЕННАЯ ФУНКЦИЯ СКАЧИВАНИЯ (BASE64)
     function dl(type) {
-        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳...";
+        const btn = event.target; 
+        const oldText = btn.innerText; 
+        btn.innerText = "⏳";
+        
         let action = "get_" + type;
         if(type === "archive") action = "get_archive";
-        fetch(API + "?action=" + action).then(r => r.json()).then(d => {
+
+        fetch(API + "?action=" + action)
+        .then(r => r.json())
+        .then(d => {
             btn.innerText = oldText;
-            if(d.result === "success" && d.url) window.open(d.url, '_blank');
-            else alert("Ошибка файла");
-        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
+            if(d.result === "success" && d.file) {
+                // Создаем виртуальную ссылку для скачивания
+                const link = document.createElement('a');
+                link.href = "data:" + d.mime + ";base64," + d.file;
+                link.download = d.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Ошибка: " + (d.message || "Неизвестная ошибка"));
+            }
+        })
+        .catch(e => {
+            btn.innerText = oldText;
+            alert("Ошибка сети");
+        });
     }
 
     function showQR() {
