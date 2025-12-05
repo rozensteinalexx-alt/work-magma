@@ -66,24 +66,26 @@
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
-        #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
-        .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
         
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
 
+        /* БЛОК ИСТОРИИ */
+        #historyBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
+        .h-title { color: #666; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; text-align: center; }
+        .h-item { background: #181818; padding: 10px; border-radius: 2px; margin-bottom: 8px; border-left: 2px solid #333; display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; }
+        .h-date { color: #888; font-size: 0.9em; }
+        .h-status { font-weight: bold; text-transform: uppercase; font-size: 0.8em; }
+        .st-wait { color: var(--gold-mid); }
+        .st-ok { color: #4caf50; }
+        .st-no { color: #f44336; }
+
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .d-item { text-align: center; width: 32%; }
-        .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
-        .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-
         .btn-small {
-            padding: 12px 5px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
             box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%;
         }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
@@ -113,7 +115,7 @@
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
         
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
 
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
@@ -129,6 +131,12 @@
         </div>
 
         <button class="btn" id="sBtn">Отправить отчет</button>
+        
+        <div id="historyBlock">
+            <div class="h-title">Ваши последние смены</div>
+            <div id="hContent">Загрузка...</div>
+        </div>
+
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
@@ -141,22 +149,13 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-
-    <div class="dashboard-stats">
-        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
-        <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
-        <div class="d-item"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали</span></div>
-    </div>
-
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
         <button class="btn-small" onclick="dl('archive')" style="filter: hue-rotate(200deg);">🗄 Архив</button>
     </div>
-    
     <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
-
     <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
@@ -179,8 +178,8 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ ИЗ DEPLOY 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwHf4op58-mCH3qjA1_LSaN58rSEz8X8Mk30O-0sM8R_uX2FAtUXRbKrsjVLyBnZWqLxQ/exec";
+    // 👇👇 ВСТАВЬТЕ ВАШУ ССЫЛКУ СЮДА 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbyfKV7SnU9Y4yanCtFjZuj6IFiM1ouOkkw_MsorjzkWNBunaPhvyNfkyWuebmGFqvaiSw/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
@@ -194,15 +193,13 @@
             if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
         }).catch(err => { ns.innerHTML = "<option>Нет связи</option>"; });
 
-        // Восстановление ПИН-кода
-        if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
-        
-        // Восстановление Количества или Установка по умолчанию 1
-        if(localStorage.getItem('wp_count')) {
-            countSelect.value = localStorage.getItem('wp_count');
-        } else {
-            countSelect.value = "1"; // По умолчанию 1
+        if(localStorage.getItem('wp_pin')) {
+            pin.value = localStorage.getItem('wp_pin');
+            checkHistory(); // Проверяем историю сразу, если пин сохранен
         }
+        
+        if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
+        else countSelect.value = "1";
 
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
@@ -212,7 +209,37 @@
     function saveUser() { 
         localStorage.setItem('wp_user', ns.value); 
         localStorage.setItem('wp_pin', pin.value);
-        localStorage.setItem('wp_count', countSelect.value); // Сохраняем выбор количества
+        localStorage.setItem('wp_count', countSelect.value);
+    }
+
+    // ФУНКЦИЯ ПРОВЕРКИ ИСТОРИИ
+    function checkHistory() {
+        var p = pin.value;
+        var n = ns.value;
+        if(p.length >= 4 && n) {
+            document.getElementById('historyBlock').style.display = 'block';
+            fetch(API + "?action=get_user_history&name=" + encodeURIComponent(n) + "&pin=" + p)
+            .then(r => r.json())
+            .then(d => {
+                if(d.result === "success" && d.history.length > 0) {
+                    var html = "";
+                    d.history.forEach(h => {
+                        var stClass = (h.status === "Подтверждено") ? "st-ok" : (h.status === "Отклонено" ? "st-no" : "st-wait");
+                        var statusIcon = (h.status === "Подтверждено") ? "✅" : (h.status === "Отклонено" ? "❌" : "⏳");
+                        html += `<div class="h-item">
+                            <div>
+                                <span class="h-date">${h.date}</span><br>
+                                <span style="color:#fff">${h.type} (${h.count})</span>
+                            </div>
+                            <div class="h-status ${stClass}">${statusIcon}</div>
+                        </div>`;
+                    });
+                    document.getElementById('hContent').innerHTML = html;
+                } else {
+                    document.getElementById('hContent').innerHTML = "<div style='text-align:center; color:#555'>Нет записей</div>";
+                }
+            });
+        }
     }
 
     function showToast(text, isErr=false) {
@@ -234,15 +261,11 @@
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
                 setTimeout(()=>{ 
-                    // Сбрасываем форму, но восстанавливаем сохраненные значения
                     document.getElementById('wForm').reset(); 
                     ns.value=localStorage.getItem('wp_user'); 
-                    pin.value=localStorage.getItem('wp_pin');
-                    
-                    // Восстанавливаем количество
-                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-                    else countSelect.value = "1";
-                    
+                    pin.value=localStorage.getItem('wp_pin'); 
+                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value="1";
+                    checkHistory(); // Обновляем историю
                 }, 1000);
             } else { showToast("⛔ " + d.message, true); }
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
@@ -261,25 +284,20 @@
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
-            if(d.stats) {
-                document.getElementById('st-dnevka').innerText = d.stats.dnevka;
-                document.getElementById('st-volume').innerText = d.stats.volume;
-                document.getElementById('st-miss').innerText = d.stats.missing;
-            }
             l.innerHTML="";
             if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
             d.data.reverse().forEach(i=>{
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
-                <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#888;float:right">🕒 ${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
-                <div style="display:flex; gap:10px; margin-top:10px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅ ПРИНЯТЬ</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌ ОТКАЗАТЬ</button>
+                <div><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
+                <div style="font-size:0.9em;color:var(--gold-mid);margin-top:5px">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
+                <div class="req-btns" style="display:flex; margin-top:10px;">
+                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">Принять</button>
+                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">Отказать</button>
                 </div>`;
                 l.appendChild(div);
             });
-        }).catch(() => { l.innerHTML = "Ошибка загрузки"; });
+        });
     }
 
     function upd(id, st) {
@@ -295,7 +313,7 @@
         fetch(API + "?action=" + action).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.url) window.open(d.url, '_blank');
-            else alert("Ошибка файла: " + (d.message || "Неизвестная ошибка"));
+            else alert("Ошибка файла");
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
 
