@@ -26,7 +26,6 @@
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-lbl { background: var(--metallic-gold-gradient); color: #2a1a00; box-shadow: 0 2px 5px rgba(0,0,0,0.5); text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
         
-        /* ЕДИНЫЙ СТИЛЬ КНОПОК */
         .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
         .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
@@ -39,7 +38,7 @@
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
         
-        #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
+        #adminPanel, #paymentPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
@@ -50,12 +49,6 @@
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
         .btn-small:hover { filter: brightness(1.1); }
         .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
-        .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
-        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
-        .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
-        .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
-        .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
-        .btn-del:hover { color: #c62828; border-color: #c62828; }
         
         #authModal, #qrModal, #statsModal, #staffModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box, .staff-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
@@ -69,21 +62,19 @@
         .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; }
         .cal-title { color: #fff; font-weight: bold; font-family: 'Cinzel'; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; cursor: pointer; transition: 0.2s; position: relative;}
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; cursor: default; transition: 0.2s; position: relative;}
         .cal-head { color: var(--gold-mid); font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 0.7em;}
         .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.4); }
         .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
         .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
-        .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
+        .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 10px; font-weight: bold; color: #fff; }
         
-        /* STAFF LIST STYLE */
         .staff-item { text-align: left; background: #181818; border-bottom: 1px solid #333; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
         .staff-name { color: #ccc; font-weight: bold; font-size: 0.9em; }
         .staff-fired { color: #e57373; text-decoration: line-through; }
 
-        /* СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО СПИСКА С ПОИСКОМ */
         .search-box { position: relative; }
-        #nSearch { cursor: pointer; } 
+        #nSearch, #paySearch { cursor: pointer; width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1; color: var(--gold-bright); box-sizing: border-box; } 
         .custom-dropdown {
             position: absolute; top: 100%; left: 0; right: 0;
             background: #222; border: 1px solid #444; border-top: none;
@@ -94,6 +85,11 @@
         .dd-item { padding: 15px; border-bottom: 1px solid #333; color: #ccc; cursor: pointer; transition: 0.2s; }
         .dd-item:hover { background: #333; color: #fff; }
         .dd-item.selected { background: var(--metallic-gold-gradient); color: #111; font-weight: bold; }
+        
+        /* Слайдер для оплаты */
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 20px 0; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 25px; width: 25px; border-radius: 50%; background: var(--gold-mid); cursor: pointer; margin-top: -10px; box-shadow: 0 0 10px rgba(212,175,55,0.8); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 5px; cursor: pointer; background: #333; border-radius: 2px; }
     </style>
 </head>
 <body>
@@ -106,12 +102,10 @@
 <div class="box">
     <form id="wForm">
         <label>👤 Сотрудник</label>
-        
         <div class="search-box">
             <input type="text" id="nSearch" name="name" required placeholder="Нажмите для выбора..." autocomplete="off">
             <div id="nDropdown" class="custom-dropdown"></div>
         </div>
-
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
         <label>👥 Количество (Чел.)</label>
@@ -127,10 +121,7 @@
         </div>
         
         <button class="btn" id="sBtn" style="margin-top: 40px;">Отправить</button>
-        <button class="gold-btn" type="button" onclick="showMyStats()">
-            🏆 Моя Статистика
-        </button>
-        
+        <button class="gold-btn" type="button" onclick="showMyStats()">🏆 Моя Статистика</button>
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
@@ -148,23 +139,45 @@
         <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
-    
     <button class="gold-btn" onclick="openStaffModal()" style="margin-bottom: 15px;">👥 УПРАВЛЕНИЕ ШТАТОМ</button>
-
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
     </div>
-    
     <button class="gold-btn" onclick="showQR()" style="margin-top: 10px;">📱 ПОКАЗАТЬ QR-КОД</button>
     <div id="list" style="text-align:center; color:#666; font-size:0.9em; margin-top:20px;">Ожидание данных...</div>
+</div>
+
+<div id="paymentPanel">
+    <div class="admin-head">
+        <span class="admin-title" style="color:#e91e63">PAYMENT CONTROL</span>
+        <button class="btn-small logout" onclick="logout()">Выход</button>
+    </div>
+    <div class="search-box" style="margin-bottom:20px;">
+        <input type="text" id="paySearch" placeholder="Выберите сотрудника..." autocomplete="off">
+        <div id="payDropdown" class="custom-dropdown"></div>
+    </div>
+    <div class="cal-nav">
+        <button onclick="changePayMonth(-1)">&#9664;</button>
+        <div class="cal-title" id="payMonthLabel">...</div>
+        <button onclick="changePayMonth(1)">&#9654;</button>
+    </div>
+    
+    <div style="margin: 20px 0; text-align:center;">
+        <label style="margin-top:0">Оплатить до: <span id="sliderVal" style="color:#fff; font-size:1.2em;">0</span> числа</label>
+        <input type="range" id="paySlider" min="0" max="31" value="0" oninput="updatePayPreview()">
+    </div>
+
+    <div id="payCalendarView"></div>
+    
+    <button class="gold-btn" onclick="savePayment()" style="background: linear-gradient(to bottom, #f48fb1, #e91e63); border-color:#c2185b; color:#fff;">💾 СОХРАНИТЬ ОПЛАТУ</button>
 </div>
 
 <div id="authModal">
     <div class="auth-box">
         <h3 style="font-family:'Cinzel'; margin-top:0; font-size: 1.6em; letter-spacing: 2px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SECURITY</h3>
-        <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;">
+        <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;" placeholder="Password">
         <button class="btn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
         <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
     </div>
@@ -203,19 +216,18 @@
              <div class="d-item" style="width:50%"><span class="d-val" id="my-volume">-</span><span class="d-lbl">Объем</span></div>
         </div>
         <div id="calendarView"></div>
-        <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Нажмите на день, чтобы отметить "Оплачено"</div>
+        <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Розовым отмечены оплаченные дни</div>
         <button class="btn-small" onclick="document.getElementById('statsModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
     </div>
 </div>
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxADIXUnvcR9eFY50BOD6vzn5oe-jRHeqC0oOgzz1pVcMLFEoFX3bAZHiHnYeazmRdrcQ/exec";
+    const API = "https://script.google.com/macros/s/AKfycbw7KV5iwmExMHxTZFqcCC4Q_u-zH9mUa-tt_vZnY1qvFgKTt9OWOrRMp9-VG-mz5b408g/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
     const dd = document.getElementById('nDropdown');
-    
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
@@ -223,13 +235,19 @@
     let statsData = null; 
     let allEmployees = []; 
 
+    // Переменные для оплаты
+    let payOffset = 0;
+    let payStats = null;
+    let paySelectedUser = "";
+
     window.onload = () => {
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-        if(localStorage.getItem('wp_admin_auth') === 'true') {
-            document.getElementById('adminPanel').style.display = 'block'; loadReq();
-        }
+        
+        let auth = localStorage.getItem('wp_admin_auth');
+        if(auth === 'main') { document.getElementById('adminPanel').style.display = 'block'; loadReq(); }
+        if(auth === 'payment') { document.getElementById('paymentPanel').style.display = 'block'; initPaymentPanel(); }
     };
 
     function loadEmpSelect() {
@@ -237,55 +255,28 @@
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
             if(d.data) {
                 allEmployees = d.data;
-                renderDropdown(allEmployees);
-                
+                renderDropdown(allEmployees, dd, ns, (val)=>{ ns.value=val; saveUser(); });
                 let saved = localStorage.getItem('wp_user');
-                if(saved) {
-                    ns.value = saved;
-                } else {
-                    ns.placeholder = "🔍 Введите имя...";
-                }
+                if(saved) ns.value = saved; else ns.placeholder = "🔍 Введите имя...";
             }
         });
     }
 
-    function renderDropdown(list) {
-        dd.innerHTML = "";
-        if(list.length === 0) {
-            dd.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>";
-            return;
-        }
+    function renderDropdown(list, ddEl, inputEl, cb) {
+        ddEl.innerHTML = "";
+        if(list.length === 0) { ddEl.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>"; return; }
         list.forEach(name => {
             let div = document.createElement('div');
             div.className = "dd-item";
-            if(name === ns.value) div.className += " selected";
             div.innerText = name;
-            div.onclick = () => {
-                ns.value = name;
-                dd.style.display = 'none';
-                saveUser();
-            };
-            dd.appendChild(div);
+            div.onclick = () => { inputEl.value = name; ddEl.style.display = 'none'; cb(name); };
+            ddEl.appendChild(div);
         });
     }
 
-    ns.addEventListener('input', function() {
-        let val = this.value.toLowerCase();
-        let filtered = allEmployees.filter(n => n.toLowerCase().includes(val));
-        renderDropdown(filtered);
-        dd.style.display = 'block';
-    });
-
-    ns.addEventListener('focus', function() {
-        renderDropdown(allEmployees);
-        dd.style.display = 'block';
-    });
-
-    document.addEventListener('click', function(e) {
-        if (!ns.contains(e.target) && !dd.contains(e.target)) {
-            dd.style.display = 'none';
-        }
-    });
+    // Поиск для сотрудника
+    ns.addEventListener('input', function() { renderDropdown(allEmployees.filter(n=>n.toLowerCase().includes(this.value.toLowerCase())), dd, ns, (val)=>{ns.value=val; saveUser();}); dd.style.display='block'; });
+    ns.addEventListener('focus', function() { renderDropdown(allEmployees, dd, ns, (val)=>{ns.value=val; saveUser();}); dd.style.display='block'; });
 
     function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
@@ -297,61 +288,45 @@
         loadStats();
     }
     
-    function changeMonth(delta) {
-        currentOffset += delta;
-        loadStats();
-    }
+    function changeMonth(delta) { currentOffset += delta; loadStats(); }
     
     function loadStats() {
         var p = pin.value; var n = ns.value;
         document.getElementById('calendarView').innerHTML = "Загрузка...";
         fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p + "&offset=" + currentOffset)
-        .then(r=>r.json())
-        .then(d => {
+        .then(r=>r.json()).then(d => {
              if(d.result === "success") {
                  statsData = d.stats;
-                 renderCalendar();
-             } else {
-                 document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
-             }
+                 renderCalendar(false); // false = режим просмотра (не админ)
+             } else { document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message; }
         });
     }
     
-    function renderCalendar() {
-        if(!statsData) return;
-        document.getElementById('calMonth').innerText = statsData.label;
-        document.getElementById('my-dnevka').innerText = statsData.dnevka;
-        document.getElementById('my-volume').innerText = statsData.volume;
-        
+    function renderCalendar(isAdmin) {
+        let container = isAdmin ? document.getElementById('payCalendarView') : document.getElementById('calendarView');
+        let data = isAdmin ? payStats : statsData;
+        if(!data) return;
+
+        if(!isAdmin) document.getElementById('calMonth').innerText = data.label;
+
         let calHtml = '<div class="calendar-grid">';
         let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
         days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
         
-        let paidKey = "paid_" + ns.value + "_" + statsData.label;
-        let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
+        let limit = isAdmin ? parseInt(document.getElementById('paySlider').value) : (data.paidLimit || 0);
 
-        for(let i=1; i<=statsData.daysInMonth; i++) {
+        for(let i=1; i<=data.daysInMonth; i++) {
              let cls = "cal-day";
-             if(statsData.workDays.includes(i)) {
-                 cls += " work";
-             } 
-             else if(statsData.limitDay > 0 && i <= statsData.limitDay) {
-                 cls += " miss";
-             }
-             if(paidDays.includes(i)) cls += " paid";
-             calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
+             if(data.workDays.includes(i)) cls += " work"; 
+             else if(!isAdmin && data.limitDay > 0 && i <= data.limitDay) cls += " miss";
+             
+             // Если день входит в лимит оплаты -> красим розовым
+             if(i <= limit) cls += " paid";
+             
+             calHtml += `<div class="${cls}">${i}</div>`;
         }
         calHtml += '</div>';
-        document.getElementById('calendarView').innerHTML = calHtml;
-    }
-    
-    function togglePay(day) {
-        if(!statsData) return;
-        let paidKey = "paid_" + ns.value + "_" + statsData.label;
-        let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
-        if(paidDays.includes(day)) paidDays = paidDays.filter(d => d !== day); else paidDays.push(day);
-        localStorage.setItem(paidKey, JSON.stringify(paidDays));
-        renderCalendar();
+        container.innerHTML = calHtml;
     }
 
     document.getElementById('wForm').onsubmit = e => {
@@ -373,14 +348,20 @@
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     function login() {
-        if(document.getElementById('pass').value==="westprom123") {
-            localStorage.setItem('wp_admin_auth', 'true');
+        let p = document.getElementById('pass').value;
+        if(p==="westprom123") {
+            localStorage.setItem('wp_admin_auth', 'main');
             document.getElementById('authModal').style.display='none';
             document.getElementById('adminPanel').style.display='block'; loadReq();
-        } else alert("Доступ запрещен");
+        } else if(p==="money777") {
+            localStorage.setItem('wp_admin_auth', 'payment');
+            document.getElementById('authModal').style.display='none';
+            document.getElementById('paymentPanel').style.display='block'; initPaymentPanel();
+        } else alert("Неверный пароль");
     }
     function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
 
+    // --- ЛОГИКА ГЛАВНОГО АДМИНА ---
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
@@ -406,84 +387,98 @@
             });
         });
     }
-
-    function upd(id, st) {
-        if(!confirm(st+"?")) return;
-        let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
-        fetch(API,{method:'POST', body:p}).then(()=>loadReq());
-    }
-    function del(id) {
-        if(!confirm("Удалить?")) return;
-        let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id);
-        fetch(API,{method:'POST', body:p}).then(()=>loadReq());
-    }
+    function upd(id, st) { if(confirm(st+"?")) { let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); } }
+    function del(id) { if(confirm("Удалить?")) { let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); } }
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
-    
-    function dl(type) {
-        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
-        fetch(API + "?action=get_" + type).then(r => r.json()).then(d => {
-            btn.innerText = oldText;
-            if(d.result === "success" && d.file) {
-                const link = document.createElement('a');
-                link.href = "data:" + d.mime + ";base64," + d.file;
-                link.download = d.name;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } else alert("Ошибка");
-        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
-    }
-    function showQR() {
-        var url = window.location.href;
-        var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
-        document.getElementById('qrImage').src = qrUrl;
-        document.getElementById('qrModal').style.display = 'flex';
-    }
+    function dl(type) { const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳"; fetch(API + "?action=get_" + type).then(r => r.json()).then(d => { btn.innerText = oldText; if(d.result === "success" && d.file) { const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name; document.body.appendChild(link); link.click(); document.body.removeChild(link); } else alert("Ошибка"); }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); }); }
+    function showQR() { var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url); document.getElementById('qrImage').src = qrUrl; document.getElementById('qrModal').style.display = 'flex'; }
+    function openStaffModal() { document.getElementById('staffModal').style.display = 'flex'; loadStaffList(); }
+    function loadStaffList() { let sl = document.getElementById('staffList'); sl.innerHTML = "Загрузка..."; fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{ if(d.result === "success") { sl.innerHTML = ""; d.staff.forEach(s => { let isFired = (s.status === "Fired"); let nameClass = isFired ? "staff-name staff-fired" : "staff-name"; let btnHtml = isFired ? `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>` : `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`; let div = document.createElement('div'); div.className = "staff-item"; div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`; sl.appendChild(div); }); } else sl.innerHTML = "Ошибка загрузки"; }); }
+    function addEmployee() { let n = document.getElementById('newEmpName').value; if(!n) return; if(!confirm("Добавить: " + n + "?")) return; let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n); fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); }); }
+    function fireEmp(name) { if(!confirm("Уволить " + name + "?")) return; let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    function restoreEmp(name) { if(!confirm("Вернуть " + name + "?")) return; let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
 
-    function openStaffModal() {
-        document.getElementById('staffModal').style.display = 'flex';
-        loadStaffList();
+    // --- ЛОГИКА КАССИРА ---
+    function initPaymentPanel() {
+        let ps = document.getElementById('paySearch');
+        let pd = document.getElementById('payDropdown');
+        ps.addEventListener('input', function() { renderDropdown(allEmployees.filter(n=>n.toLowerCase().includes(this.value.toLowerCase())), pd, ps, (val)=>{ paySelectedUser=val; loadPayStats(); }); pd.style.display='block'; });
+        ps.addEventListener('focus', function() { renderDropdown(allEmployees, pd, ps, (val)=>{ paySelectedUser=val; loadPayStats(); }); pd.style.display='block'; });
+        document.addEventListener('click', function(e) { if (!ps.contains(e.target) && !pd.contains(e.target)) pd.style.display = 'none'; });
     }
-    function loadStaffList() {
-        let sl = document.getElementById('staffList');
-        sl.innerHTML = "Загрузка...";
-        fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{
-            if(d.result === "success") {
-                sl.innerHTML = "";
-                d.staff.forEach(s => {
-                    let isFired = (s.status === "Fired");
-                    let nameClass = isFired ? "staff-name staff-fired" : "staff-name";
-                    let btnHtml = "";
-                    if(isFired) {
-                        btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
-                    } else {
-                        btnHtml = `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
-                    }
-                    
-                    let div = document.createElement('div');
-                    div.className = "staff-item";
-                    div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`;
-                    sl.appendChild(div);
-                });
-            } else sl.innerHTML = "Ошибка загрузки";
+    
+    function changePayMonth(delta) { payOffset += delta; loadPayStats(); }
+    
+    function loadPayStats() {
+        if(!paySelectedUser) return;
+        document.getElementById('payCalendarView').innerHTML = "Загрузка...";
+        // Используем тот же метод get_user_stats, он возвращает всё что нужно (включая лимит оплаты)
+        // Для кассира ПИН не нужен, отправляем пустой или спец. ключ, но т.к. бэкенд требует ПИН, 
+        // мы можем схитрить: либо сделать отдельный метод API для кассира (сделано get_payment_info), 
+        // либо просто использовать get_user_stats передавая любой пин, если бэкенд бы позволял.
+        // Но я сделал отдельный метод получения лимита, а дни работы подтянем через get_user_stats (но там проверка пина).
+        // ЧТОБЫ КАССИР ВИДЕЛ ДНИ РАБОТЫ, нам придется в бэкенде разрешить просмотр без пина для спец. запроса,
+        // но проще просто использовать get_user_stats, но мы не знаем пин юзера.
+        // РЕШЕНИЕ: Кассир видит только СВОЮ разметку (розовую), рабочие дни (зеленые) ему видеть полезно, но для этого надо менять API.
+        // Сейчас кассир будет видеть просто календарь, который он красит.
+        
+        // Получаем текущий лимит оплаты
+        let p = new URLSearchParams(); p.append('action', 'get_user_stats'); p.append('name', paySelectedUser); p.append('pin', '0000'); // Пин не подойдет, получим ошибку.
+        // Исправим: просто сделаем визуализацию ТОЛЬКО слайдера.
+        // Или лучше: используем get_payment_info + локальный расчет дней месяца.
+        
+        fetch(API + "?action=get_payment_info&name=" + encodeURIComponent(paySelectedUser) + "&month=" + getMonthLabel(payOffset))
+        .then(r=>r.json()).then(d=>{
+            if(d.result==="success") {
+                let now = new Date();
+                let target = new Date(now.getFullYear(), now.getMonth() + payOffset, 1);
+                let daysInMonth = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+                
+                payStats = {
+                   label: getMonthLabel(payOffset),
+                   daysInMonth: daysInMonth,
+                   workDays: [], // Кассир пока не видит отметки работы, только свои оплаты (для безопасности пина)
+                   limitDay: 0,
+                   paidLimit: 0
+                };
+                
+                document.getElementById('payMonthLabel').innerText = payStats.label;
+                document.getElementById('paySlider').max = daysInMonth;
+                document.getElementById('paySlider').value = d.paidLimit;
+                updatePayPreview();
+            }
         });
     }
-    function addEmployee() {
-        let n = document.getElementById('newEmpName').value;
-        if(!n) return;
-        if(!confirm("Добавить сотрудника: " + n + "?")) return;
-        let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n);
-        fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); });
+    
+    function getMonthLabel(offset) {
+        let now = new Date();
+        let d = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+        let mNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+        return mNames[d.getMonth()] + " " + d.getFullYear();
     }
-    function fireEmp(name) {
-        if(!confirm("Уволить сотрудника " + name + "?")) return;
-        let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name);
-        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
+    
+    function updatePayPreview() {
+        let val = document.getElementById('paySlider').value;
+        document.getElementById('sliderVal').innerText = val;
+        renderCalendar(true); // Рисуем календарь кассира
     }
-    function restoreEmp(name) {
-        if(!confirm("Вернуть сотрудника " + name + " в штат?")) return;
-        let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name);
-        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
+    
+    function savePayment() {
+        if(!paySelectedUser) return alert("Выберите сотрудника");
+        let limit = document.getElementById('paySlider').value;
+        let month = document.getElementById('payMonthLabel').innerText;
+        
+        let btn = event.target; btn.innerText = "Сохранение...";
+        let p = new URLSearchParams(); 
+        p.append('action','save_payment'); 
+        p.append('name', paySelectedUser); 
+        p.append('month', month);
+        p.append('limit', limit);
+        
+        fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
+            btn.innerText = "💾 СОХРАНИТЬ ОПЛАТУ";
+            if(d.result==="success") alert("Оплата сохранена!");
+        });
     }
 </script>
 
