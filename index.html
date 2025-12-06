@@ -7,6 +7,8 @@
     <link rel="icon" type="image/png" href="icon.png?v=2">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --gold-bright: #fff3c5; --gold-mid: #d4af37; --gold-dark: #997b2f;
@@ -32,11 +34,9 @@
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
         .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
-        
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
-        
         #historyBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
         .h-title { color: #666; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; text-align: center; }
         .h-item { background: #181818; padding: 10px; border-radius: 2px; margin-bottom: 8px; border-left: 2px solid #333; display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; }
@@ -47,6 +47,17 @@
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* ДИАГРАММА */
+        .chart-container { width: 160px; height: 160px; margin: 0 auto 20px auto; position: relative; }
+        .chart-center-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Cinzel'; font-weight: bold; font-size: 1.5em; color: #fff; text-align: center;}
+        .chart-center-label { font-size: 0.4em; color: #888; display: block; text-transform: uppercase;}
+
+        /* ФИЛЬТРЫ */
+        .filter-bar { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; }
+        .btn-filter { background: #222; color: #666; border: 1px solid #444; padding: 5px 10px; font-size: 0.7em; cursor: pointer; text-transform: uppercase; border-radius: 3px; }
+        .btn-filter.active { background: var(--metallic-gold-gradient); color: #2a1a00; border-color: #8a6e18; font-weight: bold; }
+
         .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
         .d-item { text-align: center; width: 32%; cursor: pointer; }
         .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
@@ -62,14 +73,9 @@
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-del:hover { color: #c62828; border-color: #c62828; }
         
-        /* Стили для списка сотрудников */
-        .emp-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; }
-        .emp-name { color: #fff; font-size: 1.1em; }
-        
         #authModal, #qrModal, #statsModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
-        
         .stat-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
         .stat-val { font-weight: bold; color: var(--gold-bright); }
     </style>
@@ -85,33 +91,27 @@
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
-        
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
-
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
             <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
-
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-
         <div style="display: flex; gap: 10px; margin-top: 30px;">
             <button class="btn" id="sBtn" style="margin-top:0;">Отправить</button>
             <button class="btn-small" type="button" onclick="showMyStats()" style="width: 80px; padding: 0; background: #333; border-color: #555;">🏆</button>
         </div>
-
         <div id="historyBlock">
             <div class="h-title">Ваши последние смены</div>
             <div id="hContent">Загрузка...</div>
         </div>
-
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
@@ -131,11 +131,26 @@
     </div>
 
     <div id="requestsView">
+        <div class="chart-container">
+            <canvas id="statsChart"></canvas>
+            <div class="chart-center-text">
+                <span id="totalToday">0</span>
+                <span class="chart-center-label">Сегодня</span>
+            </div>
+        </div>
+
         <div class="dashboard-stats">
             <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
             <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
             <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
         </div>
+
+        <div class="filter-bar">
+            <div class="btn-filter active" onclick="setFilter('all', this)">Все</div>
+            <div class="btn-filter" onclick="setFilter('wait', this)">⏳ На проверке</div>
+            <div class="btn-filter" onclick="setFilter('ok', this)">✅ Принятые</div>
+        </div>
+
         <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
             <button class="btn-small" onclick="loadReq()">↻</button>
             <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
@@ -181,22 +196,28 @@
     </div>
 </div>
 
-<script>
-    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbyb9G7ABF1y-nc_-LiV9TxV80PMr8_rC5Q9GmC-k0ZUoZeR2Jq1-iTcA9PlXjCZIhbdSw/exec";
-    // 👆👆 ----------------------- 👆👆
+<audio id="notifSound" src="data:audio/wav;base64,UklGRl9vT1d..."></audio> 
 
+<script>
+    const API = "https://script.google.com/macros/s/AKfycbzh1PDsXR9DhYTQjuvDlCHGlH4JkEigQLJppdbmGZFBb15WXikwRG2MTF3AP9LIz_LUhw/exec";
+    
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
-    
+    let allRequests = [];
+    let currentFilter = 'all';
+    let myChart = null;
+
     window.onload = () => {
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); checkHistory(); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
         if(localStorage.getItem('wp_admin_auth') === 'true') {
-            document.getElementById('adminPanel').style.display = 'block'; loadReq();
+            document.getElementById('adminPanel').style.display = 'block'; 
+            loadReq();
+            // Запуск авто-обновления (каждые 30 сек)
+            setInterval(() => loadReq(true), 30000);
         }
     };
 
@@ -208,33 +229,22 @@
         });
     }
 
-    function saveUser() { 
-        localStorage.setItem('wp_user', ns.value); 
-        localStorage.setItem('wp_pin', pin.value);
-        localStorage.setItem('wp_count', countSelect.value);
-    }
+    function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
     function checkHistory() {
         var p = pin.value; var n = ns.value;
         if(p.length >= 4 && n) {
             document.getElementById('historyBlock').style.display = 'block';
-            fetch(API + "?action=get_history&name=" + encodeURIComponent(n) + "&pin=" + p)
-            .then(r => r.json())
-            .then(d => {
+            fetch(API + "?action=get_history&name=" + encodeURIComponent(n) + "&pin=" + p).then(r=>r.json()).then(d=>{
                 if(d.result === "success" && d.history.length > 0) {
                     var html = "";
                     d.history.forEach(h => {
                         var stIcon = (h.status === "Подтверждено") ? "✅" : (h.status === "Отклонено" ? "❌" : "⏳");
                         var stClass = (h.status === "Подтверждено") ? "st-ok" : (h.status === "Отклонено" ? "st-no" : "st-wait");
-                        html += `<div class="h-item">
-                            <div><span class="h-date">${h.date}</span> <span style="color:#fff">${h.type} (${h.count})</span></div>
-                            <div class="h-status ${stClass}">${stIcon}</div>
-                        </div>`;
+                        html += `<div class="h-item"><div><span class="h-date">${h.date}</span> <span style="color:#fff">${h.type} (${h.count})</span></div><div class="h-status ${stClass}">${stIcon}</div></div>`;
                     });
                     document.getElementById('hContent').innerHTML = html;
-                } else {
-                    document.getElementById('hContent').innerHTML = "<div style='text-align:center; color:#555; padding:10px;'>Нет записей</div>";
-                }
+                } else document.getElementById('hContent').innerHTML = "<div style='text-align:center;color:#555'>Нет записей</div>";
             });
         }
     }
@@ -253,9 +263,7 @@
                  <div class="stat-row"><span>🌴 Выходные:</span><span class="stat-val" style="color:#e57373">${s.weekends}</span></div>
                  <div class="stat-row stat-total"><span>💰 ИТОГО:</span><span class="stat-val" style="color:#fff">${total}</span></div>
                  `;
-             } else {
-                 document.getElementById('statsContent').innerHTML = "<div style='text-align:center; color:#f44336'>Ошибка: " + d.message + "</div>";
-             }
+             } else document.getElementById('statsContent').innerHTML = "<div style='text-align:center; color:#f44336'>Ошибка: " + d.message + "</div>";
         });
     }
 
@@ -269,19 +277,12 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ 
-                    document.getElementById('wForm').reset(); 
-                    ns.value=localStorage.getItem('wp_user'); 
-                    pin.value=localStorage.getItem('wp_pin');
-                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1";
-                    checkHistory();
-                }, 1000);
+                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; checkHistory(); }, 1000);
             } else showToast("⛔ " + d.message, true);
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
 
     function showToast(text, isErr=false) { var t = document.getElementById("toast"); t.innerText = text; t.className = "show" + (isErr ? " error" : ""); setTimeout(()=>{ t.className = t.className.replace("show", ""); }, 3000); }
-
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
     function login() {
         if(document.getElementById('pass').value==="westprom123") {
@@ -291,33 +292,88 @@
         } else alert("Доступ запрещен");
     }
     function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
-
     function showRequests() { document.getElementById('requestsView').style.display='block'; document.getElementById('employeesView').style.display='none'; loadReq(); }
     function showEmployees() { document.getElementById('requestsView').style.display='none'; document.getElementById('employeesView').style.display='block'; loadEmp(); }
 
-    function loadReq() {
-        let l = document.getElementById('list'); l.innerHTML="Загрузка...";
+    // ФИЛЬТРЫ
+    function setFilter(f, btn) {
+        currentFilter = f;
+        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderList();
+    }
+
+    function loadReq(isAuto = false) {
+        if(!isAuto) document.getElementById('list').innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
                 document.getElementById('st-volume').innerText = d.stats.volume;
                 document.getElementById('st-miss').innerText = d.stats.missing;
                 debtorsList = d.stats.missingNames || [];
+                
+                // Обновляем график
+                updateChart(d.stats.dnevka, d.stats.volume, d.stats.missing);
+                document.getElementById('totalToday').innerText = d.stats.dnevka + d.stats.volume;
             }
-            l.innerHTML="";
-            if(!d.data || !d.data.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет новых заявок</div>"; return;}
-            d.data.reverse().forEach(i=>{
-                let div = document.createElement('div'); div.className='req-card';
-                div.innerHTML=`
-                <div><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.9em;color:var(--gold-mid);margin-top:5px">Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • ${i['Вид работ']}</div>
-                <div class="req-btns" style="display:flex; margin-top:10px;">
-                    <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅</button>
-                    <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌</button>
-                    <button class="btn-act btn-del" onclick="del('${i.ID}')">🗑️</button>
-                </div>`;
-                l.appendChild(div);
-            });
+            
+            // Звуковое уведомление
+            if(d.data.length > allRequests.length && allRequests.length > 0) {
+                // Play sound (нужен клик для первого запуска, но попробуем)
+                 var audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                 audio.play().catch(e=>{}); 
+            }
+
+            allRequests = d.data.reverse();
+            renderList();
+        });
+    }
+    
+    function renderList() {
+        let l = document.getElementById('list');
+        l.innerHTML="";
+        
+        let filtered = allRequests;
+        if(currentFilter === 'wait') filtered = allRequests.filter(x => x['Статус'] === 'На проверке');
+        if(currentFilter === 'ok') filtered = allRequests.filter(x => x['Статус'] === 'Подтверждено');
+
+        if(!filtered.length) { l.innerHTML="<div style='margin-top:15px; opacity:0.6'>Нет заявок</div>"; return;}
+        
+        filtered.forEach(i=>{
+            let div = document.createElement('div'); div.className='req-card';
+            // Если статус принят - красим в зеленый, если ждет - обычный
+            let statusColor = (i['Статус'] === 'Подтверждено') ? '#2e7d32' : (i['Статус'] === 'Отклонено' ? '#c62828' : '#333');
+            
+            div.innerHTML=`
+            <div style="margin-bottom:8px; border-bottom:1px solid #333; padding-bottom:5px;"><span style="font-size:0.8em;color:#888;float:right">${i['Дата']}</span><b style="color:var(--gold-bright); font-size:1.1em; font-family:'Cinzel'">${i['Фамилия Имя']}</b></div>
+            <div style="font-size:0.9em;color:#aaa;">👥 Людей: <b style="color:#fff">${i['Кол-во людей']}</b> • <span style="color:var(--gold-mid); font-weight:bold; text-transform:uppercase;">${i['Вид работ']}</span></div>
+            <div style="font-size:0.8em; color:${i['Статус'] === 'На проверке' ? 'var(--gold-mid)' : '#aaa'}; margin-top:5px;">Статус: ${i['Статус']}</div>
+            <div class="req-btns" style="display:flex; margin-top:10px;">
+                <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅</button>
+                <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌</button>
+                <button class="btn-act btn-del" onclick="del('${i.ID}')">🗑️</button>
+            </div>`;
+            l.appendChild(div);
+        });
+    }
+
+    function updateChart(d, v, m) {
+        if(myChart) myChart.destroy();
+        var ctx = document.getElementById('statsChart').getContext('2d');
+        myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Дневка', 'Объем', 'Не сдали'],
+                datasets: [{
+                    data: [d, v, m],
+                    backgroundColor: ['#1c4587', '#e69138', '#cc0000'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '70%',
+                plugins: { legend: { display: false } }
+            }
         });
     }
 
