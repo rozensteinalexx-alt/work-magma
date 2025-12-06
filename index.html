@@ -32,15 +32,11 @@
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
         .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
-        
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
         
-        #statsBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
-        .stat-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #222; color: #aaa; font-size: 0.9em; }
-        .stat-val { font-weight: bold; color: var(--gold-bright); }
-        .stat-total { margin-top: 10px; font-size: 1.1em; color: #fff; font-weight: bold; border-top: 2px solid #444; padding-top: 5px; }
+        #historyBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
 
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
@@ -67,6 +63,16 @@
         #authModal, #qrModal, #statsModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
+        
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .stat-val { font-weight: bold; color: var(--gold-bright); }
+
+        /* КАЛЕНДАРЬ */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; }
+        .cal-day.ok { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+        .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
+        .cal-head { color: var(--gold-mid); font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 0.7em;}
     </style>
 </head>
 <body>
@@ -81,7 +87,7 @@
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
             <option value="1" selected>1 (Стандарт)</option>
@@ -98,6 +104,7 @@
             <button class="btn" id="sBtn" style="margin-top:0;">Отправить</button>
             <button class="btn-small" type="button" onclick="showMyStats()" style="width: 80px; padding: 0; background: #333; border-color: #555;">🏆</button>
         </div>
+
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
@@ -161,15 +168,16 @@
 
 <div id="statsModal" style="display:none;">
     <div class="stats-box">
-        <h3 style="color:var(--gold-mid); margin-top:0;">МОЯ СТАТИСТИКА</h3>
+        <h3 style="color:var(--gold-mid); margin-top:0;">МОЙ РЕЗУЛЬТАТ</h3>
         <div id="statsContent" style="color:#ccc; text-align:left;">Загрузка...</div>
+        <div id="calendarView"></div>
         <button class="btn-small" onclick="document.getElementById('statsModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
     </div>
 </div>
 
 <script>
     // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbysJrSe9gvi4DfadMOYfOS4om9CUWA9FKE6bpiTYZdBJ7KoN8v5D4XVMiBAGTxtxBIzBw/exec";
+    const API = "https://script.google.com/macros/s/AKfycbzbrHd7iOHqjeNqzZrrSrtovrjdZfvGR7P7Bde_rzZ7WKllnUx9unBjTzpxn9ltW01P6A/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
@@ -208,12 +216,33 @@
              if(d.result === "success") {
                  let s = d.stats;
                  let total = s.dnevka + s.volume;
+                 
                  document.getElementById('statsContent').innerHTML = `
                  <div class="stat-row"><span>⏱️ Дневка:</span><span class="stat-val">${s.dnevka}</span></div>
                  <div class="stat-row"><span>📦 Объем:</span><span class="stat-val">${s.volume}</span></div>
                  <div class="stat-row"><span>🌴 Выходные:</span><span class="stat-val" style="color:#e57373">${s.weekends}</span></div>
                  <div class="stat-row stat-total"><span>💰 ИТОГО:</span><span class="stat-val" style="color:#fff">${total}</span></div>
                  `;
+                 
+                 // РИСУЕМ КАЛЕНДАРЬ
+                 let calHtml = '<div class="calendar-grid">';
+                 // Заголовки дней
+                 let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+                 days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
+                 
+                 // Пустые клетки до начала месяца (просто для примера 1-е число)
+                 // В реальном проекте можно высчитывать день недели
+                 
+                 // Рисуем 31 день
+                 for(let i=1; i<=31; i++) {
+                     let cls = "cal-day";
+                     if(s.workDays.includes(i)) cls += " ok";
+                     else if(i <= s.limitDay) cls += " miss";
+                     calHtml += `<div class="${cls}">${i}</div>`;
+                 }
+                 calHtml += '</div>';
+                 document.getElementById('calendarView').innerHTML = calHtml;
+
              } else {
                  document.getElementById('statsContent').innerHTML = "<div style='text-align:center; color:#f44336'>Ошибка: " + d.message + "</div>";
              }
@@ -338,4 +367,3 @@
 
 </body>
 </html>
-
