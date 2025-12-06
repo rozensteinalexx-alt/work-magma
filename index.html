@@ -25,9 +25,12 @@
         .radio-lbl { flex: 1; padding: 14px; text-align: center; color: #777; cursor: pointer; transition: 0.3s; font-family: 'Cinzel', serif; font-weight: bold; font-size: 0.9em; text-transform: uppercase; border-radius: 2px; text-shadow: 0 1px 1px rgba(0,0,0,1); }
         input[type="radio"] { display: none; }
         input[type="radio"]:checked + .radio-lbl { background: var(--metallic-gold-gradient); color: #2a1a00; box-shadow: 0 2px 5px rgba(0,0,0,0.5); text-shadow: 0 1px 0 rgba(255,255,255,0.3); }
-        .btn { width: 100%; padding: 20px; margin-top: 40px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
-        .btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
+        
+        /* ЕДИНЫЙ СТИЛЬ КНОПОК */
+        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
+        
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
@@ -36,13 +39,6 @@
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
         
-        #historyBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
-        .h-title { color: #666; font-size: 0.7em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; text-align: center; }
-        .h-item { background: #181818; padding: 10px; border-radius: 2px; margin-bottom: 8px; border-left: 2px solid #333; display: flex; justify-content: space-between; align-items: center; font-size: 0.85em; }
-        .h-date { color: #888; font-size: 0.9em; }
-        .h-status { font-weight: bold; font-size: 1.2em; }
-        .st-ok { color: #4caf50; } .st-no { color: #e57373; } .st-wait { color: var(--gold-mid); }
-
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -60,8 +56,6 @@
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-del:hover { color: #c62828; border-color: #c62828; }
-        .gold-btn { width: 100%; padding: 16px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-radius: 4px; font-family: 'Cinzel'; font-weight: bold; color: #3a2a00; text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.6); cursor: pointer; transition: 0.2s; }
-        .gold-btn:active { transform: translateY(2px); }
         
         #authModal, #qrModal, #statsModal, #staffModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box, .staff-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
@@ -89,7 +83,7 @@
 
         /* СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО СПИСКА С ПОИСКОМ */
         .search-box { position: relative; }
-        #nSearch { cursor: pointer; } /* Чтобы было понятно, что можно нажать */
+        #nSearch { cursor: pointer; } 
         .custom-dropdown {
             position: absolute; top: 100%; left: 0; right: 0;
             background: #222; border: 1px solid #444; border-top: none;
@@ -119,7 +113,7 @@
         </div>
 
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
             <option value="1" selected>1 (Стандарт)</option>
@@ -132,13 +126,12 @@
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
         
-        <button class="btn" id="sBtn">Отправить</button>
-        <button class="gold-btn" type="button" onclick="showMyStats()" style="margin-top: 15px; background: linear-gradient(to bottom, #2a2a2a, #1a1a1a); color: var(--gold-mid); border: 1px solid var(--gold-mid); box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+        <button class="btn" id="sBtn" style="margin-top: 40px;">Отправить</button>
+        <button class="gold-btn" type="button" onclick="showMyStats()">
             🏆 Моя Статистика
         </button>
         
     </form>
-    <div id="historyBlock"><div class="h-title">Ваши последние смены</div><div id="hContent">Загрузка...</div></div>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
 </div>
@@ -156,7 +149,7 @@
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
     
-    <button class="gold-btn" onclick="openStaffModal()" style="margin-bottom: 15px; background: #333; color: #ccc; border-color: #555;">👥 УПРАВЛЕНИЕ ШТАТОМ</button>
+    <button class="gold-btn" onclick="openStaffModal()" style="margin-bottom: 15px;">👥 УПРАВЛЕНИЕ ШТАТОМ</button>
 
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
@@ -220,7 +213,6 @@
     const API = "https://script.google.com/macros/s/AKfycbxADIXUnvcR9eFY50BOD6vzn5oe-jRHeqC0oOgzz1pVcMLFEoFX3bAZHiHnYeazmRdrcQ/exec";
     // 👆👆 ----------------------- 👆👆
 
-    // ИЗМЕНЕНО: Ссылка теперь на поле ввода, а не селект
     const ns = document.getElementById('nSearch');
     const dd = document.getElementById('nDropdown');
     
@@ -229,18 +221,17 @@
     let debtorsList = [];
     let currentOffset = 0; 
     let statsData = null; 
-    let allEmployees = []; // Храним список всех сотрудников
+    let allEmployees = []; 
 
     window.onload = () => {
         loadEmpSelect();
-        if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); checkHistory(); }
+        if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
         if(localStorage.getItem('wp_admin_auth') === 'true') {
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
 
-    // НОВАЯ ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ СПИСКА
     function loadEmpSelect() {
         ns.placeholder = "Загрузка...";
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
@@ -248,11 +239,9 @@
                 allEmployees = d.data;
                 renderDropdown(allEmployees);
                 
-                // Восстанавливаем сохраненного пользователя
                 let saved = localStorage.getItem('wp_user');
                 if(saved) {
                     ns.value = saved;
-                    checkHistory();
                 } else {
                     ns.placeholder = "🔍 Введите имя...";
                 }
@@ -260,7 +249,6 @@
         });
     }
 
-    // ЛОГИКА ВЫПАДАЮЩЕГО СПИСКА
     function renderDropdown(list) {
         dd.innerHTML = "";
         if(list.length === 0) {
@@ -276,13 +264,11 @@
                 ns.value = name;
                 dd.style.display = 'none';
                 saveUser();
-                checkHistory();
             };
             dd.appendChild(div);
         });
     }
 
-    // ОБРАБОТЧИКИ ПОИСКА
     ns.addEventListener('input', function() {
         let val = this.value.toLowerCase();
         let filtered = allEmployees.filter(n => n.toLowerCase().includes(val));
@@ -295,7 +281,6 @@
         dd.style.display = 'block';
     });
 
-    // Закрыть при клике вне
     document.addEventListener('click', function(e) {
         if (!ns.contains(e.target) && !dd.contains(e.target)) {
             dd.style.display = 'none';
@@ -304,24 +289,6 @@
 
     function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
-    function checkHistory() {
-        var p = pin.value; var n = ns.value;
-        if(p.length >= 4 && n) {
-            document.getElementById('historyBlock').style.display = 'block';
-            fetch(API + "?action=get_history&name=" + encodeURIComponent(n) + "&pin=" + p).then(r => r.json()).then(d => {
-                if(d.result === "success" && d.history.length > 0) {
-                    var html = "";
-                    d.history.forEach(h => {
-                        var stClass = (h.status === "Подтверждено") ? "st-ok" : (h.status === "Отклонено" ? "st-no" : "st-wait");
-                        var stIcon = (h.status === "Подтверждено") ? "✅" : (h.status === "Отклонено" ? "❌" : "⏳");
-                        html += `<div class="h-item"><div><span class="h-date">${h.date}</span> <span style="color:#fff">${h.type} (${h.count})</span></div><div class="h-status ${stClass}">${stIcon}</div></div>`;
-                    });
-                    document.getElementById('hContent').innerHTML = html;
-                } else document.getElementById('hContent').innerHTML = "<div style='text-align:center;color:#555'>Нет записей</div>";
-            });
-        }
-    }
-    
     function showMyStats() {
         var p = pin.value; var n = ns.value;
         if(!p || !n) { showToast("⚠️ Выберите имя и введите ПИН", true); return; }
@@ -397,7 +364,7 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; checkHistory(); }, 1000);
+                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; }, 1000);
             } else showToast(d.message, true); 
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
