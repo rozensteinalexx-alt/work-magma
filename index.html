@@ -24,13 +24,17 @@
         input:focus { background: #222; }
 
         /* КНОПКИ */
-        .btn, .gold-btn { width: 100%; padding: 18px; margin-top: 25px; background: var(--grad); border: none; border-radius: 2px; font-family: 'Cinzel'; font-weight: 900; font-size: 16px; cursor: pointer; color: #222; text-transform: uppercase; transition: 0.2s; }
-        .btn:hover, .gold-btn:hover { filter: brightness(1.15); transform: scale(1.02); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+        .btn, .gold-btn, .btn-small { background: var(--grad); border: none; border-radius: 2px; font-family: 'Cinzel'; font-weight: 900; cursor: pointer; color: #222; text-transform: uppercase; transition: 0.2s; }
+        .btn, .gold-btn { width: 100%; padding: 18px; margin-top: 25px; font-size: 16px; }
+        .btn:hover, .gold-btn:hover, .btn-small:hover { filter: brightness(1.15); transform: scale(1.02); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
         .btn:active { transform: scale(0.98); }
-
-        .btn-small { padding: 8px 15px; font-size: 0.7em; background: #333; color: #ccc; border: 1px solid #444; cursor: pointer; font-weight: bold; border-radius: 2px; transition: 0.2s; }
-        .btn-small:hover { background: #444; color: #fff; border-color: var(--gold-mid); }
+        .btn-small { padding: 8px 15px; font-size: 0.7em; font-family: 'Lato', sans-serif; }
         
+        /* Переключатель Дневка/Объем (ИСПРАВЛЕНО) */
+        .radio-wrapper { display:flex; gap:0; margin-top:5px; border:1px solid var(--gold-mid); border-radius:2px; overflow:hidden; }
+        .radio-opt { flex:1; padding:12px; text-align:center; cursor:pointer; font-weight:bold; transition:0.3s; font-size:0.9em; background:#121212; color:#555; }
+        .radio-opt.active { background: var(--grad); color:#111; }
+
         /* ПАНЕЛИ */
         #adminPanel, #paymentPanel { display: none; background: #1a1a1a; border: 1px solid var(--gold-mid); padding: 20px; width: 100%; max-width: 95%; box-sizing: border-box; margin-top: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
@@ -41,17 +45,9 @@
 
         /* ПОИСК */
         .search-box { position: relative; }
-        #nDropdown, #payDropdown { position: absolute; top: 100%; left: 0; right: 0; background: #222; border: 1px solid var(--gold-mid); max-height: 200px; overflow-y: auto; z-index: 100; display: none; }
+        #nDropdown { position: absolute; top: 100%; left: 0; right: 0; background: #222; border: 1px solid var(--gold-mid); max-height: 200px; overflow-y: auto; z-index: 100; display: none; }
         .dd-item { padding: 12px; border-bottom: 1px solid #333; cursor: pointer; }
         .dd-item:hover { background: var(--gold-mid); color: #000; font-weight: bold; }
-
-        /* КАЛЕНДАРЬ */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 15px; }
-        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #222; border: 1px solid #333; font-size: 0.8em; position: relative; color: #555; }
-        .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; }
-        .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; font-weight: bold; }
-        .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; }
-        .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 2px; font-size: 8px; }
 
         /* ТАБЛИЦА КАССИРА */
         .pay-table-container { overflow-x: auto; margin-top: 15px; border: 1px solid #333; }
@@ -60,9 +56,12 @@
         .pay-table th { background: #000; color: var(--gold-mid); position: sticky; top: 0; z-index: 10; font-family: 'Cinzel'; }
         .pay-table td.name-col { text-align: left; font-weight: bold; background: #181818; position: sticky; left: 0; border-right: 2px solid var(--gold-mid); cursor: pointer; color: #fff; z-index: 5; min-width: 120px;}
         .pay-table td.name-col:hover { color: var(--gold-mid); background: #222; }
-        .bg-ok { background: #2e7d32; color: #fff; }
-        .bg-miss { background: #c62828; color: #fff; font-weight: bold; }
-        .bg-paid { background: #e91e63; color: #fff; }
+        
+        /* Цвета ячеек (ОБНОВЛЕНО) */
+        .bg-ok { background: #2e7d32; color: #fff; } /* Зеленый */
+        .bg-miss { background: #c62828; color: #fff; font-weight: bold; } /* Красный */
+        .bg-paid { background: #e91e63; color: #fff; font-weight: bold; position: relative; } /* Розовый */
+        .bg-paid::after { content: '₽'; position: absolute; bottom: 1px; right: 2px; font-size: 8px; color: #fff; }
 
         /* СЛАЙДЕР */
         #payControl { display: none; background: #222; padding: 20px; border: 1px solid var(--gold-mid); position: fixed; bottom: 0; left: 0; width: 100%; box-sizing: border-box; z-index: 2000; border-top-left-radius: 10px; border-top-right-radius: 10px; box-shadow: 0 -5px 20px rgba(0,0,0,0.8); }
@@ -76,6 +75,11 @@
 
         #toast { visibility: hidden; min-width: 250px; background: #222; color: #fff; text-align: center; border-radius: 4px; padding: 16px; position: fixed; z-index: 10000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); }
         #toast.show { visibility: visible; }
+        
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #222; border: 1px solid #333; font-size: 0.8em; position: relative; color: #555; }
+        .cal-day.paid { background: #e91e63; color: #fff; }
+        .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 2px; font-size: 8px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 15px; }
     </style>
 </head>
 <body>
@@ -104,14 +108,11 @@
         </select>
         
         <label>⚙️ Тип работ</label>
-        <div style="display:flex; gap:5px; margin-top:5px;">
-            <div style="flex:1; background:#222; padding:10px; text-align:center; border:1px solid #333; cursor:pointer;" onclick="document.getElementById('t1').checked=true; updateRadioUI(this)">
-                <input type="radio" id="t1" name="type" value="Дневка" checked style="display:none"> ДНЕВКА
-            </div>
-            <div style="flex:1; background:#222; padding:10px; text-align:center; border:1px solid #333; cursor:pointer;" onclick="document.getElementById('t2').checked=true; updateRadioUI(this)">
-                <input type="radio" id="t2" name="type" value="Объем" style="display:none"> ОБЪЕМ
-            </div>
+        <div class="radio-wrapper">
+            <div class="radio-opt active" id="optDnevka" onclick="setWorkType('Дневка')">ДНЕВКА</div>
+            <div class="radio-opt" id="optVolume" onclick="setWorkType('Объем')">ОБЪЕМ</div>
         </div>
+        <input type="hidden" id="workType" name="type" value="Дневка">
         
         <button class="btn" id="sBtn">ОТПРАВИТЬ</button>
         <button type="button" class="gold-btn" onclick="showMyStats()" style="margin-top:15px; background: transparent; border: 1px solid var(--gold-mid); color:var(--gold-mid);">🏆 МОЯ СТАТИСТИКА</button>
@@ -122,25 +123,25 @@
 <div id="toast"></div>
 
 <div id="adminPanel">
-    <div class="admin-head"><span style="color:var(--gold-mid); font-weight:bold;">ADMIN</span> <button class="btn-small" onclick="logout()">ВЫХОД</button></div>
+    <div class="admin-head"><span style="color:var(--gold-mid); font-weight:bold;">ADMIN</span> <button class="btn-small" style="background:#333;color:#ccc" onclick="logout()">ВЫХОД</button></div>
     <div class="dashboard-stats">
         <div class="d-item"><span class="d-val" id="st-dnevka">-</span><br><span class="d-lbl">ДНЕВКА</span></div>
         <div class="d-item"><span class="d-val" id="st-volume">-</span><br><span class="d-lbl">ОБЪЕМ</span></div>
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><br><span class="d-lbl">ДОЛГ</span></div>
     </div>
     
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom:15px;">
-        <button class="btn-small" onclick="openStaffModal()" style="padding:12px; flex:1; margin-right:5px;">👥 ШТАТ</button>
-        <button class="btn-small" onclick="dl('pdf')" style="padding:12px; width:60px;">PDF</button>
-        <button class="btn-small" onclick="dl('excel')" style="padding:12px; width:60px; margin-left:5px;">XLS</button>
+    <div style="display:flex; gap:10px; margin-bottom:15px;">
+        <button class="btn-small" onclick="openStaffModal()" style="flex:1">👥 ШТАТ</button>
+        <button class="btn-small" onclick="dl('pdf')" style="width:70px">PDF</button>
+        <button class="btn-small" onclick="dl('excel')" style="width:70px">XLS</button>
     </div>
     
-    <div style="text-align:center; margin-bottom:10px;"><button class="btn-small" onclick="loadReq()">ОБНОВИТЬ СПИСОК</button></div>
+    <div style="text-align:center; margin-bottom:10px;"><button class="btn-small" style="background:#333;color:#ccc" onclick="loadReq()">ОБНОВИТЬ СПИСОК</button></div>
     <div id="list" style="color:#666; font-size:0.8em; text-align:center;">Загрузка...</div>
 </div>
 
 <div id="paymentPanel">
-    <div class="admin-head"><span style="color:#e91e63; font-weight:bold;">ФИНАНСЫ</span> <button class="btn-small" onclick="logout()">ВЫХОД</button></div>
+    <div class="admin-head"><span style="color:#e91e63; font-weight:bold;">ФИНАНСЫ</span> <button class="btn-small" style="background:#333;color:#ccc" onclick="logout()">ВЫХОД</button></div>
     
     <div style="display:flex; justify-content:center; align-items:center; gap:20px; margin-bottom:15px;">
         <button class="btn-small" onclick="changePayMonth(-1)"><</button>
@@ -149,7 +150,7 @@
     </div>
 
     <div style="display:flex; justify-content:center; gap:10px; margin-bottom:15px;">
-        <button class="btn-small" onclick="dl('pdf')" style="background:#222; color:#fff;">СКАЧАТЬ PDF</button>
+        <button class="btn-small" onclick="dl('pdf')">СКАЧАТЬ PDF</button>
     </div>
 
     <div class="pay-table-container">
@@ -163,24 +164,24 @@
         <label style="margin:0">Оплатить до: <span id="sliderVal" style="color:#fff; font-size:1.5em; font-weight:bold;">0</span></label>
         <input type="range" id="paySlider" min="0" max="31" value="0" oninput="document.getElementById('sliderVal').innerText=this.value">
     </div>
-    <button class="gold-btn" onclick="savePayment()" style="background: linear-gradient(to bottom, #f48fb1, #e91e63); color:#fff; margin-top:10px;">💾 СОХРАНИТЬ И ОТПРАВИТЬ</button>
-    <button class="btn-small" onclick="document.getElementById('payControl').style.display='none'" style="margin-top:10px; width:100%; background:transparent; border:none;">ОТМЕНА</button>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+        <button class="btn-small" onclick="savePayment(false)" style="flex:1;">💾 СОХРАНИТЬ</button>
+        <button class="btn-small" onclick="savePayment(true)" style="flex:1; background: #e91e63; color:#fff;">✈️ В TG</button>
+    </div>
+    <button class="btn-small" onclick="document.getElementById('payControl').style.display='none'" style="margin-top:10px; width:100%; background:transparent; border:none; color:#666;">ОТМЕНА</button>
 </div>
 
 <div id="authModal"><div class="modal-box"><h3>ВХОД</h3><input type="password" id="pass" placeholder="Пароль" style="text-align:center"><button class="btn" onclick="login()">ВОЙТИ</button><br><br><span onclick="closeM('authModal')" style="color:#666;cursor:pointer">Закрыть</span></div></div>
-
 <div id="staffModal"><div class="modal-box"><h3>ШТАТ</h3><input id="newEmpName" placeholder="ФИО" style="margin-bottom:10px;"><button class="btn-small" onclick="addEmployee()">ДОБАВИТЬ</button><div id="staffList" style="text-align:left; margin-top:15px;"></div><br><span onclick="closeM('staffModal')" style="color:#666;cursor:pointer">Закрыть</span></div></div>
-
 <div id="statsModal"><div class="modal-box">
     <div style="display:flex; justify-content:space-between;"><button class="btn-small" onclick="changeMonth(-1)"><</button><span id="calMonth">...</span><button class="btn-small" onclick="changeMonth(1)">></button></div>
     <div id="calendarView"></div>
-    <div style="font-size:0.7em; color:#666; margin-top:10px;">* X = Прогул, Розовый = Оплачено</div>
     <br><span onclick="closeM('statsModal')" style="color:#666;cursor:pointer">Закрыть</span>
 </div></div>
 
 <script>
     // ⚠️ ВСТАВЬТЕ ССЫЛКУ НИЖЕ ⚠️
-    const API = "https://script.google.com/macros/s/AKfycbxQp3fjPBNpOSyi1HOoKxVRPJv-DVGv8ZBmFlvXnHvJWMm7IJL3FhPOvyVmNWCLUJNaiQ/exec";
+    const API = "https://script.google.com/macros/s/AKfycbwgNTO9qvOMEj0scNMpIjlSUOE6Ki9OJ4NQl7IalPiQ9JlD0F9e9AqIwmEjSvv6ogb28A/exec";
     
     let allEmployees = [], currentOffset = 0, payOffset = 0, payCurrentName = "", payFullData = null, statsData = null;
 
@@ -188,7 +189,6 @@
         if(API.includes("ВСТАВЬТЕ")) return alert("Вставьте ссылку API в код!");
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) document.getElementById('nPin').value = localStorage.getItem('wp_pin');
-        
         let auth = localStorage.getItem('wp_admin_auth');
         if(auth === 'main') { document.getElementById('adminPanel').style.display='block'; document.getElementById('mainBox').style.display='none'; loadReq(); }
         else if(auth === 'payment') { document.getElementById('paymentPanel').style.display='block'; document.getElementById('mainBox').style.display='none'; loadPayTable(); }
@@ -196,9 +196,10 @@
     window.onload = init;
 
     // --- ОБЩИЕ ---
-    function updateRadioUI(el) {
-        document.querySelectorAll('.radio-group div').forEach(d => d.style.background = '#222');
-        el.style.background = '#444';
+    function setWorkType(type) {
+        document.getElementById('workType').value = type;
+        document.getElementById('optDnevka').className = type==='Дневка'?'radio-opt active':'radio-opt';
+        document.getElementById('optVolume').className = type==='Объем'?'radio-opt active':'radio-opt';
     }
     function renderDropdown(list) {
         let dd = document.getElementById('nDropdown'); dd.innerHTML="";
@@ -209,13 +210,8 @@
     document.getElementById('nSearch').addEventListener('focus', function(){ renderDropdown(allEmployees); document.getElementById('nDropdown').style.display='block'; });
     document.onclick = (e) => { if(!e.target.closest('.search-box')) document.getElementById('nDropdown').style.display='none'; };
 
-    function loadEmpSelect() {
-        fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{ allEmployees=d.data||[]; if(localStorage.getItem('wp_user')) document.getElementById('nSearch').value=localStorage.getItem('wp_user'); });
-    }
-    function saveUser() {
-        localStorage.setItem('wp_user', document.getElementById('nSearch').value);
-        localStorage.setItem('wp_pin', document.getElementById('nPin').value);
-    }
+    function loadEmpSelect() { fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{ allEmployees=d.data||[]; if(localStorage.getItem('wp_user')) document.getElementById('nSearch').value=localStorage.getItem('wp_user'); }); }
+    function saveUser() { localStorage.setItem('wp_user', document.getElementById('nSearch').value); localStorage.setItem('wp_pin', document.getElementById('nPin').value); }
 
     // --- ОТПРАВКА ---
     document.getElementById('wForm').onsubmit = (e) => {
@@ -224,15 +220,12 @@
         let p = new URLSearchParams(new FormData(document.getElementById('wForm'))); p.append('action','create');
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
             btn.innerText="ОТПРАВИТЬ"; btn.disabled=false;
-            if(d.result==="success") { showToast("✅ ОТПРАВЛЕНО"); } else showToast("⛔ "+d.message);
+            if(d.result==="success") showToast("✅ ОТПРАВЛЕНО"); else showToast("⛔ "+d.message);
         });
     };
 
     // --- СТАТИСТИКА ЮЗЕРА ---
-    function showMyStats() {
-        if(!document.getElementById('nPin').value) return showToast("Введите ПИН!");
-        document.getElementById('statsModal').style.display='flex'; loadStats();
-    }
+    function showMyStats() { if(!document.getElementById('nPin').value) return showToast("Введите ПИН!"); document.getElementById('statsModal').style.display='flex'; loadStats(); }
     function changeMonth(d) { currentOffset+=d; loadStats(); }
     function loadStats() {
         document.getElementById('calendarView').innerHTML="Загрузка...";
@@ -243,9 +236,9 @@
                 let h="<div class='calendar-grid'>";
                 for(let i=1; i<=statsData.daysInMonth; i++) {
                     let c="cal-day"; 
-                    if(statsData.workDays.includes(i)) c+=" work";
-                    else if(statsData.limitDay>0 && i<=statsData.limitDay) c+=" miss";
-                    if(i<=statsData.paidLimit) c+=" paid";
+                    if(i<=statsData.paidLimit) c+=" paid"; // Розовый
+                    else if(statsData.workDays.includes(i)) c+=" work"; // Зеленый
+                    else if(statsData.limitDay>0 && i<=statsData.limitDay) c+=" miss"; // Красный
                     h+=`<div class="${c}">${(c.includes('miss') && !c.includes('paid')) ? 'X' : i}</div>`;
                 }
                 document.getElementById('calendarView').innerHTML=h+"</div>";
@@ -260,15 +253,19 @@
         fetch(API+"?action=get_all_stats_month&offset="+payOffset).then(r=>r.json()).then(d=>{
             payFullData=d; document.getElementById('payTableMonth').innerText=d.monthLabel;
             let h="<tr><th class='name-col'>ФИО</th>"; for(let i=1;i<=d.daysInMonth;i++) h+=`<th>${i}</th>`; h+="<th>Дн</th><th>Об</th></tr>";
-            
             Object.keys(d.stats).sort().forEach(n=>{
                 let u=d.stats[n];
                 h+=`<tr><td class='name-col' onclick="openPayControl('${n}',${u.paidLimit})">${n}</td>`;
                 for(let i=1;i<=d.daysInMonth;i++) {
                     let bg="", val="";
-                    if(i<=u.paidLimit) { bg="bg-paid"; val="₽"; }
-                    else if(u.days[i]) { bg="bg-ok"; val=u.days[i]; }
+                    // Логика цвета
+                    if(i<=u.paidLimit) { bg="bg-paid"; } 
+                    else if(u.days[i]) { bg="bg-ok"; }
                     else if(d.limitDay>0 && i<=d.limitDay) { bg="bg-miss"; val="X"; }
+                    
+                    // Логика цифр (Оставляем цифру даже если розовый)
+                    if(u.days[i]) val = u.days[i]; 
+                    
                     h+=`<td class="${bg}">${val}</td>`;
                 }
                 h+=`<td>${u.totalD}</td><td>${u.totalV}</td></tr>`;
@@ -282,14 +279,18 @@
         document.getElementById('sliderVal').innerText=limit;
         document.getElementById('payControl').style.display='block';
     }
-    function savePayment() {
-        let btn = event.target; btn.innerText="СОХРАНЕНИЕ...";
-        let p=new URLSearchParams(); p.append('action','save_payment'); p.append('name',payCurrentName); p.append('month',document.getElementById('payTableMonth').innerText); p.append('limit',document.getElementById('paySlider').value);
+    function savePayment(sendToTg) {
+        let btnStr = sendToTg ? "ОТПРАВКА..." : "СОХРАНЕНИЕ...";
+        showToast(btnStr);
+        let limit = document.getElementById('paySlider').value;
+        let month = document.getElementById('payTableMonth').innerText;
+        let p=new URLSearchParams(); p.append('action','save_payment'); p.append('name',payCurrentName); p.append('month',month); p.append('limit',limit);
         fetch(API,{method:'POST', body:p}).then(r=>r.json()).then(()=>{
-            btn.innerText="💾 СОХРАНИТЬ И ОТПРАВИТЬ";
+            if(sendToTg) {
+                fetch(API+"?action=send_tg_report&month="+month).then(()=>{ showToast("Отчет отправлен!"); });
+            } else { showToast("Сохранено!"); }
             document.getElementById('payControl').style.display='none';
             loadPayTable();
-            showToast("Оплата сохранена!");
         });
     }
 
@@ -312,7 +313,11 @@
     }
     function upd(id,st){ if(confirm(st+"?")) fetch(API+"?action=update&id="+id+"&status="+st,{method:'POST'}).then(loadReq); }
     function del(id){ if(confirm("Удалить?")) fetch(API+"?action=delete_row&id="+id,{method:'POST'}).then(loadReq); }
-    function dl(type) { window.open(API+"?action=get_"+type, '_blank'); }
+    function dl(type) { 
+        let offset = 0; 
+        if(document.getElementById('paymentPanel').style.display === 'block') offset = payOffset;
+        window.open(API+"?action=get_"+type+"&offset="+offset, '_blank'); 
+    }
 
     // --- ШТАТ ---
     function openStaffModal() { document.getElementById('staffModal').style.display='flex'; loadStaff(); }
