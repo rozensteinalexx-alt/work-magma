@@ -38,7 +38,7 @@
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
         
-        #adminPanel, #paymentPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
+        #adminPanel, #paymentPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 95%; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
@@ -74,22 +74,29 @@
         .staff-fired { color: #e57373; text-decoration: line-through; }
 
         .search-box { position: relative; }
-        #nSearch, #paySearch { cursor: pointer; width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1; color: var(--gold-bright); box-sizing: border-box; } 
-        .custom-dropdown {
-            position: absolute; top: 100%; left: 0; right: 0;
-            background: #222; border: 1px solid #444; border-top: none;
-            max-height: 250px; overflow-y: auto; z-index: 100;
-            display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.8);
-            border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;
-        }
+        #nSearch { cursor: pointer; width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1; color: var(--gold-bright); box-sizing: border-box; } 
+        .custom-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: #222; border: 1px solid #444; border-top: none; max-height: 250px; overflow-y: auto; z-index: 100; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.8); border-bottom-left-radius: 4px; border-bottom-right-radius: 4px; }
         .dd-item { padding: 15px; border-bottom: 1px solid #333; color: #ccc; cursor: pointer; transition: 0.2s; }
         .dd-item:hover { background: #333; color: #fff; }
         .dd-item.selected { background: var(--metallic-gold-gradient); color: #111; font-weight: bold; }
         
-        /* Слайдер для оплаты */
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 20px 0; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 25px; width: 25px; border-radius: 50%; background: var(--gold-mid); cursor: pointer; margin-top: -10px; box-shadow: 0 0 10px rgba(212,175,55,0.8); }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 5px; cursor: pointer; background: #333; border-radius: 2px; }
+
+        /* ТАБЛИЦА КАССИРА */
+        .pay-table-container { overflow-x: auto; margin-top: 10px; border: 1px solid #333; }
+        .pay-table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        .pay-table th, .pay-table td { border: 1px solid #333; padding: 8px; text-align: center; font-size: 0.8em; color: #ccc; }
+        .pay-table th { background: #0c0c0c; color: var(--gold-mid); font-family: 'Cinzel'; position: sticky; top: 0; }
+        .pay-table td.name-col { text-align: left; font-weight: bold; background: #111; position: sticky; left: 0; border-right: 2px solid var(--gold-mid); cursor: pointer; color: var(--gold-bright); }
+        .pay-table td.name-col:hover { background: #222; }
+        .pay-cell { width: 20px; height: 20px; line-height: 20px; }
+        .bg-ok { background: #2e7d32; color: #fff; }
+        .bg-miss { background: #c62828; color: #fff; }
+        .bg-paid { background: #e91e63; color: #fff; font-weight: bold; }
+        
+        #payControl { display: none; margin-top: 20px; padding: 20px; background: #1a1a1a; border: 1px solid var(--gold-mid); }
     </style>
 </head>
 <body>
@@ -149,29 +156,32 @@
     <div id="list" style="text-align:center; color:#666; font-size:0.9em; margin-top:20px;">Ожидание данных...</div>
 </div>
 
-<div id="paymentPanel">
+<div id="paymentPanel" style="max-width: 95%;">
     <div class="admin-head">
         <span class="admin-title" style="color:#e91e63">PAYMENT CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-    <div class="search-box" style="margin-bottom:20px;">
-        <input type="text" id="paySearch" placeholder="Выберите сотрудника..." autocomplete="off">
-        <div id="payDropdown" class="custom-dropdown"></div>
-    </div>
+    
     <div class="cal-nav">
         <button onclick="changePayMonth(-1)">&#9664;</button>
-        <div class="cal-title" id="payMonthLabel">...</div>
+        <div class="cal-title" id="payTableMonth">...</div>
         <button onclick="changePayMonth(1)">&#9654;</button>
     </div>
-    
-    <div style="margin: 20px 0; text-align:center;">
-        <label style="margin-top:0">Оплатить до: <span id="sliderVal" style="color:#fff; font-size:1.2em;">0</span> числа</label>
-        <input type="range" id="paySlider" min="0" max="31" value="0" oninput="updatePayPreview()">
+
+    <div class="pay-table-container">
+        <table class="pay-table" id="bigPayTable">
+            </table>
     </div>
 
-    <div id="payCalendarView"></div>
-    
-    <button class="gold-btn" onclick="savePayment()" style="background: linear-gradient(to bottom, #f48fb1, #e91e63); border-color:#c2185b; color:#fff;">💾 СОХРАНИТЬ ОПЛАТУ</button>
+    <div id="payControl">
+        <h3 style="color:var(--gold-mid); margin-top:0;" id="payControlName">Сотрудник</h3>
+        <div style="margin: 20px 0; text-align:center;">
+            <label style="margin-top:0">Оплатить до: <span id="sliderVal" style="color:#fff; font-size:1.2em;">0</span> числа</label>
+            <input type="range" id="paySlider" min="0" max="31" value="0" oninput="document.getElementById('sliderVal').innerText=this.value">
+        </div>
+        <button class="gold-btn" onclick="savePayment()" style="background: linear-gradient(to bottom, #f48fb1, #e91e63); border-color:#c2185b; color:#fff;">💾 СОХРАНИТЬ</button>
+        <button class="btn-small" onclick="document.getElementById('payControl').style.display='none'" style="margin-top:10px; background:#333;">ЗАКРЫТЬ</button>
+    </div>
 </div>
 
 <div id="authModal">
@@ -223,7 +233,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbw7KV5iwmExMHxTZFqcCC4Q_u-zH9mUa-tt_vZnY1qvFgKTt9OWOrRMp9-VG-mz5b408g/exec";
+    const API = "https://script.google.com/macros/s/AKfycbznuu1glJr65Wp926QDxnPxAcibQxRl_h9gSzAXkR8HHmVUOeceoB9akZ5yxAZGsv71Sw/exec;
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -237,8 +247,8 @@
 
     // Переменные для оплаты
     let payOffset = 0;
-    let payStats = null;
-    let paySelectedUser = "";
+    let payFullData = null;
+    let payCurrentName = "";
 
     window.onload = () => {
         loadEmpSelect();
@@ -247,7 +257,7 @@
         
         let auth = localStorage.getItem('wp_admin_auth');
         if(auth === 'main') { document.getElementById('adminPanel').style.display = 'block'; loadReq(); }
-        if(auth === 'payment') { document.getElementById('paymentPanel').style.display = 'block'; initPaymentPanel(); }
+        if(auth === 'payment') { document.getElementById('paymentPanel').style.display = 'block'; loadPayTable(); }
     };
 
     function loadEmpSelect() {
@@ -274,9 +284,9 @@
         });
     }
 
-    // Поиск для сотрудника
     ns.addEventListener('input', function() { renderDropdown(allEmployees.filter(n=>n.toLowerCase().includes(this.value.toLowerCase())), dd, ns, (val)=>{ns.value=val; saveUser();}); dd.style.display='block'; });
     ns.addEventListener('focus', function() { renderDropdown(allEmployees, dd, ns, (val)=>{ns.value=val; saveUser();}); dd.style.display='block'; });
+    document.addEventListener('click', function(e) { if (!ns.contains(e.target) && !dd.contains(e.target)) dd.style.display = 'none'; });
 
     function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
@@ -297,36 +307,26 @@
         .then(r=>r.json()).then(d => {
              if(d.result === "success") {
                  statsData = d.stats;
-                 renderCalendar(false); // false = режим просмотра (не админ)
+                 renderCalendar(); 
              } else { document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message; }
         });
     }
     
-    function renderCalendar(isAdmin) {
-        let container = isAdmin ? document.getElementById('payCalendarView') : document.getElementById('calendarView');
-        let data = isAdmin ? payStats : statsData;
-        if(!data) return;
-
-        if(!isAdmin) document.getElementById('calMonth').innerText = data.label;
-
+    function renderCalendar() {
+        if(!statsData) return;
+        document.getElementById('calMonth').innerText = statsData.label;
         let calHtml = '<div class="calendar-grid">';
         let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
         days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
-        
-        let limit = isAdmin ? parseInt(document.getElementById('paySlider').value) : (data.paidLimit || 0);
-
-        for(let i=1; i<=data.daysInMonth; i++) {
+        for(let i=1; i<=statsData.daysInMonth; i++) {
              let cls = "cal-day";
-             if(data.workDays.includes(i)) cls += " work"; 
-             else if(!isAdmin && data.limitDay > 0 && i <= data.limitDay) cls += " miss";
-             
-             // Если день входит в лимит оплаты -> красим розовым
-             if(i <= limit) cls += " paid";
-             
+             if(statsData.workDays.includes(i)) cls += " work"; 
+             else if(statsData.limitDay > 0 && i <= statsData.limitDay) cls += " miss";
+             if(i <= statsData.paidLimit) cls += " paid";
              calHtml += `<div class="${cls}">${i}</div>`;
         }
         calHtml += '</div>';
-        container.innerHTML = calHtml;
+        document.getElementById('calendarView').innerHTML = calHtml;
     }
 
     document.getElementById('wForm').onsubmit = e => {
@@ -356,12 +356,12 @@
         } else if(p==="money777") {
             localStorage.setItem('wp_admin_auth', 'payment');
             document.getElementById('authModal').style.display='none';
-            document.getElementById('paymentPanel').style.display='block'; initPaymentPanel();
+            document.getElementById('paymentPanel').style.display='block'; loadPayTable();
         } else alert("Неверный пароль");
     }
     function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
 
-    // --- ЛОГИКА ГЛАВНОГО АДМИНА ---
+    // --- АДМИНКА ---
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         fetch(API+"?action=get").then(r=>r.json()).then(d=>{
@@ -398,86 +398,105 @@
     function fireEmp(name) { if(!confirm("Уволить " + name + "?")) return; let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
     function restoreEmp(name) { if(!confirm("Вернуть " + name + "?")) return; let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
 
-    // --- ЛОГИКА КАССИРА ---
-    function initPaymentPanel() {
-        let ps = document.getElementById('paySearch');
-        let pd = document.getElementById('payDropdown');
-        ps.addEventListener('input', function() { renderDropdown(allEmployees.filter(n=>n.toLowerCase().includes(this.value.toLowerCase())), pd, ps, (val)=>{ paySelectedUser=val; loadPayStats(); }); pd.style.display='block'; });
-        ps.addEventListener('focus', function() { renderDropdown(allEmployees, pd, ps, (val)=>{ paySelectedUser=val; loadPayStats(); }); pd.style.display='block'; });
-        document.addEventListener('click', function(e) { if (!ps.contains(e.target) && !pd.contains(e.target)) pd.style.display = 'none'; });
-    }
+    // --- КАССИР ---
+    function changePayMonth(delta) { payOffset += delta; loadPayTable(); }
     
-    function changePayMonth(delta) { payOffset += delta; loadPayStats(); }
-    
-    function loadPayStats() {
-        if(!paySelectedUser) return;
-        document.getElementById('payCalendarView').innerHTML = "Загрузка...";
-        // Используем тот же метод get_user_stats, он возвращает всё что нужно (включая лимит оплаты)
-        // Для кассира ПИН не нужен, отправляем пустой или спец. ключ, но т.к. бэкенд требует ПИН, 
-        // мы можем схитрить: либо сделать отдельный метод API для кассира (сделано get_payment_info), 
-        // либо просто использовать get_user_stats передавая любой пин, если бэкенд бы позволял.
-        // Но я сделал отдельный метод получения лимита, а дни работы подтянем через get_user_stats (но там проверка пина).
-        // ЧТОБЫ КАССИР ВИДЕЛ ДНИ РАБОТЫ, нам придется в бэкенде разрешить просмотр без пина для спец. запроса,
-        // но проще просто использовать get_user_stats, но мы не знаем пин юзера.
-        // РЕШЕНИЕ: Кассир видит только СВОЮ разметку (розовую), рабочие дни (зеленые) ему видеть полезно, но для этого надо менять API.
-        // Сейчас кассир будет видеть просто календарь, который он красит.
-        
-        // Получаем текущий лимит оплаты
-        let p = new URLSearchParams(); p.append('action', 'get_user_stats'); p.append('name', paySelectedUser); p.append('pin', '0000'); // Пин не подойдет, получим ошибку.
-        // Исправим: просто сделаем визуализацию ТОЛЬКО слайдера.
-        // Или лучше: используем get_payment_info + локальный расчет дней месяца.
-        
-        fetch(API + "?action=get_payment_info&name=" + encodeURIComponent(paySelectedUser) + "&month=" + getMonthLabel(payOffset))
-        .then(r=>r.json()).then(d=>{
-            if(d.result==="success") {
-                let now = new Date();
-                let target = new Date(now.getFullYear(), now.getMonth() + payOffset, 1);
-                let daysInMonth = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
-                
-                payStats = {
-                   label: getMonthLabel(payOffset),
-                   daysInMonth: daysInMonth,
-                   workDays: [], // Кассир пока не видит отметки работы, только свои оплаты (для безопасности пина)
-                   limitDay: 0,
-                   paidLimit: 0
-                };
-                
-                document.getElementById('payMonthLabel').innerText = payStats.label;
-                document.getElementById('paySlider').max = daysInMonth;
-                document.getElementById('paySlider').value = d.paidLimit;
-                updatePayPreview();
+    function loadPayTable() {
+        document.getElementById('bigPayTable').innerHTML = "<tr><td style='padding:20px'>Загрузка...</td></tr>";
+        fetch(API + "?action=get_all_stats_month&offset=" + payOffset).then(r=>r.json()).then(d=>{
+            if(d.result === "success") {
+                payFullData = d;
+                document.getElementById('payTableMonth').innerText = d.monthLabel;
+                renderBigTable();
+            } else {
+                document.getElementById('bigPayTable').innerHTML = "Ошибка: " + d.message;
             }
         });
     }
-    
-    function getMonthLabel(offset) {
-        let now = new Date();
-        let d = new Date(now.getFullYear(), now.getMonth() + offset, 1);
-        let mNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-        return mNames[d.getMonth()] + " " + d.getFullYear();
+
+    function renderBigTable() {
+        if(!payFullData) return;
+        let t = document.getElementById('bigPayTable');
+        t.innerHTML = "";
+        
+        // Шапка
+        let hRow = document.createElement('tr');
+        hRow.innerHTML = "<th>ФИО</th>";
+        for(let i=1; i<=payFullData.daysInMonth; i++) { hRow.innerHTML += `<th>${i}</th>`; }
+        hRow.innerHTML += "<th>Дн</th><th>Сд</th>";
+        t.appendChild(hRow);
+        
+        // Ряды
+        let names = Object.keys(payFullData.stats).sort();
+        names.forEach(name => {
+            let user = payFullData.stats[name];
+            let row = document.createElement('tr');
+            
+            // Имя
+            let nameCell = document.createElement('td');
+            nameCell.className = "name-col";
+            nameCell.innerText = name;
+            nameCell.onclick = () => openPaymentControl(name, user.paidLimit);
+            row.appendChild(nameCell);
+            
+            // Дни
+            for(let i=1; i<=payFullData.daysInMonth; i++) {
+                let cell = document.createElement('td');
+                cell.className = "pay-cell";
+                
+                let val = "";
+                let bg = "";
+                
+                // Приоритет 1: Оплачено
+                if (i <= user.paidLimit) {
+                    val = "₽"; bg = "bg-paid";
+                } else {
+                    // Приоритет 2: Работал
+                    if (user.days[i]) {
+                        val = user.days[i]; bg = "bg-ok";
+                    } 
+                    // Приоритет 3: Прогул (если до лимита дней)
+                    else if (payFullData.limitDay > 0 && i <= payFullData.limitDay) {
+                         bg = "bg-miss";
+                    }
+                }
+                
+                if(bg) cell.classList.add(bg);
+                cell.innerText = val;
+                row.appendChild(cell);
+            }
+            
+            // Итоги
+            row.innerHTML += `<td>${user.totalD}</td><td>${user.totalV}</td>`;
+            t.appendChild(row);
+        });
     }
     
-    function updatePayPreview() {
-        let val = document.getElementById('paySlider').value;
-        document.getElementById('sliderVal').innerText = val;
-        renderCalendar(true); // Рисуем календарь кассира
+    function openPaymentControl(name, limit) {
+        payCurrentName = name;
+        document.getElementById('payControlName').innerText = name;
+        document.getElementById('paySlider').max = payFullData.daysInMonth;
+        document.getElementById('paySlider').value = limit;
+        document.getElementById('sliderVal').innerText = limit;
+        document.getElementById('payControl').style.display = 'block';
+        document.getElementById('payControl').scrollIntoView({behavior: "smooth"});
     }
     
     function savePayment() {
-        if(!paySelectedUser) return alert("Выберите сотрудника");
         let limit = document.getElementById('paySlider').value;
-        let month = document.getElementById('payMonthLabel').innerText;
+        let month = document.getElementById('payTableMonth').innerText;
         
-        let btn = event.target; btn.innerText = "Сохранение...";
+        let btn = event.target; btn.innerText = "⏳...";
         let p = new URLSearchParams(); 
         p.append('action','save_payment'); 
-        p.append('name', paySelectedUser); 
+        p.append('name', payCurrentName); 
         p.append('month', month);
         p.append('limit', limit);
         
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
-            btn.innerText = "💾 СОХРАНИТЬ ОПЛАТУ";
-            if(d.result==="success") alert("Оплата сохранена!");
+            btn.innerText = "💾 СОХРАНИТЬ";
+            document.getElementById('payControl').style.display = 'none';
+            loadPayTable(); // Перезагружаем таблицу
         });
     }
 </script>
