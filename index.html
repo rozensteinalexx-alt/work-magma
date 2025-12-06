@@ -35,8 +35,6 @@
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
-        
-        #historyBlock { margin-top: 30px; border-top: 1px solid #333; padding-top: 15px; display: none; }
 
         #adminPanel { display: none; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border: 1px solid var(--gold-mid); box-shadow: 0 20px 50px rgba(0,0,0,0.9); padding: 30px; border-radius: 4px; width: 100%; max-width: 440px; box-sizing: border-box; margin-top: 20px; }
         .admin-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 15px;}
@@ -56,23 +54,25 @@
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-del:hover { color: #c62828; border-color: #c62828; }
         
-        /* Стили для списка сотрудников */
-        .emp-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; }
-        .emp-name { color: #fff; font-size: 1.1em; }
-        
         #authModal, #qrModal, #statsModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .stat-val { font-weight: bold; color: var(--gold-bright); }
-
-        /* КАЛЕНДАРЬ */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 15px; }
-        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; }
-        .cal-day.ok { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
-        .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
+        /* Стили календаря */
+        .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; }
+        .cal-title { color: #fff; font-weight: bold; font-family: 'Cinzel'; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; cursor: pointer; transition: 0.2s; position: relative;}
         .cal-head { color: var(--gold-mid); font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 0.7em;}
+        
+        /* Статусы в календаре */
+        .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+        .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
+        /* Статус ОПЛАЧЕНО (Розовый) */
+        .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
+        /* Индикатор оплаты (галочка) */
+        .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
     </style>
 </head>
 <body>
@@ -102,9 +102,8 @@
         
         <div style="display: flex; gap: 10px; margin-top: 30px;">
             <button class="btn" id="sBtn" style="margin-top:0;">Отправить</button>
-            <button class="btn-small" type="button" onclick="showMyStats()" style="width: 80px; padding: 0; background: #333; border-color: #555;">🏆</button>
+            <button class="btn-small" type="button" onclick="openStats()" style="width: 80px; padding: 0; background: #333; border-color: #555;">🏆</button>
         </div>
-
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
@@ -168,23 +167,38 @@
 
 <div id="statsModal" style="display:none;">
     <div class="stats-box">
-        <h3 style="color:var(--gold-mid); margin-top:0;">МОЙ РЕЗУЛЬТАТ</h3>
-        <div id="statsContent" style="color:#ccc; text-align:left;">Загрузка...</div>
+        <div class="cal-nav">
+            <button onclick="changeMonth(-1)">&#9664;</button>
+            <div class="cal-title" id="calMonth">...</div>
+            <button onclick="changeMonth(1)">&#9654;</button>
+        </div>
+        
+        <div class="dashboard-stats" style="margin-bottom:10px; border:none; padding:0;">
+             <div class="d-item" style="width:50%"><span class="d-val" id="my-dnevka">-</span><span class="d-lbl">Дневка</span></div>
+             <div class="d-item" style="width:50%"><span class="d-val" id="my-volume">-</span><span class="d-lbl">Объем</span></div>
+        </div>
+        
         <div id="calendarView"></div>
+        <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Нажмите на день, чтобы отметить "Оплачено"</div>
+        
         <button class="btn-small" onclick="document.getElementById('statsModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
     </div>
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzbrHd7iOHqjeNqzZrrSrtovrjdZfvGR7P7Bde_rzZ7WKllnUx9unBjTzpxn9ltW01P6A/exec";
-    // 👆👆 ----------------------- 👆👆
+    // 👇👇 ВСТАВЬТЕ ССЫЛКУ 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbwcLK3soCeEZHojTn4zeLWw7hanLA27FcUU_N_NHurFfgLXO5-5nkn4UWc-5W1TLyB2Tg/exec";
+    // 👆👆 ------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
     
+    // Календарь
+    let currentOffset = 0; // 0 = текущий месяц
+    let statsData = null; // Данные с сервера
+
     window.onload = () => {
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
@@ -207,46 +221,78 @@
         localStorage.setItem('wp_pin', pin.value);
         localStorage.setItem('wp_count', countSelect.value);
     }
-    
-    function showMyStats() {
+
+    // ОТКРЫТИЕ СТАТИСТИКИ
+    function openStats() {
         var p = pin.value; var n = ns.value;
         if(!p || !n) { alert("Сначала выберите имя и введите ПИН"); return; }
         document.getElementById('statsModal').style.display='flex';
-        fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p).then(r=>r.json()).then(d=>{
+        currentOffset = 0;
+        loadStats();
+    }
+    
+    function changeMonth(delta) {
+        currentOffset += delta;
+        loadStats();
+    }
+    
+    function loadStats() {
+        var p = pin.value; var n = ns.value;
+        document.getElementById('calendarView').innerHTML = "Загрузка...";
+        fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p + "&offset=" + currentOffset)
+        .then(r=>r.json())
+        .then(d => {
              if(d.result === "success") {
-                 let s = d.stats;
-                 let total = s.dnevka + s.volume;
-                 
-                 document.getElementById('statsContent').innerHTML = `
-                 <div class="stat-row"><span>⏱️ Дневка:</span><span class="stat-val">${s.dnevka}</span></div>
-                 <div class="stat-row"><span>📦 Объем:</span><span class="stat-val">${s.volume}</span></div>
-                 <div class="stat-row"><span>🌴 Выходные:</span><span class="stat-val" style="color:#e57373">${s.weekends}</span></div>
-                 <div class="stat-row stat-total"><span>💰 ИТОГО:</span><span class="stat-val" style="color:#fff">${total}</span></div>
-                 `;
-                 
-                 // РИСУЕМ КАЛЕНДАРЬ
-                 let calHtml = '<div class="calendar-grid">';
-                 // Заголовки дней
-                 let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-                 days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
-                 
-                 // Пустые клетки до начала месяца (просто для примера 1-е число)
-                 // В реальном проекте можно высчитывать день недели
-                 
-                 // Рисуем 31 день
-                 for(let i=1; i<=31; i++) {
-                     let cls = "cal-day";
-                     if(s.workDays.includes(i)) cls += " ok";
-                     else if(i <= s.limitDay) cls += " miss";
-                     calHtml += `<div class="${cls}">${i}</div>`;
-                 }
-                 calHtml += '</div>';
-                 document.getElementById('calendarView').innerHTML = calHtml;
-
+                 statsData = d.stats;
+                 renderCalendar();
              } else {
-                 document.getElementById('statsContent').innerHTML = "<div style='text-align:center; color:#f44336'>Ошибка: " + d.message + "</div>";
+                 document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
              }
         });
+    }
+    
+    function renderCalendar() {
+        if(!statsData) return;
+        
+        document.getElementById('calMonth').innerText = statsData.label;
+        document.getElementById('my-dnevka').innerText = statsData.dnevka;
+        document.getElementById('my-volume').innerText = statsData.volume;
+        
+        let calHtml = '<div class="calendar-grid">';
+        let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+        days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
+        
+        // Получаем оплаченные дни из памяти
+        let paidKey = "paid_" + ns.value + "_" + statsData.label;
+        let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
+
+        for(let i=1; i<=statsData.daysInMonth; i++) {
+             let cls = "cal-day";
+             if(statsData.workDays.includes(i)) cls += " work"; // Работал
+             else if(i <= statsData.limitDay) cls += " miss";   // Прогул
+             
+             if(paidDays.includes(i)) cls += " paid"; // Оплачено
+
+             calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
+        }
+        calHtml += '</div>';
+        document.getElementById('calendarView').innerHTML = calHtml;
+    }
+    
+    // ОТМЕТКА ОПЛАТЫ (В ПАМЯТЬ ТЕЛЕФОНА)
+    function togglePay(day) {
+        if(!statsData) return;
+        let paidKey = "paid_" + ns.value + "_" + statsData.label;
+        let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
+        
+        if(paidDays.includes(day)) {
+            paidDays = paidDays.filter(d => d !== day); // Убрать
+        } else {
+            paidDays.push(day); // Добавить
+        }
+        
+        localStorage.setItem(paidKey, JSON.stringify(paidDays));
+        renderCalendar(); // Перерисовать
     }
 
     document.getElementById('wForm').onsubmit = e => {
