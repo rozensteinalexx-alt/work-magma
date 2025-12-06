@@ -32,6 +32,7 @@
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
         .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
+        
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
@@ -61,17 +62,22 @@
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-del:hover { color: #c62828; border-color: #c62828; }
         
-        /* Стили для списка сотрудников */
-        .emp-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #333; }
-        .emp-name { color: #fff; font-size: 1.1em; }
-        .emp-fired { color: #666; text-decoration: line-through; }
-        
         #authModal, #qrModal, #statsModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
-        .stat-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
-        .stat-val { font-weight: bold; color: var(--gold-bright); }
+        /* Стили календаря */
+        .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; }
+        .cal-title { color: #fff; font-weight: bold; font-family: 'Cinzel'; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; cursor: pointer; transition: 0.2s; position: relative;}
+        .cal-head { color: var(--gold-mid); font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 0.7em;}
+        
+        .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+        .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
+        .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
+        .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
     </style>
 </head>
 <body>
@@ -85,29 +91,25 @@
     <form id="wForm">
         <label>👤 Сотрудник</label>
         <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
-        
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
-
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
             <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
-
         <label>⚙️ Тип работ</label>
         <div class="radio-group">
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-
-        <button class="btn" id="sBtn">Отправить отчет</button>
         
-        <div style="margin-top:20px; text-align:center;">
-            <button class="btn-small" type="button" onclick="showMyStats()" style="width: 100%; background: #333; border-color: #555;">🏆 МОЙ РЕЗУЛЬТАТ</button>
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <button class="btn" id="sBtn" style="margin-top:0;">Отправить</button>
+            <button class="btn-small" type="button" onclick="showMyStats()" style="width: 80px; padding: 0; background: #333; border-color: #555;">🏆</button>
         </div>
-        
+
         <div id="historyBlock">
             <div class="h-title">Ваши последние смены</div>
             <div id="hContent">Загрузка...</div>
@@ -125,34 +127,22 @@
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
     
-    <div style="display:flex; gap:5px; margin-bottom:20px;">
-        <button class="btn-small" onclick="showRequests()">📋 Заявки</button>
-        <button class="btn-small" onclick="showEmployees()">👥 Сотрудники</button>
+    <div class="dashboard-stats">
+        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
+        <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
+        <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
 
-    <div id="requestsView">
-        <div class="dashboard-stats">
-            <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
-            <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
-            <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
-        </div>
-        <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
-            <button class="btn-small" onclick="loadReq()">↻</button>
-            <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
-            <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
-        </div>
-        <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
-    </div>
-
-    <div id="employeesView" style="display:none;">
-        <div style="display:flex; gap:5px; margin-bottom:15px;">
-            <input type="text" id="newEmpName" placeholder="Имя Фамилия" style="margin:0; padding:10px;">
-            <button class="btn-small" onclick="addEmployee()" style="width:auto;">➕</button>
-        </div>
-        <div id="empList"></div>
+    <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
+        <button class="btn-small" onclick="loadReq()">↻</button>
+        <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
+        <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
     </div>
     
-    <button class="btn" onclick="showQR()" style="margin-top: 25px; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
+    <button class="btn" onclick="sendSummary()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px; background: linear-gradient(to right, #1c4587, #0c343d); border:1px solid #2c3e50;">🚀 СВОДКА В TG</button>
+    <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
+
+    <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
 </div>
 
 <div id="authModal">
@@ -175,15 +165,27 @@
 
 <div id="statsModal" style="display:none;">
     <div class="stats-box">
-        <h3 style="color:var(--gold-mid); margin-top:0;">МОЯ СТАТИСТИКА</h3>
-        <div id="statsContent" style="color:#ccc; text-align:left;">Загрузка...</div>
+        <div class="cal-nav">
+            <button onclick="changeMonth(-1)">&#9664;</button>
+            <div class="cal-title" id="calMonth">...</div>
+            <button onclick="changeMonth(1)">&#9654;</button>
+        </div>
+        
+        <div class="dashboard-stats" style="margin-bottom:10px; border:none; padding:0;">
+             <div class="d-item" style="width:50%"><span class="d-val" id="my-dnevka">-</span><span class="d-lbl">Дневка</span></div>
+             <div class="d-item" style="width:50%"><span class="d-val" id="my-volume">-</span><span class="d-lbl">Объем</span></div>
+        </div>
+        
+        <div id="calendarView"></div>
+        <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Нажмите, чтобы отметить "Оплачено"</div>
+        
         <button class="btn-small" onclick="document.getElementById('statsModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
     </div>
 </div>
 
 <script>
     // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxVQUgqV_o6y2m2dMPEolT6qL8kVmVEyspceDgvjXyzHaeAOU-7yRwp-2eeJiLz0E-zLg/exec";
+    const API = "https://script.google.com/macros/s/AKfycbzW3w-7533uJ33jPN4FdRtl1-e-Xq0KNSIhkFbZztxVfWwICrbqws8dAeONULUpykVmpA/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
@@ -191,6 +193,10 @@
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
     
+    // Календарь
+    let currentOffset = 0; 
+    let statsData = null; 
+
     window.onload = () => {
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); checkHistory(); }
@@ -214,6 +220,7 @@
         localStorage.setItem('wp_count', countSelect.value);
     }
 
+    // ИСТОРИЯ (ПОСЛЕДНИЕ 3)
     function checkHistory() {
         var p = pin.value; var n = ns.value;
         if(p.length >= 4 && n) {
@@ -239,24 +246,88 @@
         }
     }
     
-    function showMyStats() {
+    // ОТКРЫТИЕ СТАТИСТИКИ (КАЛЕНДАРЬ)
+    function openStats() {
         var p = pin.value; var n = ns.value;
         if(!p || !n) { alert("Сначала выберите имя и введите ПИН"); return; }
         document.getElementById('statsModal').style.display='flex';
-        fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p).then(r=>r.json()).then(d=>{
+        currentOffset = 0;
+        loadStats();
+    }
+    
+    function changeMonth(delta) {
+        currentOffset += delta;
+        loadStats();
+    }
+    
+    function loadStats() {
+        var p = pin.value; var n = ns.value;
+        document.getElementById('calendarView').innerHTML = "Загрузка...";
+        fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p + "&offset=" + currentOffset)
+        .then(r=>r.json())
+        .then(d => {
              if(d.result === "success") {
-                 let s = d.stats;
-                 let total = s.dnevka + s.volume;
-                 document.getElementById('statsContent').innerHTML = `
-                 <div class="stat-row"><span>⏱️ Дневка:</span><span class="stat-val">${s.dnevka}</span></div>
-                 <div class="stat-row"><span>📦 Объем:</span><span class="stat-val">${s.volume}</span></div>
-                 <div class="stat-row"><span>🌴 Выходные:</span><span class="stat-val" style="color:#e57373">${s.weekends}</span></div>
-                 <div class="stat-row stat-total"><span>💰 ИТОГО:</span><span class="stat-val" style="color:#fff">${total}</span></div>
-                 `;
+                 statsData = d.stats;
+                 renderCalendar();
              } else {
-                 if(d.message.includes("уволен")) alert("Вы уволены и не имеете доступа к статистике.");
-                 else document.getElementById('statsContent').innerHTML = "<div style='text-align:center; color:#f44336'>Ошибка: " + d.message + "</div>";
+                 document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
              }
+        });
+    }
+    
+    function renderCalendar() {
+        if(!statsData) return;
+        
+        document.getElementById('calMonth').innerText = statsData.label;
+        document.getElementById('my-dnevka').innerText = statsData.dnevka;
+        document.getElementById('my-volume').innerText = statsData.volume;
+        
+        let calHtml = '<div class="calendar-grid">';
+        let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+        days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
+        
+        // Ключ для LocalStorage (уникальный для юзера и месяца)
+        let paidKey = "paid_" + ns.value + "_" + statsData.label;
+        let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
+
+        for(let i=1; i<=statsData.daysInMonth; i++) {
+             let cls = "cal-day";
+             if(statsData.workDays.includes(i)) cls += " work"; 
+             else if(i <= statsData.limitDay) cls += " miss"; 
+             
+             if(paidDays.includes(i)) cls += " paid";
+
+             calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
+        }
+        calHtml += '</div>';
+        document.getElementById('calendarView').innerHTML = calHtml;
+    }
+    
+    function togglePay(day) {
+        if(!statsData) return;
+        let paidKey = "paid_" + ns.value + "_" + statsData.label;
+        let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
+        
+        if(paidDays.includes(day)) {
+            paidDays = paidDays.filter(d => d !== day);
+        } else {
+            paidDays.push(day);
+        }
+        
+        localStorage.setItem(paidKey, JSON.stringify(paidDays));
+        renderCalendar();
+    }
+
+    // ОТПРАВКА СВОДКИ
+    function sendSummary() {
+        if(!confirm("Отправить сводку в Telegram?")) return;
+        const btn = event.target;
+        const oldText = btn.innerText;
+        btn.innerText = "⏳...";
+        fetch(API + "?action=send_summary").then(r=>r.json()).then(d=>{
+            btn.innerText = oldText;
+            if(d.result === "success") alert("Сводка отправлена!");
+            else alert("Ошибка: " + d.message);
         });
     }
 
@@ -270,15 +341,7 @@
             b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
-                setTimeout(()=>{ 
-                    document.getElementById('wForm').reset(); 
-                    ns.value=localStorage.getItem('wp_user'); 
-                    pin.value=localStorage.getItem('wp_pin');
-                    if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1";
-                    checkHistory();
-                }, 1000);
-            } else if(d.result==="fired") {
-                showToast(d.message, true);
+                setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; checkHistory(); }, 1000);
             } else { showToast("⛔ " + d.message, true); }
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
@@ -294,9 +357,6 @@
         } else alert("Доступ запрещен");
     }
     function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
-
-    function showRequests() { document.getElementById('requestsView').style.display='block'; document.getElementById('employeesView').style.display='none'; loadReq(); }
-    function showEmployees() { document.getElementById('requestsView').style.display='none'; document.getElementById('employeesView').style.display='block'; loadEmp(); }
 
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
@@ -322,42 +382,6 @@
                 l.appendChild(div);
             });
         });
-    }
-
-    function loadEmp() {
-        let l = document.getElementById('empList'); l.innerHTML="Загрузка...";
-        fetch(API+"?action=get_employees_admin").then(r=>r.json()).then(d=>{
-            l.innerHTML="";
-            if(d.data) d.data.forEach(emp => {
-                 let div = document.createElement('div'); div.className='emp-item';
-                 let nameStyle = emp.isFired ? 'emp-fired' : 'emp-name';
-                 let actionBtn = emp.isFired ? 
-                     `<button class="btn-act btn-yes" onclick="restoreEmp('${emp.name}')" style="flex:0; width:80px; font-size:0.6em;">ВЕРНУТЬ</button>` : 
-                     `<button class="btn-act btn-no" onclick="fireEmp('${emp.name}')" style="flex:0; width:80px; font-size:0.6em;">УВОЛИТЬ</button>`;
-                 
-                 div.innerHTML=`<span class="${nameStyle}">${emp.name}</span> ${actionBtn}`;
-                 l.appendChild(div);
-            });
-        });
-    }
-
-    function addEmployee() {
-        var name = document.getElementById('newEmpName').value;
-        if(!name) return;
-        fetch(API + "?action=add_employee&new_name=" + encodeURIComponent(name)).then(() => {
-            document.getElementById('newEmpName').value = "";
-            loadEmp();
-        });
-    }
-
-    function fireEmp(name) {
-        if(!confirm("Уволить " + name + "? (Доступ будет закрыт)")) return;
-        fetch(API + "?action=fire_employee&name=" + encodeURIComponent(name)).then(() => loadEmp());
-    }
-    
-    function restoreEmp(name) {
-        if(!confirm("Вернуть " + name + " в штат?")) return;
-        fetch(API + "?action=restore_employee&name=" + encodeURIComponent(name)).then(() => loadEmp());
     }
 
     function upd(id, st) {
