@@ -107,10 +107,12 @@
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-        <div style="display: flex; gap: 10px; margin-top: 30px;">
-            <button class="btn" id="sBtn" style="margin-top:0;">Отправить</button>
-            <button class="gold-btn" type="button" onclick="showMyStats()" style="width: 60px; padding: 0; margin:0; font-size:1.5em;">🏆</button>
-        </div>
+        
+        <button class="btn" id="sBtn">Отправить</button>
+        <button class="gold-btn" type="button" onclick="showMyStats()" style="margin-top: 15px; background: linear-gradient(to bottom, #2a2a2a, #1a1a1a); color: var(--gold-mid); border: 1px solid var(--gold-mid); box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+            🏆 Моя Статистика
+        </button>
+        
     </form>
     <div id="historyBlock"><div class="h-title">Ваши последние смены</div><div id="hContent">Загрузка...</div></div>
     <div id="msg"></div>
@@ -134,7 +136,7 @@
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
     </div>
-    <button class="gold-btn" onclick="sendSummary()">🚀 СВОДКА В TG</button>
+    
     <button class="gold-btn" onclick="showQR()" style="margin-top: 10px;">📱 ПОКАЗАТЬ QR-КОД</button>
     <div id="list" style="text-align:center; color:#666; font-size:0.9em; margin-top:20px;">Ожидание данных...</div>
 </div>
@@ -223,9 +225,10 @@
         }
     }
     
+    // ИСПРАВЛЕНО: Используем showToast вместо alert
     function showMyStats() {
         var p = pin.value; var n = ns.value;
-        if(!p || !n) { alert("Сначала выберите имя и введите ПИН"); return; }
+        if(!p || !n) { showToast("⚠️ Выберите имя и введите ПИН", true); return; }
         document.getElementById('statsModal').style.display='flex';
         currentOffset = 0;
         loadStats();
