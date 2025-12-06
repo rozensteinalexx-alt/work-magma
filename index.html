@@ -63,8 +63,8 @@
         .gold-btn { width: 100%; padding: 16px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-radius: 4px; font-family: 'Cinzel'; font-weight: bold; color: #3a2a00; text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.6); cursor: pointer; transition: 0.2s; }
         .gold-btn:active { transform: translateY(2px); }
         
-        #authModal, #qrModal, #statsModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .auth-box, .qr-box, .stats-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
+        #authModal, #qrModal, #statsModal, #staffModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .auth-box, .qr-box, .stats-box, .staff-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
         .stat-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
@@ -81,6 +81,25 @@
         .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
         .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
         .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
+        
+        /* STAFF LIST STYLE */
+        .staff-item { text-align: left; background: #181818; border-bottom: 1px solid #333; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .staff-name { color: #ccc; font-weight: bold; font-size: 0.9em; }
+        .staff-fired { color: #e57373; text-decoration: line-through; }
+
+        /* СТИЛИ ДЛЯ ВЫПАДАЮЩЕГО СПИСКА С ПОИСКОМ */
+        .search-box { position: relative; }
+        #nSearch { cursor: pointer; } /* Чтобы было понятно, что можно нажать */
+        .custom-dropdown {
+            position: absolute; top: 100%; left: 0; right: 0;
+            background: #222; border: 1px solid #444; border-top: none;
+            max-height: 250px; overflow-y: auto; z-index: 100;
+            display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;
+        }
+        .dd-item { padding: 15px; border-bottom: 1px solid #333; color: #ccc; cursor: pointer; transition: 0.2s; }
+        .dd-item:hover { background: #333; color: #fff; }
+        .dd-item.selected { background: var(--metallic-gold-gradient); color: #111; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -93,7 +112,12 @@
 <div class="box">
     <form id="wForm">
         <label>👤 Сотрудник</label>
-        <select id="nSelect" name="name" required onchange="saveUser()"><option value="">Загрузка...</option></select>
+        
+        <div class="search-box">
+            <input type="text" id="nSearch" name="name" required placeholder="Нажмите для выбора..." autocomplete="off">
+            <div id="nDropdown" class="custom-dropdown"></div>
+        </div>
+
         <label>🔒 ПИН-код</label>
         <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="checkHistory(); saveUser()">
         <label>👥 Количество (Чел.)</label>
@@ -131,6 +155,9 @@
         <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
+    
+    <button class="gold-btn" onclick="openStaffModal()" style="margin-bottom: 15px; background: #333; color: #ccc; border-color: #555;">👥 УПРАВЛЕНИЕ ШТАТОМ</button>
+
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
@@ -159,6 +186,18 @@
     </div>
 </div>
 
+<div id="staffModal" style="display:none;">
+    <div class="staff-box">
+        <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel';">ШТАТ СОТРУДНИКОВ</h3>
+        <div style="display:flex; gap:5px; margin-bottom:15px;">
+             <input id="newEmpName" placeholder="ФИО нового сотрудника" style="padding:10px; font-size:0.9em;">
+             <button class="btn-small" onclick="addEmployee()" style="width:auto; background: #2e7d32; color:#fff;">+</button>
+        </div>
+        <div id="staffList" style="max-height: 300px; overflow-y: auto; text-align: left;">Загрузка...</div>
+        <button class="btn-small" onclick="document.getElementById('staffModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
+    </div>
+</div>
+
 <div id="statsModal" style="display:none;">
     <div class="stats-box">
         <div class="cal-nav">
@@ -178,15 +217,19 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxUbgaEoPNkyDyHGdeeC172DyS2YJgVGx1A0eSOG4VHGwc5ZeEHI2AnPGF6ZwtzbgL-bQ/exec";
+    const API = "https://script.google.com/macros/s/AKfycbxADIXUnvcR9eFY50BOD6vzn5oe-jRHeqC0oOgzz1pVcMLFEoFX3bAZHiHnYeazmRdrcQ/exec";
     // 👆👆 ----------------------- 👆👆
 
-    const ns = document.getElementById('nSelect');
+    // ИЗМЕНЕНО: Ссылка теперь на поле ввода, а не селект
+    const ns = document.getElementById('nSearch');
+    const dd = document.getElementById('nDropdown');
+    
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
     let currentOffset = 0; 
     let statsData = null; 
+    let allEmployees = []; // Храним список всех сотрудников
 
     window.onload = () => {
         loadEmpSelect();
@@ -197,13 +240,67 @@
         }
     };
 
+    // НОВАЯ ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ СПИСКА
     function loadEmpSelect() {
+        ns.placeholder = "Загрузка...";
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
-            ns.innerHTML = '<option value="" disabled selected>Выберите себя</option>';
-            if(d.data) d.data.forEach(n=>{ let op = document.createElement('option'); op.value=n; op.innerText=n; ns.appendChild(op); });
-            if(localStorage.getItem('wp_user')) ns.value = localStorage.getItem('wp_user');
+            if(d.data) {
+                allEmployees = d.data;
+                renderDropdown(allEmployees);
+                
+                // Восстанавливаем сохраненного пользователя
+                let saved = localStorage.getItem('wp_user');
+                if(saved) {
+                    ns.value = saved;
+                    checkHistory();
+                } else {
+                    ns.placeholder = "🔍 Введите имя...";
+                }
+            }
         });
     }
+
+    // ЛОГИКА ВЫПАДАЮЩЕГО СПИСКА
+    function renderDropdown(list) {
+        dd.innerHTML = "";
+        if(list.length === 0) {
+            dd.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>";
+            return;
+        }
+        list.forEach(name => {
+            let div = document.createElement('div');
+            div.className = "dd-item";
+            if(name === ns.value) div.className += " selected";
+            div.innerText = name;
+            div.onclick = () => {
+                ns.value = name;
+                dd.style.display = 'none';
+                saveUser();
+                checkHistory();
+            };
+            dd.appendChild(div);
+        });
+    }
+
+    // ОБРАБОТЧИКИ ПОИСКА
+    ns.addEventListener('input', function() {
+        let val = this.value.toLowerCase();
+        let filtered = allEmployees.filter(n => n.toLowerCase().includes(val));
+        renderDropdown(filtered);
+        dd.style.display = 'block';
+    });
+
+    ns.addEventListener('focus', function() {
+        renderDropdown(allEmployees);
+        dd.style.display = 'block';
+    });
+
+    // Закрыть при клике вне
+    document.addEventListener('click', function(e) {
+        if (!ns.contains(e.target) && !dd.contains(e.target)) {
+            dd.style.display = 'none';
+        }
+    });
 
     function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
@@ -225,7 +322,6 @@
         }
     }
     
-    // ИСПРАВЛЕНО: Используем showToast вместо alert
     function showMyStats() {
         var p = pin.value; var n = ns.value;
         if(!p || !n) { showToast("⚠️ Выберите имя и введите ПИН", true); return; }
@@ -269,8 +365,12 @@
 
         for(let i=1; i<=statsData.daysInMonth; i++) {
              let cls = "cal-day";
-             if(statsData.workDays.includes(i)) cls += " work"; 
-             else if(i <= statsData.limitDay) cls += " miss"; 
+             if(statsData.workDays.includes(i)) {
+                 cls += " work";
+             } 
+             else if(statsData.limitDay > 0 && i <= statsData.limitDay) {
+                 cls += " miss";
+             }
              if(paidDays.includes(i)) cls += " paid";
              calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
         }
@@ -286,15 +386,6 @@
         localStorage.setItem(paidKey, JSON.stringify(paidDays));
         renderCalendar();
     }
-    
-    function sendSummary() {
-        if(!confirm("Отправить сводку в Telegram?")) return;
-        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳...";
-        fetch(API + "?action=send_summary").then(r=>r.json()).then(d=>{
-            btn.innerText = oldText;
-            if(d.result === "success") alert("Сводка отправлена!"); else alert("Ошибка: " + d.message);
-        });
-    }
 
     document.getElementById('wForm').onsubmit = e => {
         e.preventDefault();
@@ -307,7 +398,7 @@
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; checkHistory(); }, 1000);
-            } else showToast("⛔ " + d.message, true);
+            } else showToast(d.message, true); 
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
 
@@ -380,6 +471,52 @@
         var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
         document.getElementById('qrImage').src = qrUrl;
         document.getElementById('qrModal').style.display = 'flex';
+    }
+
+    function openStaffModal() {
+        document.getElementById('staffModal').style.display = 'flex';
+        loadStaffList();
+    }
+    function loadStaffList() {
+        let sl = document.getElementById('staffList');
+        sl.innerHTML = "Загрузка...";
+        fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{
+            if(d.result === "success") {
+                sl.innerHTML = "";
+                d.staff.forEach(s => {
+                    let isFired = (s.status === "Fired");
+                    let nameClass = isFired ? "staff-name staff-fired" : "staff-name";
+                    let btnHtml = "";
+                    if(isFired) {
+                        btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
+                    } else {
+                        btnHtml = `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
+                    }
+                    
+                    let div = document.createElement('div');
+                    div.className = "staff-item";
+                    div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`;
+                    sl.appendChild(div);
+                });
+            } else sl.innerHTML = "Ошибка загрузки";
+        });
+    }
+    function addEmployee() {
+        let n = document.getElementById('newEmpName').value;
+        if(!n) return;
+        if(!confirm("Добавить сотрудника: " + n + "?")) return;
+        let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n);
+        fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); });
+    }
+    function fireEmp(name) {
+        if(!confirm("Уволить сотрудника " + name + "?")) return;
+        let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name);
+        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
+    }
+    function restoreEmp(name) {
+        if(!confirm("Вернуть сотрудника " + name + " в штат?")) return;
+        let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name);
+        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
     }
 </script>
 
