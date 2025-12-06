@@ -32,7 +32,6 @@
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
         .success { color: #4caf50; text-shadow: 0 2px 4px rgba(0,0,0,1); } .error { color: #e74c3c; text-shadow: 0 2px 4px rgba(0,0,0,1); }
-        
         #toast { visibility: hidden; min-width: 250px; background: #111; color: #fff; text-align: center; border-radius: 2px; padding: 16px; position: fixed; z-index: 1000; left: 50%; bottom: 30px; margin-left: -125px; border: 1px solid var(--gold-mid); box-shadow: 0 5px 20px rgba(0,0,0,0.8); opacity: 0; transition: 0.5s; font-family: 'Cinzel'; }
         #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
         #toast.error { border-color: #c62828; color: #ff8a80; }
@@ -61,20 +60,24 @@
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-del:hover { color: #c62828; border-color: #c62828; }
+        .gold-btn { width: 100%; padding: 16px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-radius: 4px; font-family: 'Cinzel'; font-weight: bold; color: #3a2a00; text-transform: uppercase; box-shadow: 0 5px 15px rgba(0,0,0,0.6); cursor: pointer; transition: 0.2s; }
+        .gold-btn:active { transform: translateY(2px); }
         
         #authModal, #qrModal, #statsModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
-        /* Стили календаря */
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .stat-val { font-weight: bold; color: var(--gold-bright); }
+
+        /* КАЛЕНДАРЬ */
         .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; }
         .cal-title { color: #fff; font-weight: bold; font-family: 'Cinzel'; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
         .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; cursor: pointer; transition: 0.2s; position: relative;}
         .cal-head { color: var(--gold-mid); font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 0.7em;}
-        
-        .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+        .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.4); }
         .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
         .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
         .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
@@ -104,17 +107,12 @@
             <input type="radio" id="t1" name="type" value="Дневка" checked><label for="t1" class="radio-lbl">Дневка</label>
             <input type="radio" id="t2" name="type" value="Объем"><label for="t2" class="radio-lbl">Объем</label>
         </div>
-        
         <div style="display: flex; gap: 10px; margin-top: 30px;">
             <button class="btn" id="sBtn" style="margin-top:0;">Отправить</button>
-            <button class="btn-small" type="button" onclick="showMyStats()" style="width: 80px; padding: 0; background: #333; border-color: #555;">🏆</button>
-        </div>
-
-        <div id="historyBlock">
-            <div class="h-title">Ваши последние смены</div>
-            <div id="hContent">Загрузка...</div>
+            <button class="gold-btn" type="button" onclick="showMyStats()" style="width: 60px; padding: 0; margin:0; font-size:1.5em;">🏆</button>
         </div>
     </form>
+    <div id="historyBlock"><div class="h-title">Ваши последние смены</div><div id="hContent">Загрузка...</div></div>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
 </div>
@@ -126,23 +124,19 @@
         <span class="admin-title">ADMIN CONTROL</span>
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
-    
     <div class="dashboard-stats">
         <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Дневка</span></div>
         <div class="d-item"><span class="d-val" id="st-volume">-</span><span class="d-lbl">Объем</span></div>
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
-
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
         <button class="btn-small" onclick="loadReq()">↻</button>
         <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
     </div>
-    
-    <button class="btn" onclick="sendSummary()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px; background: linear-gradient(to right, #1c4587, #0c343d); border:1px solid #2c3e50;">🚀 СВОДКА В TG</button>
-    <button class="btn" onclick="showQR()" style="margin-top: 0; margin-bottom: 25px; font-size: 14px; padding: 12px;">📱 ПОКАЗАТЬ QR-КОД</button>
-
-    <div id="list" style="text-align:center; color:#666; font-size:0.9em;">Ожидание данных...</div>
+    <button class="gold-btn" onclick="sendSummary()">🚀 СВОДКА В TG</button>
+    <button class="gold-btn" onclick="showQR()" style="margin-top: 10px;">📱 ПОКАЗАТЬ QR-КОД</button>
+    <div id="list" style="text-align:center; color:#666; font-size:0.9em; margin-top:20px;">Ожидание данных...</div>
 </div>
 
 <div id="authModal">
@@ -170,30 +164,25 @@
             <div class="cal-title" id="calMonth">...</div>
             <button onclick="changeMonth(1)">&#9654;</button>
         </div>
-        
         <div class="dashboard-stats" style="margin-bottom:10px; border:none; padding:0;">
              <div class="d-item" style="width:50%"><span class="d-val" id="my-dnevka">-</span><span class="d-lbl">Дневка</span></div>
              <div class="d-item" style="width:50%"><span class="d-val" id="my-volume">-</span><span class="d-lbl">Объем</span></div>
         </div>
-        
         <div id="calendarView"></div>
-        <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Нажмите, чтобы отметить "Оплачено"</div>
-        
+        <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Нажмите на день, чтобы отметить "Оплачено"</div>
         <button class="btn-small" onclick="document.getElementById('statsModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
     </div>
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ СЮДА ВАШУ НОВУЮ ССЫЛКУ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzW3w-7533uJ33jPN4FdRtl1-e-Xq0KNSIhkFbZztxVfWwICrbqws8dAeONULUpykVmpA/exec";
+    // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbxUbgaEoPNkyDyHGdeeC172DyS2YJgVGx1A0eSOG4VHGwc5ZeEHI2AnPGF6ZwtzbgL-bQ/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSelect');
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
-    
-    // Календарь
     let currentOffset = 0; 
     let statsData = null; 
 
@@ -214,40 +203,27 @@
         });
     }
 
-    function saveUser() { 
-        localStorage.setItem('wp_user', ns.value); 
-        localStorage.setItem('wp_pin', pin.value);
-        localStorage.setItem('wp_count', countSelect.value);
-    }
+    function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
-    // ИСТОРИЯ (ПОСЛЕДНИЕ 3)
     function checkHistory() {
         var p = pin.value; var n = ns.value;
         if(p.length >= 4 && n) {
             document.getElementById('historyBlock').style.display = 'block';
-            fetch(API + "?action=get_history&name=" + encodeURIComponent(n) + "&pin=" + p)
-            .then(r => r.json())
-            .then(d => {
+            fetch(API + "?action=get_history&name=" + encodeURIComponent(n) + "&pin=" + p).then(r => r.json()).then(d => {
                 if(d.result === "success" && d.history.length > 0) {
                     var html = "";
                     d.history.forEach(h => {
-                        var stIcon = (h.status === "Подтверждено") ? "✅" : (h.status === "Отклонено" ? "❌" : "⏳");
                         var stClass = (h.status === "Подтверждено") ? "st-ok" : (h.status === "Отклонено" ? "st-no" : "st-wait");
-                        html += `<div class="h-item">
-                            <div><span class="h-date">${h.date}</span> <span style="color:#fff">${h.type} (${h.count})</span></div>
-                            <div class="h-status ${stClass}">${stIcon}</div>
-                        </div>`;
+                        var stIcon = (h.status === "Подтверждено") ? "✅" : (h.status === "Отклонено" ? "❌" : "⏳");
+                        html += `<div class="h-item"><div><span class="h-date">${h.date}</span> <span style="color:#fff">${h.type} (${h.count})</span></div><div class="h-status ${stClass}">${stIcon}</div></div>`;
                     });
                     document.getElementById('hContent').innerHTML = html;
-                } else {
-                    document.getElementById('hContent').innerHTML = "<div style='text-align:center; color:#555; padding:10px;'>Нет записей</div>";
-                }
+                } else document.getElementById('hContent').innerHTML = "<div style='text-align:center;color:#555'>Нет записей</div>";
             });
         }
     }
     
-    // ОТКРЫТИЕ СТАТИСТИКИ (КАЛЕНДАРЬ)
-    function openStats() {
+    function showMyStats() {
         var p = pin.value; var n = ns.value;
         if(!p || !n) { alert("Сначала выберите имя и введите ПИН"); return; }
         document.getElementById('statsModal').style.display='flex';
@@ -277,7 +253,6 @@
     
     function renderCalendar() {
         if(!statsData) return;
-        
         document.getElementById('calMonth').innerText = statsData.label;
         document.getElementById('my-dnevka').innerText = statsData.dnevka;
         document.getElementById('my-volume').innerText = statsData.volume;
@@ -286,7 +261,6 @@
         let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
         days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
         
-        // Ключ для LocalStorage (уникальный для юзера и месяца)
         let paidKey = "paid_" + ns.value + "_" + statsData.label;
         let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
 
@@ -294,9 +268,7 @@
              let cls = "cal-day";
              if(statsData.workDays.includes(i)) cls += " work"; 
              else if(i <= statsData.limitDay) cls += " miss"; 
-             
              if(paidDays.includes(i)) cls += " paid";
-
              calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
         }
         calHtml += '</div>';
@@ -307,27 +279,17 @@
         if(!statsData) return;
         let paidKey = "paid_" + ns.value + "_" + statsData.label;
         let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
-        
-        if(paidDays.includes(day)) {
-            paidDays = paidDays.filter(d => d !== day);
-        } else {
-            paidDays.push(day);
-        }
-        
+        if(paidDays.includes(day)) paidDays = paidDays.filter(d => d !== day); else paidDays.push(day);
         localStorage.setItem(paidKey, JSON.stringify(paidDays));
         renderCalendar();
     }
-
-    // ОТПРАВКА СВОДКИ
+    
     function sendSummary() {
         if(!confirm("Отправить сводку в Telegram?")) return;
-        const btn = event.target;
-        const oldText = btn.innerText;
-        btn.innerText = "⏳...";
+        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳...";
         fetch(API + "?action=send_summary").then(r=>r.json()).then(d=>{
             btn.innerText = oldText;
-            if(d.result === "success") alert("Сводка отправлена!");
-            else alert("Ошибка: " + d.message);
+            if(d.result === "success") alert("Сводка отправлена!"); else alert("Ошибка: " + d.message);
         });
     }
 
@@ -342,7 +304,7 @@
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; checkHistory(); }, 1000);
-            } else { showToast("⛔ " + d.message, true); }
+            } else showToast("⛔ " + d.message, true);
         }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
 
