@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WestProm Timesheet</title>
-    <link rel="icon" type="image/png" href="icon.png?v=4">
+    <link rel="icon" type="image/png" href="icon.png?v=5">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -212,7 +212,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxS6anyq5FY92ME-QKQnRSuAh-_SUEuU7A3mUdlXB3bGTAkeNuJIPE6CLPLKJUKlBP1Ig/exec";
+    const API = "https://script.google.com/macros/s/AKfycbzUS0BVmVR5aZfPKF85sax3XUuwNgXMwlhblseuf08GHF_SPP3JSdtfKJpfcO7x4E1x1A/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -325,13 +325,20 @@
     
     function login() {
         let pass = document.getElementById('pass').value; let btn = event.target; btn.innerText = "Checking..."; btn.disabled = true;
-        fetch(API + "?action=admin_login&pass=" + encodeURIComponent(pass)).then(r => r.json()).then(d => {
+        
+        fetch(API + "?action=admin_login&pass=" + encodeURIComponent(pass))
+        .then(r => r.json())
+        .then(d => {
             btn.innerText = "Вход"; btn.disabled = false;
             if(d.result === "success") {
-                localStorage.setItem('wp_admin_auth', 'true'); localStorage.setItem('wp_admin_pass', pass);
-                document.getElementById('authModal').style.display='none'; document.getElementById('adminPanel').style.display='block'; loadReq();
+                localStorage.setItem('wp_admin_auth', 'true'); 
+                localStorage.setItem('wp_admin_pass', pass); // 🔑 СОХРАНЯЕМ ПАРОЛЬ
+                document.getElementById('authModal').style.display='none'; 
+                document.getElementById('adminPanel').style.display='block'; 
+                loadReq();
             } else alert("❌ " + d.message);
-        }).catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Connection Error"); });
+        })
+        .catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Ошибка соединения"); });
     }
     
     function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); localStorage.removeItem('wp_admin_pass'); location.reload(); } }
@@ -368,14 +375,14 @@
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ ОТМЕТИЛИСЬ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
-        const btn = event.target; const oldText = btn.innerText; btn.innerText = "ПОДОЖДИТЕ...";
-        fetch(API + "?action=get_" + type + "&auth=" + getAuth()).then(r => r.json()).then(d => {
+        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
+        fetch(API + "?action=get_file&type=" + type + "&auth=" + getAuth()).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
                 const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name;
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
             } else alert("❌ Ошибка: " + (d.message || "Unknown"));
-        }).catch(e => { btn.innerText = oldText; alert("❌ Ошибка сети. Попробуйте еще раз."); });
+        }).catch(e => { btn.innerText = oldText; alert("❌ Ошибка сети."); });
     }
     function showQR() {
         var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
@@ -391,7 +398,7 @@
                 d.staff.forEach(s => {
                     let isFired = (s.status === "Fired");
                     let nameClass = isFired ? "staff-name staff-fired" : "staff-name";
-                    let btnHtml = isFired ? `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>` : `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
+                    let btnHtml = isFired ? `<button class="btn-small" onclick="empStatus('${s.name}', 'Active')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>` : `<button class="btn-small" onclick="empStatus('${s.name}', 'Fired')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
                     let div = document.createElement('div'); div.className = "staff-item";
                     div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`;
                     sl.appendChild(div);
@@ -400,8 +407,7 @@
         });
     }
     function addEmployee() { let n = document.getElementById('newEmpName').value; if(!n) return; if(!confirm("Добавить: " + n + "?")) return; let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n); p.append('auth', getAuth()); fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); }); }
-    function fireEmp(name) { if(!confirm("Уволить " + name + "?")) return; let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name); p.append('auth', getAuth()); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
-    function restoreEmp(name) { if(!confirm("Вернуть " + name + "?")) return; let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name); p.append('auth', getAuth()); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    function empStatus(name, st) { if(!confirm(st==="Fired"?"Уволить?":"Вернуть?")) return; let p = new URLSearchParams(); p.append('action','fire_restore'); p.append('name',name); p.append('status', st); p.append('auth', getAuth()); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
 </script>
 
 </body>
