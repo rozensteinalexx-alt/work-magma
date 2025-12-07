@@ -21,9 +21,33 @@
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
-        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
-        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
-        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
+        /* СТИЛИ КНОПОК */
+        .btn, .gold-btn { 
+            width: 100%; padding: 20px; margin-top: 20px; 
+            background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); 
+            border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; 
+            font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; 
+            cursor: pointer; color: #3a2a00; text-transform: uppercase; 
+            box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); 
+            transition: all 0.2s ease; /* Плавная анимация */
+            position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); 
+        }
+
+        /* 🔥 ЭФФЕКТ НАВЕДЕНИЯ (HOVER) 🔥 */
+        .btn:hover, .gold-btn:hover {
+            filter: brightness(1.15) contrast(1.1); /* Делаем ярче */
+            box-shadow: 0 8px 0 #4a3b0a, 0 0 25px rgba(212, 175, 55, 0.6), inset 0 2px 3px rgba(255,255,255,0.8); /* Золотое свечение */
+            transform: translateY(-1px); /* Чуть приподнимается */
+        }
+
+        .btn:active, .gold-btn:active { 
+            top: 8px; 
+            box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); 
+            transform: translateY(0);
+            filter: brightness(0.95);
+        }
+        
+        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; filter: none; transform: none; cursor: not-allowed;}
         
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
@@ -39,27 +63,43 @@
         .d-item { text-align: center; width: 48%; cursor: pointer; }
         .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
         .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%; }
-        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
-        .btn-small:hover { filter: brightness(1.1); }
+        
+        /* МАЛЕНЬКИЕ КНОПКИ */
+        .btn-small { 
+            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; 
+            border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
+            box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); 
+            font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.2s; position: relative; top:0; width: 100%; 
+        }
+        .btn-small:hover { 
+            filter: brightness(1.2); /* Подсветка при наведении */
+            box-shadow: 0 3px 0 #4a3b0a, 0 0 10px rgba(255, 255, 255, 0.4);
+        }
+        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; filter: brightness(1.0); }
+        
         .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
+        .btn-small.logout:hover { color: #fff; background: #333; }
+        
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
-        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
+        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5); transition: 0.2s;}
+        .btn-act:hover { filter: brightness(1.15); }
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
-        .btn-del:hover { color: #c62828; border-color: #c62828; }
+        .btn-del:hover { color: #c62828; border-color: #c62828; background: #222;}
         
         #authModal, #qrModal, #statsModal, #staffModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
         .auth-box, .qr-box, .stats-box, .staff-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
         .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; }
+        .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; transition: 0.2s; }
+        .cal-nav button:hover { color: #fff; text-shadow: 0 0 10px var(--gold-mid); }
         .cal-title { color: #fff; font-weight: bold; font-family: 'Cinzel'; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
         .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 0.8em; color: #555; border-radius: 4px; background: #1a1a1a; border: 1px solid #333; cursor: pointer; transition: 0.2s; position: relative;}
         .cal-head { color: var(--gold-mid); font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 0.7em;}
+        .cal-day:hover { background: #333; color: #fff; border-color: #555; }
         .cal-day.work { background: #2e7d32; color: #fff; border-color: #4caf50; box-shadow: 0 0 5px rgba(76, 175, 80, 0.4); }
         .cal-day.miss { background: #c62828; color: #fff; border-color: #f44336; }
         .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
@@ -79,7 +119,7 @@
             border-bottom-left-radius: 4px; border-bottom-right-radius: 4px;
         }
         .dd-item { padding: 15px; border-bottom: 1px solid #333; color: #ccc; cursor: pointer; transition: 0.2s; }
-        .dd-item:hover { background: #333; color: #fff; }
+        .dd-item:hover { background: #333; color: #fff; border-left: 3px solid var(--gold-mid); padding-left: 12px; }
         .dd-item.selected { background: var(--metallic-gold-gradient); color: #111; font-weight: bold; }
     </style>
 </head>
