@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WestProm Timesheet</title>
-    <link rel="icon" type="image/png" href="icon.png?v=5">
-    <link rel="manifest" href="manifest.json">
+    <title>WestProm Premium</title>
+    <link rel="icon" type="image/png" href="icon.png?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,32 +14,16 @@
         body { font-family: 'Lato', sans-serif; background: linear-gradient(rgba(15, 15, 15, 0.9), rgba(10, 10, 10, 0.95)), url('https://www.transparenttextures.com/patterns/dark-wall.png'), #1a1a1a; color: #ccc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .logo-container { margin-bottom: 25px; text-align: center; }
         h1.gold-sign { font-family: 'Cinzel', serif; font-weight: 900; font-size: 2.5rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(to bottom, #fffde8 0%, #e3c472 20%, #d4af37 50%, #a0832a 51%, #d4af37 80%, #fffde8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.8)); }
-        .subtitle-sign { font-family: 'Cinzel', serif; color: var(--gold-mid); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 8px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; border-top: 1px solid #444; padding-top: 5px; width: 100%;}
+        .subtitle-sign { font-family: 'Cinzel', serif; color: var(--gold-mid); font-size: 0.8rem; letter-spacing: 6px; text-transform: uppercase; margin-top: 5px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
         .box { background: linear-gradient(135deg, rgba(35,35,35,0.95), rgba(20,20,20,0.98)), url('https://www.transparenttextures.com/patterns/concrete-wall.png'); border: 2px solid; border-image: var(--metallic-gold-gradient) 1; box-shadow: 0 0 0 4px #121212, 0 25px 60px rgba(0,0,0,1), inset 0 0 40px rgba(0,0,0,0.8); padding: 30px; border-radius: 2px; width: 100%; max-width: 440px; box-sizing: border-box; margin-bottom: 25px; }
         label { color: var(--gold-mid); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; margin-top: 20px; text-shadow: 0 1px 2px rgba(0,0,0,1); display: flex; align-items: center; gap: 8px; }
         select, input { width: 100%; padding: 15px; background: #181818; border: 1px solid #333; border-bottom: 3px solid; border-image: var(--metallic-gold-gradient) 1; border-radius: 2px; color: var(--gold-bright); font-family: 'Lato', sans-serif; font-size: 16px; box-sizing: border-box; outline: none; box-shadow: inset 0 3px 10px rgba(0,0,0,0.8); transition: 0.3s; }
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
-        /* 🔥 КНОПКИ С ЯРКОЙ ПОДСВЕТКОЙ 🔥 */
-        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 25px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.2s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
-        
-        /* Эффект наведения */
-        .btn:hover, .gold-btn:hover {
-            filter: brightness(1.2); /* Делает кнопку ярче */
-            transform: translateY(-2px); /* Приподнимает */
-            box-shadow: 0 12px 0 #4a3b0a, 0 20px 30px rgba(212, 175, 55, 0.4); /* Усиливает тень */
-        }
-        
-        /* Эффект нажатия */
-        .btn:active, .gold-btn:active { 
-            top: 8px; 
-            box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); 
-            transform: scale(0.98); 
-            filter: brightness(1.0);
-        }
-
-        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; transform: none; filter: none; }
+        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
+        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
         
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
@@ -54,17 +37,14 @@
         .admin-title { font-family: 'Cinzel'; color: var(--gold-mid); font-weight: bold; font-size: 1.1em; letter-spacing: 1px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .dashboard-stats { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 15px; }
         .d-item { text-align: center; width: 48%; cursor: pointer; }
-        .d-val { font-size: 2em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
+        .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
         .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.15s; position: relative; top:0; width: 100%; }
-        .btn-small:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 6px 10px rgba(212, 175, 55, 0.2), 0 3px 0 #4a3b0a; }
-        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; transform: scale(0.98); }
-
+        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%; }
+        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
+        .btn-small:hover { filter: brightness(1.1); }
         .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
-        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5); transition: 0.2s; }
-        .btn-act:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
@@ -74,7 +54,6 @@
         .auth-box, .qr-box, .stats-box, .staff-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
-        /* КАЛЕНДАРЬ */
         .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .cal-nav button { background: none; border: none; color: var(--gold-mid); font-size: 1.5em; cursor: pointer; }
         .cal-title { color: #fff; font-weight: bold; font-family: 'Cinzel'; }
@@ -86,12 +65,10 @@
         .cal-day.paid { background: #e91e63; color: #fff; border-color: #f48fb1; box-shadow: 0 0 8px rgba(233, 30, 99, 0.6); }
         .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
         
-        /* STAFF LIST STYLE */
         .staff-item { text-align: left; background: #181818; border-bottom: 1px solid #333; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
         .staff-name { color: #ccc; font-weight: bold; font-size: 0.9em; }
         .staff-fired { color: #e57373; text-decoration: line-through; }
 
-        /* SEARCH DROPDOWN */
         .search-box { position: relative; }
         #nSearch { cursor: pointer; } 
         .custom-dropdown {
@@ -110,30 +87,33 @@
 
 <div class="logo-container">
     <h1 class="gold-sign">WestProm</h1>
-    <div class="subtitle-sign">Учет рабочего времени</div>
+    <div class="subtitle-sign">Global Industries</div>
 </div>
 
 <div class="box">
     <form id="wForm">
         <label>👤 Сотрудник</label>
+        
         <div class="search-box">
             <input type="text" id="nSearch" name="name" required placeholder="Нажмите для выбора..." autocomplete="off">
             <div id="nDropdown" class="custom-dropdown"></div>
         </div>
 
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Ваш PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
+        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
         
-        <label>👥 Количество смен (Чел/Дни)</label>
+        <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
-            <option value="1" selected>1 (Целый день)</option>
+            <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
             <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
         
-        <button class="btn" id="sBtn">ОТПРАВИТЬ</button>
+        <input type="hidden" name="type" value="Дневка">
+        
+        <button class="btn" id="sBtn" style="margin-top: 40px;">Отправить</button>
         <button class="gold-btn" type="button" onclick="showMyStats()">
-            📅 Мой Календарь
+            🏆 Моя Статистика
         </button>
         
     </form>
@@ -149,7 +129,7 @@
         <button class="btn-small logout" onclick="logout()">Выход</button>
     </div>
     <div class="dashboard-stats">
-        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Смены (Сегодня)</span></div>
+        <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Сдано смен</span></div>
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
     
@@ -161,7 +141,7 @@
         <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
     </div>
     
-    <button class="gold-btn" onclick="showQR()" style="margin-top: 10px;">📱 QR-КОД</button>
+    <button class="gold-btn" onclick="showQR()" style="margin-top: 10px;">📱 ПОКАЗАТЬ QR-КОД</button>
     <div id="list" style="text-align:center; color:#666; font-size:0.9em; margin-top:20px;">Ожидание данных...</div>
 </div>
 
@@ -176,7 +156,9 @@
 
 <div id="qrModal" style="display:none;">
     <div class="qr-box">
+        <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel'; margin-bottom:20px;">SCAN TO ENTER</h3>
         <img id="qrImage" class="qr-img" src="" alt="QR Code">
+        <div style="color:#aaa; font-size:0.8em; margin-bottom:20px;">Наведите камеру телефона</div>
         <button class="btn-small" onclick="document.getElementById('qrModal').style.display='none'" style="width: auto; padding: 10px 30px;">ЗАКРЫТЬ</button>
     </div>
 </div>
@@ -200,9 +182,8 @@
             <div class="cal-title" id="calMonth">...</div>
             <button onclick="changeMonth(1)">&#9654;</button>
         </div>
-        <div style="text-align:center; margin-bottom:15px;">
-             <span style="color:#888; text-transform:uppercase; font-size:0.7em;">Отработано смен:</span><br>
-             <span class="d-val" id="my-dnevka" style="font-size:2.5em">-</span>
+        <div class="dashboard-stats" style="margin-bottom:10px; border:none; padding:0; justify-content: center;">
+             <div class="d-item" style="width:100%"><span class="d-val" id="my-dnevka">-</span><span class="d-lbl">Всего Смен</span></div>
         </div>
         <div id="calendarView"></div>
         <div style="text-align:center; color:#555; font-size:0.7em; margin-top:10px;">* Нажмите на день, чтобы отметить "Оплачено"</div>
@@ -212,11 +193,12 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzUS0BVmVR5aZfPKF85sax3XUuwNgXMwlhblseuf08GHF_SPP3JSdtfKJpfcO7x4E1x1A/exec";
+    const API = "https://script.google.com/macros/s/AKfycbwEzjvR1LDAW71dy2A-1s4fgUerj3Eox4u1mBlHl6xQgJBD5lhmoWhfWMSSGd4nSg2C2g/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
     const dd = document.getElementById('nDropdown');
+    
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
     let debtorsList = [];
@@ -226,53 +208,95 @@
 
     window.onload = () => {
         loadEmpSelect();
-        if(localStorage.getItem('wp_pin')) pin.value = localStorage.getItem('wp_pin');
+        if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-        if(localStorage.getItem('wp_admin_auth') === 'true') { document.getElementById('adminPanel').style.display = 'block'; loadReq(); }
+        if(localStorage.getItem('wp_admin_auth') === 'true') {
+            document.getElementById('adminPanel').style.display = 'block'; loadReq();
+        }
     };
 
     function loadEmpSelect() {
         ns.placeholder = "Загрузка...";
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
             if(d.data) {
-                allEmployees = d.data; renderDropdown(allEmployees);
+                allEmployees = d.data;
+                renderDropdown(allEmployees);
+                
                 let saved = localStorage.getItem('wp_user');
-                if(saved) ns.value = saved; else ns.placeholder = "🔍 Найти себя...";
+                if(saved) {
+                    ns.value = saved;
+                } else {
+                    ns.placeholder = "🔍 Введите имя...";
+                }
             }
         });
     }
 
     function renderDropdown(list) {
         dd.innerHTML = "";
-        if(list.length === 0) { dd.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>"; return; }
+        if(list.length === 0) {
+            dd.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>";
+            return;
+        }
         list.forEach(name => {
-            let div = document.createElement('div'); div.className = "dd-item";
+            let div = document.createElement('div');
+            div.className = "dd-item";
             if(name === ns.value) div.className += " selected";
             div.innerText = name;
-            div.onclick = () => { ns.value = name; dd.style.display = 'none'; saveUser(); };
+            div.onclick = () => {
+                ns.value = name;
+                dd.style.display = 'none';
+                saveUser();
+            };
             dd.appendChild(div);
         });
     }
-    ns.addEventListener('input', function() { renderDropdown(allEmployees.filter(n => n.toLowerCase().includes(this.value.toLowerCase()))); dd.style.display = 'block'; });
-    ns.addEventListener('focus', function() { renderDropdown(allEmployees); dd.style.display = 'block'; });
-    document.addEventListener('click', function(e) { if (!ns.contains(e.target) && !dd.contains(e.target)) dd.style.display = 'none'; });
+
+    ns.addEventListener('input', function() {
+        let val = this.value.toLowerCase();
+        let filtered = allEmployees.filter(n => n.toLowerCase().includes(val));
+        renderDropdown(filtered);
+        dd.style.display = 'block';
+    });
+
+    ns.addEventListener('focus', function() {
+        renderDropdown(allEmployees);
+        dd.style.display = 'block';
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!ns.contains(e.target) && !dd.contains(e.target)) {
+            dd.style.display = 'none';
+        }
+    });
 
     function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
 
     function showMyStats() {
-        if(!pin.value || !ns.value) { showToast("⚠️ Выберите имя и введите ПИН", true); return; }
+        var p = pin.value; var n = ns.value;
+        if(!p || !n) { showToast("⚠️ Выберите имя и введите ПИН", true); return; }
         document.getElementById('statsModal').style.display='flex';
-        currentOffset = 0; loadStats();
+        currentOffset = 0;
+        loadStats();
     }
     
-    function changeMonth(delta) { currentOffset += delta; loadStats(); }
+    function changeMonth(delta) {
+        currentOffset += delta;
+        loadStats();
+    }
     
     function loadStats() {
+        var p = pin.value; var n = ns.value;
         document.getElementById('calendarView').innerHTML = "Загрузка...";
-        fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(ns.value) + "&pin=" + pin.value + "&offset=" + currentOffset)
-        .then(r=>r.json()).then(d => {
-             if(d.result === "success") { statsData = d.stats; renderCalendar(); } 
-             else document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
+        fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p + "&offset=" + currentOffset)
+        .then(r=>r.json())
+        .then(d => {
+             if(d.result === "success") {
+                 statsData = d.stats;
+                 renderCalendar();
+             } else {
+                 document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
+             }
         });
     }
     
@@ -280,13 +304,22 @@
         if(!statsData) return;
         document.getElementById('calMonth').innerText = statsData.label;
         document.getElementById('my-dnevka').innerText = statsData.dnevka;
+        
         let calHtml = '<div class="calendar-grid">';
-        ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
+        let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+        days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
+        
         let paidKey = "paid_" + ns.value + "_" + statsData.label;
         let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
+
         for(let i=1; i<=statsData.daysInMonth; i++) {
              let cls = "cal-day";
-             if(statsData.workDays.includes(i)) cls += " work"; else if(statsData.limitDay > 0 && i <= statsData.limitDay) cls += " miss";
+             if(statsData.workDays.includes(i)) {
+                 cls += " work";
+             } 
+             else if(statsData.limitDay > 0 && i <= statsData.limitDay) {
+                 cls += " miss";
+             }
              if(paidDays.includes(i)) cls += " paid";
              calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
         }
@@ -305,49 +338,34 @@
 
     document.getElementById('wForm').onsubmit = e => {
         e.preventDefault();
-        let b = document.getElementById('sBtn'); b.disabled=true; b.innerText="ОТПРАВКА...";
+        let b = document.getElementById('sBtn'); b.disabled=true; b.innerText="Отправка...";
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
         for(let [k,v] of fd) p.append(k,v);
-        p.append('type', 'Дневка');
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
-            b.disabled=false; b.innerText="ОТПРАВИТЬ";
+            b.disabled=false; b.innerText="Отправить отчет";
             if(d.result==="success"){
-                showToast("✅ ОТЧЕТ ПРИНЯТ");
+                showToast("✅ ОТЧЕТ ОТПРАВЛЕН");
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; }, 1000);
             } else showToast(d.message, true); 
-        }).catch(()=>{ b.disabled=false; b.innerText="ОТПРАВИТЬ"; showToast("❌ ОШИБКА СВЯЗИ", true); });
+        }).catch(()=>{ b.disabled=false; b.innerText="Отправить отчет"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
 
     function showToast(text, isErr=false) { var t = document.getElementById("toast"); t.innerText = text; t.className = "show" + (isErr ? " error" : ""); setTimeout(()=>{ t.className = t.className.replace("show", ""); }, 3000); }
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
-    
     function login() {
-        let pass = document.getElementById('pass').value; let btn = event.target; btn.innerText = "Checking..."; btn.disabled = true;
-        
-        fetch(API + "?action=admin_login&pass=" + encodeURIComponent(pass))
-        .then(r => r.json())
-        .then(d => {
-            btn.innerText = "Вход"; btn.disabled = false;
-            if(d.result === "success") {
-                localStorage.setItem('wp_admin_auth', 'true'); 
-                localStorage.setItem('wp_admin_pass', pass); // 🔑 СОХРАНЯЕМ ПАРОЛЬ
-                document.getElementById('authModal').style.display='none'; 
-                document.getElementById('adminPanel').style.display='block'; 
-                loadReq();
-            } else alert("❌ " + d.message);
-        })
-        .catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Ошибка соединения"); });
+        if(document.getElementById('pass').value==="westprom123") {
+            localStorage.setItem('wp_admin_auth', 'true');
+            document.getElementById('authModal').style.display='none';
+            document.getElementById('adminPanel').style.display='block'; loadReq();
+        } else alert("Доступ запрещен");
     }
-    
-    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); localStorage.removeItem('wp_admin_pass'); location.reload(); } }
-    function getAuth() { return localStorage.getItem('wp_admin_pass') || ""; }
+    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
 
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
-        fetch(API+"?action=get&auth=" + getAuth()).then(r=>r.json()).then(d=>{
-            if(d.result === "error") { l.innerHTML = "Ошибка доступа"; return; }
+        fetch(API+"?action=get").then(r=>r.json()).then(d=>{
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
                 document.getElementById('st-miss').innerText = d.stats.missing;
@@ -359,7 +377,7 @@
                 let div = document.createElement('div'); div.className='req-card';
                 div.innerHTML=`
                 <div><span style="font-size:0.8em;color:#666;float:right">${i['Дата']}</span><b class="req-info">${i['Фамилия Имя']}</b></div>
-                <div style="font-size:0.9em;color:var(--gold-mid);margin-top:5px">Смен: <b style="color:#fff">${i['Кол-во людей']}</b></div>
+                <div style="font-size:0.9em;color:var(--gold-mid);margin-top:5px">Людей: <b style="color:#fff">${i['Кол-во людей']}</b></div>
                 <div class="req-btns" style="display:flex; margin-top:10px;">
                     <button class="btn-act btn-yes" onclick="upd('${i.ID}','Подтверждено')">✅</button>
                     <button class="btn-act btn-no" onclick="upd('${i.ID}','Отклонено')">❌</button>
@@ -370,44 +388,84 @@
         });
     }
 
-    function upd(id, st) { if(!confirm(st+"?")) return; let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st); p.append('auth', getAuth()); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); }
-    function del(id) { if(!confirm("Удалить?")) return; let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id); p.append('auth', getAuth()); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); }
-    function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ ОТМЕТИЛИСЬ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
+    function upd(id, st) {
+        if(!confirm(st+"?")) return;
+        let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
+        fetch(API,{method:'POST', body:p}).then(()=>loadReq());
+    }
+    function del(id) {
+        if(!confirm("Удалить?")) return;
+        let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id);
+        fetch(API,{method:'POST', body:p}).then(()=>loadReq());
+    }
+    function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
-        fetch(API + "?action=get_file&type=" + type + "&auth=" + getAuth()).then(r => r.json()).then(d => {
+        fetch(API + "?action=get_" + type).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
-                const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name;
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            } else alert("❌ Ошибка: " + (d.message || "Unknown"));
-        }).catch(e => { btn.innerText = oldText; alert("❌ Ошибка сети."); });
+                const link = document.createElement('a');
+                link.href = "data:" + d.mime + ";base64," + d.file;
+                link.download = d.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else alert("Ошибка");
+        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
     function showQR() {
-        var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
-        document.getElementById('qrImage').src = qrUrl; document.getElementById('qrModal').style.display = 'flex';
+        var url = window.location.href;
+        var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
+        document.getElementById('qrImage').src = qrUrl;
+        document.getElementById('qrModal').style.display = 'flex';
     }
 
-    function openStaffModal() { document.getElementById('staffModal').style.display = 'flex'; loadStaffList(); }
+    function openStaffModal() {
+        document.getElementById('staffModal').style.display = 'flex';
+        loadStaffList();
+    }
     function loadStaffList() {
-        let sl = document.getElementById('staffList'); sl.innerHTML = "Загрузка...";
-        fetch(API + "?action=get_staff_list&auth=" + getAuth()).then(r=>r.json()).then(d=>{
+        let sl = document.getElementById('staffList');
+        sl.innerHTML = "Загрузка...";
+        fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{
             if(d.result === "success") {
                 sl.innerHTML = "";
                 d.staff.forEach(s => {
                     let isFired = (s.status === "Fired");
                     let nameClass = isFired ? "staff-name staff-fired" : "staff-name";
-                    let btnHtml = isFired ? `<button class="btn-small" onclick="empStatus('${s.name}', 'Active')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>` : `<button class="btn-small" onclick="empStatus('${s.name}', 'Fired')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
-                    let div = document.createElement('div'); div.className = "staff-item";
+                    let btnHtml = "";
+                    if(isFired) {
+                        btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
+                    } else {
+                        btnHtml = `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
+                    }
+                    
+                    let div = document.createElement('div');
+                    div.className = "staff-item";
                     div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`;
                     sl.appendChild(div);
                 });
-            } else sl.innerHTML = "Ошибка: " + d.message;
+            } else sl.innerHTML = "Ошибка загрузки";
         });
     }
-    function addEmployee() { let n = document.getElementById('newEmpName').value; if(!n) return; if(!confirm("Добавить: " + n + "?")) return; let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n); p.append('auth', getAuth()); fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); }); }
-    function empStatus(name, st) { if(!confirm(st==="Fired"?"Уволить?":"Вернуть?")) return; let p = new URLSearchParams(); p.append('action','fire_restore'); p.append('name',name); p.append('status', st); p.append('auth', getAuth()); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    function addEmployee() {
+        let n = document.getElementById('newEmpName').value;
+        if(!n) return;
+        if(!confirm("Добавить сотрудника: " + n + "?")) return;
+        let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n);
+        fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); });
+    }
+    function fireEmp(name) {
+        if(!confirm("Уволить сотрудника " + name + "?")) return;
+        let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name);
+        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
+    }
+    function restoreEmp(name) {
+        if(!confirm("Вернуть сотрудника " + name + " в штат?")) return;
+        let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name);
+        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
+    }
 </script>
 
 </body>
