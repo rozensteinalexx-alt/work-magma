@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WestProm Timesheet</title>
-    <link rel="icon" type="image/png" href="icon.png?v=3">
+    <link rel="icon" type="image/png" href="icon.png?v=4">
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -22,18 +22,26 @@
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
-        /* КНОПКИ С ЭФФЕКТОМ НАВЕДЕНИЯ */
-        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 25px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
-        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); transform: scale(0.98); }
-        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; transform: none; }
+        /* 🔥 КНОПКИ С ЯРКОЙ ПОДСВЕТКОЙ 🔥 */
+        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 25px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.2s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
         
-        /* 🔥 ЯРКАЯ ПОДСВЕТКА ПРИ НАВЕДЕНИИ 🔥 */
+        /* Эффект наведения */
         .btn:hover, .gold-btn:hover {
-            filter: brightness(1.2);
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3), 0 8px 0 #4a3b0a;
+            filter: brightness(1.2); /* Делает кнопку ярче */
+            transform: translateY(-2px); /* Приподнимает */
+            box-shadow: 0 12px 0 #4a3b0a, 0 20px 30px rgba(212, 175, 55, 0.4); /* Усиливает тень */
+        }
+        
+        /* Эффект нажатия */
+        .btn:active, .gold-btn:active { 
+            top: 8px; 
+            box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); 
+            transform: scale(0.98); 
+            filter: brightness(1.0);
         }
 
+        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; transform: none; filter: none; }
+        
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
@@ -49,11 +57,10 @@
         .d-val { font-size: 2em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
         .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* МАЛЕНЬКИЕ КНОПКИ */
         .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.15s; position: relative; top:0; width: 100%; }
-        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; transform: scale(0.98); }
         .btn-small:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 6px 10px rgba(212, 175, 55, 0.2), 0 3px 0 #4a3b0a; }
-        
+        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; transform: scale(0.98); }
+
         .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
         .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5); transition: 0.2s; }
@@ -205,7 +212,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbz9DmYMFHjQYoWqudZVFBvo87Aybk9Hkk1ifXxSCH28BndZxL-sLyyL6pBJQf3NUWqW5w/exec";
+    const API = "https://script.google.com/macros/s/AKfycbxS6anyq5FY92ME-QKQnRSuAh-_SUEuU7A3mUdlXB3bGTAkeNuJIPE6CLPLKJUKlBP1Ig/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -302,7 +309,6 @@
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
         for(let [k,v] of fd) p.append(k,v);
-        // АВТОМАТИЧЕСКИ ДОБАВЛЯЕМ ТИП "ДНЕВКА"
         p.append('type', 'Дневка');
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
             b.disabled=false; b.innerText="ОТПРАВИТЬ";
@@ -362,14 +368,14 @@
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ ОТМЕТИЛИСЬ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
-        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
+        const btn = event.target; const oldText = btn.innerText; btn.innerText = "ПОДОЖДИТЕ...";
         fetch(API + "?action=get_" + type + "&auth=" + getAuth()).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
                 const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name;
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            } else alert("Ошибка: " + (d.message || "Unknown"));
-        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети. Попробуйте еще раз."); });
+            } else alert("❌ Ошибка: " + (d.message || "Unknown"));
+        }).catch(e => { btn.innerText = oldText; alert("❌ Ошибка сети. Попробуйте еще раз."); });
     }
     function showQR() {
         var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
