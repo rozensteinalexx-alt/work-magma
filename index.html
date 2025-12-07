@@ -210,7 +210,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbz8cyB9zgezd2f19lRUgRoSghJu-PsRxZ7D9LCbWQLWGiIkAtjBrGtWXps9Djlj0gKtGg/exec";
+    const API = "https://script.google.com/macros/s/AKfycbxOXRTicaQTV2uzbd1JzOIuI7cVjcZ-C0V7xxxv09ossaS1hWFnrTVjva7Se4QIT41NQg/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -372,18 +372,44 @@
     function showToast(text, isErr=false) { var t = document.getElementById("toast"); t.innerText = text; t.className = "show" + (isErr ? " error" : ""); setTimeout(()=>{ t.className = t.className.replace("show", ""); }, 3000); }
 
     function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
+    
+    // 🔥 НОВАЯ БЕЗОПАСНАЯ ФУНКЦИЯ ВХОДА 🔥
     function login() {
-        if(document.getElementById('pass').value==="westprom123") {
-            localStorage.setItem('wp_admin_auth', 'true');
-            document.getElementById('authModal').style.display='none';
-            document.getElementById('adminPanel').style.display='block'; loadReq();
-        } else alert("Доступ запрещен");
+        let pass = document.getElementById('pass').value;
+        let btn = event.target;
+        btn.innerText = "Проверка...";
+        btn.disabled = true;
+
+        fetch(API + "?action=admin_login&pass=" + encodeURIComponent(pass))
+        .then(r => r.json())
+        .then(d => {
+            btn.innerText = "Вход";
+            btn.disabled = false;
+            if(d.result === "success") {
+                localStorage.setItem('wp_admin_auth', 'true');
+                localStorage.setItem('wp_admin_pass', pass); // Сохраняем пароль для сессии
+                document.getElementById('authModal').style.display='none';
+                document.getElementById('adminPanel').style.display='block';
+                loadReq();
+            } else {
+                alert("❌ " + d.message);
+            }
+        })
+        .catch(() => {
+            btn.innerText = "Вход";
+            btn.disabled = false;
+            alert("Ошибка связи");
+        });
     }
-    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
+    
+    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); localStorage.removeItem('wp_admin_pass'); location.reload(); } }
+    
+    function getAuth() { return localStorage.getItem('wp_admin_pass') || ""; }
 
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
-        fetch(API+"?action=get").then(r=>r.json()).then(d=>{
+        fetch(API+"?action=get&auth=" + getAuth()).then(r=>r.json()).then(d=>{
+            if(d.result === "error") { l.innerHTML = "Ошибка доступа. Перезайдите."; return; }
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
                 document.getElementById('st-volume').innerText = d.stats.volume;
@@ -409,19 +435,19 @@
 
     function upd(id, st) {
         if(!confirm(st+"?")) return;
-        let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
+        let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st); p.append('auth', getAuth());
         fetch(API,{method:'POST', body:p}).then(()=>loadReq());
     }
     function del(id) {
         if(!confirm("Удалить?")) return;
-        let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id);
+        let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id); p.append('auth', getAuth());
         fetch(API,{method:'POST', body:p}).then(()=>loadReq());
     }
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
-        fetch(API + "?action=get_" + type).then(r => r.json()).then(d => {
+        fetch(API + "?action=get_" + type + "&auth=" + getAuth()).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
                 const link = document.createElement('a');
@@ -430,7 +456,7 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-            } else alert("Ошибка");
+            } else alert("Ошибка: " + (d.message || "Unknown"));
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
     function showQR() {
@@ -447,7 +473,7 @@
     function loadStaffList() {
         let sl = document.getElementById('staffList');
         sl.innerHTML = "Загрузка...";
-        fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{
+        fetch(API + "?action=get_staff_list&auth=" + getAuth()).then(r=>r.json()).then(d=>{
             if(d.result === "success") {
                 sl.innerHTML = "";
                 d.staff.forEach(s => {
@@ -465,24 +491,24 @@
                     div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`;
                     sl.appendChild(div);
                 });
-            } else sl.innerHTML = "Ошибка загрузки";
+            } else sl.innerHTML = "Ошибка: " + d.message;
         });
     }
     function addEmployee() {
         let n = document.getElementById('newEmpName').value;
         if(!n) return;
         if(!confirm("Добавить сотрудника: " + n + "?")) return;
-        let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n);
+        let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n); p.append('auth', getAuth());
         fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); });
     }
     function fireEmp(name) {
         if(!confirm("Уволить сотрудника " + name + "?")) return;
-        let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name);
+        let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name); p.append('auth', getAuth());
         fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
     }
     function restoreEmp(name) {
         if(!confirm("Вернуть сотрудника " + name + " в штат?")) return;
-        let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name);
+        let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name); p.append('auth', getAuth());
         fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
     }
 </script>
