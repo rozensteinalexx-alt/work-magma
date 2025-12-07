@@ -21,7 +21,6 @@
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
-        /* СТИЛИ КНОПОК */
         .btn, .gold-btn { 
             width: 100%; padding: 20px; margin-top: 20px; 
             background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); 
@@ -29,24 +28,11 @@
             font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; 
             cursor: pointer; color: #3a2a00; text-transform: uppercase; 
             box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); 
-            transition: all 0.2s ease; /* Плавная анимация */
+            transition: all 0.2s ease;
             position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); 
         }
-
-        /* 🔥 ЭФФЕКТ НАВЕДЕНИЯ (HOVER) 🔥 */
-        .btn:hover, .gold-btn:hover {
-            filter: brightness(1.15) contrast(1.1); /* Делаем ярче */
-            box-shadow: 0 8px 0 #4a3b0a, 0 0 25px rgba(212, 175, 55, 0.6), inset 0 2px 3px rgba(255,255,255,0.8); /* Золотое свечение */
-            transform: translateY(-1px); /* Чуть приподнимается */
-        }
-
-        .btn:active, .gold-btn:active { 
-            top: 8px; 
-            box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); 
-            transform: translateY(0);
-            filter: brightness(0.95);
-        }
-        
+        .btn:hover, .gold-btn:hover { filter: brightness(1.15) contrast(1.1); box-shadow: 0 8px 0 #4a3b0a, 0 0 25px rgba(212, 175, 55, 0.6), inset 0 2px 3px rgba(255,255,255,0.8); transform: translateY(-1px); }
+        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); transform: translateY(0); filter: brightness(0.95); }
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; filter: none; transform: none; cursor: not-allowed;}
         
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
@@ -64,19 +50,9 @@
         .d-val { font-size: 1.4em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
         .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* МАЛЕНЬКИЕ КНОПКИ */
-        .btn-small { 
-            padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; 
-            border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; 
-            box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); 
-            font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.2s; position: relative; top:0; width: 100%; 
-        }
-        .btn-small:hover { 
-            filter: brightness(1.2); /* Подсветка при наведении */
-            box-shadow: 0 3px 0 #4a3b0a, 0 0 10px rgba(255, 255, 255, 0.4);
-        }
+        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.2s; position: relative; top:0; width: 100%; }
+        .btn-small:hover { filter: brightness(1.2); box-shadow: 0 3px 0 #4a3b0a, 0 0 10px rgba(255, 255, 255, 0.4); }
         .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; filter: brightness(1.0); }
-        
         .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
         .btn-small.logout:hover { color: #fff; background: #333; }
         
@@ -108,9 +84,10 @@
         .staff-item { text-align: left; background: #181818; border-bottom: 1px solid #333; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
         .staff-name { color: #ccc; font-weight: bold; font-size: 0.9em; }
         .staff-fired { color: #e57373; text-decoration: line-through; }
+        .is-admin { color: var(--gold-mid); margin-left: 5px; font-size: 0.8em; }
 
         .search-box { position: relative; }
-        #nSearch { cursor: pointer; } 
+        #nSearch, #adminSearch { cursor: pointer; } 
         .custom-dropdown {
             position: absolute; top: 100%; left: 0; right: 0;
             background: #222; border: 1px solid #444; border-top: none;
@@ -187,9 +164,16 @@
 
 <div id="authModal">
     <div class="auth-box">
-        <h3 style="font-family:'Cinzel'; margin-top:0; font-size: 1.6em; letter-spacing: 2px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">SECURITY</h3>
-        <input type="password" id="pass" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;">
-        <button class="btn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
+        <h3 style="font-family:'Cinzel'; margin-top:0; font-size: 1.6em; letter-spacing: 2px; background: var(--metallic-gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ADMIN LOGIN</h3>
+        
+        <div class="search-box" style="margin-bottom: 20px;">
+            <input type="text" id="adminSearch" placeholder="Выберите Админа..." autocomplete="off">
+            <div id="adminDropdown" class="custom-dropdown"></div>
+        </div>
+
+        <input type="tel" id="adminPin" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;" placeholder="ПИН" maxlength="6">
+        
+        <button class="btn" id="loginBtn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
         <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
     </div>
 </div>
@@ -233,11 +217,13 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwEzjvR1LDAW71dy2A-1s4fgUerj3Eox4u1mBlHl6xQgJBD5lhmoWhfWMSSGd4nSg2C2g/exec";
+    const API = "https://script.google.com/macros/s/AKfycbxoiIxO381zNMlIDB6YYkM7Tb_iFDwMCllgHEoXjOh-959sn6gzUdqM5fUb5PgM9tJEaA/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
     const dd = document.getElementById('nDropdown');
+    const adminS = document.getElementById('adminSearch');
+    const adminDD = document.getElementById('adminDropdown');
     
     const pin = document.getElementById('nPin');
     const countSelect = document.getElementById('countSelect');
@@ -245,12 +231,13 @@
     let currentOffset = 0; 
     let statsData = null; 
     let allEmployees = []; 
+    let adminList = [];
 
     window.onload = () => {
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-        if(localStorage.getItem('wp_admin_auth') === 'true') {
+        if(localStorage.getItem('wp_admin_token')) { 
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
@@ -260,54 +247,50 @@
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
             if(d.data) {
                 allEmployees = d.data;
-                renderDropdown(allEmployees);
-                
+                renderDropdown(ns, dd, allEmployees, (name) => { saveUser(); });
                 let saved = localStorage.getItem('wp_user');
-                if(saved) {
-                    ns.value = saved;
-                } else {
-                    ns.placeholder = "🔍 Введите имя...";
-                }
+                if(saved) ns.value = saved;
+                else ns.placeholder = "🔍 Введите имя...";
             }
         });
     }
 
-    function renderDropdown(list) {
-        dd.innerHTML = "";
+    function renderDropdown(input, drop, list, cb) {
+        drop.innerHTML = "";
         if(list.length === 0) {
-            dd.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>";
+            drop.innerHTML = "<div class='dd-item' style='cursor:default; color:#777'>Ничего не найдено</div>";
             return;
         }
         list.forEach(name => {
             let div = document.createElement('div');
             div.className = "dd-item";
-            if(name === ns.value) div.className += " selected";
+            if(name === input.value) div.className += " selected";
             div.innerText = name;
             div.onclick = () => {
-                ns.value = name;
-                dd.style.display = 'none';
-                saveUser();
+                input.value = name;
+                drop.style.display = 'none';
+                if(cb) cb(name);
             };
-            dd.appendChild(div);
+            drop.appendChild(div);
         });
     }
 
-    ns.addEventListener('input', function() {
-        let val = this.value.toLowerCase();
-        let filtered = allEmployees.filter(n => n.toLowerCase().includes(val));
-        renderDropdown(filtered);
-        dd.style.display = 'block';
-    });
+    ns.addEventListener('input', function() { showFilter(this, dd, allEmployees, saveUser); });
+    ns.addEventListener('focus', function() { renderDropdown(ns, dd, allEmployees, saveUser); dd.style.display='block'; });
+    
+    adminS.addEventListener('input', function() { showFilter(this, adminDD, adminList, null); });
+    adminS.addEventListener('focus', function() { renderDropdown(adminS, adminDD, adminList, null); adminDD.style.display='block'; });
 
-    ns.addEventListener('focus', function() {
-        renderDropdown(allEmployees);
-        dd.style.display = 'block';
-    });
+    function showFilter(inp, drop, list, cb) {
+        let val = inp.value.toLowerCase();
+        let filtered = list.filter(n => n.toLowerCase().includes(val));
+        renderDropdown(inp, drop, filtered, cb);
+        drop.style.display = 'block';
+    }
 
     document.addEventListener('click', function(e) {
-        if (!ns.contains(e.target) && !dd.contains(e.target)) {
-            dd.style.display = 'none';
-        }
+        if (!ns.contains(e.target) && !dd.contains(e.target)) dd.style.display = 'none';
+        if (!adminS.contains(e.target) && !adminDD.contains(e.target)) adminDD.style.display = 'none';
     });
 
     function saveUser() { localStorage.setItem('wp_user', ns.value); localStorage.setItem('wp_pin', pin.value); localStorage.setItem('wp_count', countSelect.value); }
@@ -320,23 +303,15 @@
         loadStats();
     }
     
-    function changeMonth(delta) {
-        currentOffset += delta;
-        loadStats();
-    }
+    function changeMonth(delta) { currentOffset += delta; loadStats(); }
     
     function loadStats() {
         var p = pin.value; var n = ns.value;
         document.getElementById('calendarView').innerHTML = "Загрузка...";
         fetch(API + "?action=get_user_stats&name=" + encodeURIComponent(n) + "&pin=" + p + "&offset=" + currentOffset)
-        .then(r=>r.json())
-        .then(d => {
-             if(d.result === "success") {
-                 statsData = d.stats;
-                 renderCalendar();
-             } else {
-                 document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
-             }
+        .then(r=>r.json()).then(d => {
+             if(d.result === "success") { statsData = d.stats; renderCalendar(); } 
+             else document.getElementById('calendarView').innerHTML = "Ошибка: " + d.message;
         });
     }
     
@@ -344,22 +319,15 @@
         if(!statsData) return;
         document.getElementById('calMonth').innerText = statsData.label;
         document.getElementById('my-dnevka').innerText = statsData.dnevka;
-        
         let calHtml = '<div class="calendar-grid">';
         let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
         days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
-        
         let paidKey = "paid_" + ns.value + "_" + statsData.label;
         let paidDays = JSON.parse(localStorage.getItem(paidKey) || "[]");
-
         for(let i=1; i<=statsData.daysInMonth; i++) {
              let cls = "cal-day";
-             if(statsData.workDays.includes(i)) {
-                 cls += " work";
-             } 
-             else if(statsData.limitDay > 0 && i <= statsData.limitDay) {
-                 cls += " miss";
-             }
+             if(statsData.workDays.includes(i)) cls += " work";
+             else if(statsData.limitDay > 0 && i <= statsData.limitDay) cls += " miss";
              if(paidDays.includes(i)) cls += " paid";
              calHtml += `<div class="${cls}" onclick="togglePay(${i})">${i}</div>`;
         }
@@ -393,15 +361,48 @@
 
     function showToast(text, isErr=false) { var t = document.getElementById("toast"); t.innerText = text; t.className = "show" + (isErr ? " error" : ""); setTimeout(()=>{ t.className = t.className.replace("show", ""); }, 3000); }
 
-    function openAuth() { document.getElementById('authModal').style.display = 'flex'; }
-    function login() {
-        if(document.getElementById('pass').value==="westprom123") {
-            localStorage.setItem('wp_admin_auth', 'true');
-            document.getElementById('authModal').style.display='none';
-            document.getElementById('adminPanel').style.display='block'; loadReq();
-        } else alert("Доступ запрещен");
+    function openAuth() { 
+        document.getElementById('authModal').style.display = 'flex'; 
+        // Подгружаем список АДМИНОВ при открытии окна
+        document.getElementById('adminSearch').placeholder = "Загрузка...";
+        fetch(API+"?action=get_sys_admins").then(r=>r.json()).then(d=>{
+             if(d.data) {
+                 adminList = d.data;
+                 document.getElementById('adminSearch').placeholder = "Выберите Админа...";
+                 renderDropdown(adminS, adminDD, adminList, null);
+             }
+        });
     }
-    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_auth'); location.reload(); } }
+    
+    function login() {
+        let name = document.getElementById('adminSearch').value;
+        let p = document.getElementById('adminPin').value;
+        if(!name || !p) { alert("Заполните имя и ПИН"); return; }
+        
+        let btn = document.getElementById('loginBtn');
+        btn.innerText = "Проверка..."; btn.disabled = true;
+
+        let params = new URLSearchParams();
+        params.append('action', 'login_admin');
+        params.append('name', name);
+        params.append('pin', p);
+
+        fetch(API, {method:'POST', body:params})
+        .then(r => r.json())
+        .then(d => {
+            btn.innerText = "Вход"; btn.disabled = false;
+            if(d.result === "success") {
+                localStorage.setItem('wp_admin_token', d.token); 
+                document.getElementById('authModal').style.display='none';
+                document.getElementById('adminPanel').style.display='block';
+                loadReq();
+            } else {
+                alert(d.message);
+            }
+        }).catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Ошибка соединения"); });
+    }
+    
+    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_token'); location.reload(); } }
 
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
@@ -428,16 +429,8 @@
         });
     }
 
-    function upd(id, st) {
-        if(!confirm(st+"?")) return;
-        let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st);
-        fetch(API,{method:'POST', body:p}).then(()=>loadReq());
-    }
-    function del(id) {
-        if(!confirm("Удалить?")) return;
-        let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id);
-        fetch(API,{method:'POST', body:p}).then(()=>loadReq());
-    }
+    function upd(id, st) { if(!confirm(st+"?")) return; let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); }
+    function del(id) { if(!confirm("Удалить?")) return; let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); }
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
@@ -445,66 +438,59 @@
         fetch(API + "?action=get_" + type).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
-                const link = document.createElement('a');
-                link.href = "data:" + d.mime + ";base64," + d.file;
-                link.download = d.name;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name; document.body.appendChild(link); link.click(); document.body.removeChild(link);
             } else alert("Ошибка");
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
     function showQR() {
-        var url = window.location.href;
-        var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
-        document.getElementById('qrImage').src = qrUrl;
-        document.getElementById('qrModal').style.display = 'flex';
+        var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url); document.getElementById('qrImage').src = qrUrl; document.getElementById('qrModal').style.display = 'flex';
     }
 
-    function openStaffModal() {
-        document.getElementById('staffModal').style.display = 'flex';
-        loadStaffList();
-    }
+    function openStaffModal() { document.getElementById('staffModal').style.display = 'flex'; loadStaffList(); }
+    
     function loadStaffList() {
-        let sl = document.getElementById('staffList');
-        sl.innerHTML = "Загрузка...";
+        let sl = document.getElementById('staffList'); sl.innerHTML = "Загрузка...";
         fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{
             if(d.result === "success") {
                 sl.innerHTML = "";
                 d.staff.forEach(s => {
                     let isFired = (s.status === "Fired");
+                    let isAdmin = (s.role === "Admin");
                     let nameClass = isFired ? "staff-name staff-fired" : "staff-name";
                     let btnHtml = "";
+                    
                     if(isFired) {
                         btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
                     } else {
                         btnHtml = `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
+                        let crownColor = isAdmin ? "#ffd700" : "#444";
+                        let nextRole = isAdmin ? "Worker" : "Admin";
+                        btnHtml += `<button class="btn-small" onclick="setRole('${s.name}', '${nextRole}')" style="width:auto; padding:5px 8px; margin-left:5px; background:none; border:1px solid #333; color:${crownColor}">👑</button>`;
                     }
                     
                     let div = document.createElement('div');
                     div.className = "staff-item";
-                    div.innerHTML = `<span class="${nameClass}">${s.name} ${isFired ? '<br><span style="font-size:0.7em;color:#777">Уволен: '+s.firedDate+'</span>' : ''}</span> ${btnHtml}`;
+                    div.innerHTML = `<span class="${nameClass}">${s.name} ${isAdmin ? '<span class="is-admin">(Админ)</span>' : ''}</span> <div style="display:flex">${btnHtml}</div>`;
                     sl.appendChild(div);
                 });
             } else sl.innerHTML = "Ошибка загрузки";
         });
     }
+    
     function addEmployee() {
-        let n = document.getElementById('newEmpName').value;
-        if(!n) return;
+        let n = document.getElementById('newEmpName').value; if(!n) return;
         if(!confirm("Добавить сотрудника: " + n + "?")) return;
         let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n);
         fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); });
     }
-    function fireEmp(name) {
-        if(!confirm("Уволить сотрудника " + name + "?")) return;
-        let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name);
-        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
-    }
-    function restoreEmp(name) {
-        if(!confirm("Вернуть сотрудника " + name + " в штат?")) return;
-        let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name);
-        fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); });
+    function fireEmp(name) { if(!confirm("Уволить сотрудника " + name + "?")) return; let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    function restoreEmp(name) { if(!confirm("Вернуть сотрудника " + name + " в штат?")) return; let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    
+    function setRole(name, role) {
+        let title = (role === "Admin") ? "Назначить АДМИНИСТРАТОРОМ" : "Снять права администратора у";
+        if(!confirm(title + " " + name + "?")) return;
+        let p = new URLSearchParams(); p.append('action','set_role'); p.append('name',name); p.append('role', role);
+        fetch(API, {method:'POST', body:p}).then(() => loadStaffList());
     }
 </script>
 
