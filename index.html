@@ -22,11 +22,18 @@
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
-        /* КНОПКИ */
-        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 25px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.15s; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
-        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); }
-        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; }
+        /* КНОПКИ С ЭФФЕКТОМ НАВЕДЕНИЯ */
+        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 25px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+        .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); transform: scale(0.98); }
+        .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; transform: none; }
         
+        /* 🔥 ЯРКАЯ ПОДСВЕТКА ПРИ НАВЕДЕНИИ 🔥 */
+        .btn:hover, .gold-btn:hover {
+            filter: brightness(1.2);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3), 0 8px 0 #4a3b0a;
+        }
+
         .admin-link { text-align: center; margin-top: 30px; font-size: 0.75em; color: #666; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
         .admin-link:hover { color: var(--gold-mid); text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
         #msg { text-align: center; margin-top: 25px; font-weight: bold; min-height: 20px; font-size: 0.95em;}
@@ -41,12 +48,16 @@
         .d-item { text-align: center; width: 48%; cursor: pointer; }
         .d-val { font-size: 2em; font-weight: bold; color: #fff; display: block; font-family: 'Cinzel'; }
         .d-lbl { font-size: 0.6em; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.1s; position: relative; top:0; width: 100%; }
-        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; }
-        .btn-small:hover { filter: brightness(1.1); }
+        
+        /* МАЛЕНЬКИЕ КНОПКИ */
+        .btn-small { padding: 12px 10px; font-size: 0.7em; background: var(--metallic-gold-gradient); color: #2a1a00; border: 1px solid #8a6e18; border-radius: 3px; cursor: pointer; text-transform: uppercase; box-shadow: 0 3px 0 #4a3b0a, 0 5px 10px rgba(0,0,0,0.3); font-family: 'Lato', sans-serif; font-weight: 900; transition: 0.15s; position: relative; top:0; width: 100%; }
+        .btn-small:active { top: 3px; box-shadow: 0 0 0 #4a3b0a; transform: scale(0.98); }
+        .btn-small:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 6px 10px rgba(212, 175, 55, 0.2), 0 3px 0 #4a3b0a; }
+        
         .btn-small.logout { background: #222; color: #999; border: 1px solid #333; box-shadow: 0 3px 0 #111; width: auto; padding: 12px 18px;}
         .req-card { background: #141414; padding: 18px; margin-bottom: 15px; border: 1px solid #333; border-left: 4px solid var(--gold-mid); border-radius: 4px; box-shadow: inset 0 0 20px rgba(0,0,0,0.7); }
-        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5);}
+        .btn-act { flex: 1; padding: 12px; border: none; border-radius: 3px; cursor: pointer; font-weight: 900; font-size: 0.75em; text-transform: uppercase; box-shadow: 0 3px 0 rgba(0,0,0,0.5); text-shadow: 0 1px 1px rgba(0,0,0,0.5); transition: 0.2s; }
+        .btn-act:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-yes { background: linear-gradient(to bottom, #2e7d32, #1b5e20); color: #fff; border: 1px solid #1b5e20; }
         .btn-no { background: linear-gradient(to bottom, #c62828, #b71c1c); color: #fff; border: 1px solid #b71c1c; }
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
@@ -113,7 +124,7 @@
             <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
         
-        <button class="btn" id="sBtn">Отметить присутствие</button>
+        <button class="btn" id="sBtn">ОТПРАВИТЬ</button>
         <button class="gold-btn" type="button" onclick="showMyStats()">
             📅 Мой Календарь
         </button>
@@ -194,7 +205,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxGwG003OjAok-CQDGfMCP0p4yFjGqnLWWbvUb7lKNtcwDdFbl-uXtcYDVGA_KraKnpZw/exec";
+    const API = "https://script.google.com/macros/s/AKfycbyq3g6x4Z7YNEQML4_ghoYOMP90uT_GWe_qzoNuxLpJhG26cHhkBhg14PAfxTK1us2f3g/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -287,19 +298,19 @@
 
     document.getElementById('wForm').onsubmit = e => {
         e.preventDefault();
-        let b = document.getElementById('sBtn'); b.disabled=true; b.innerText="Отправка...";
+        let b = document.getElementById('sBtn'); b.disabled=true; b.innerText="ОТПРАВКА...";
         let fd = new FormData(document.getElementById('wForm'));
         let p = new URLSearchParams(); p.append('action','create');
         for(let [k,v] of fd) p.append(k,v);
         // АВТОМАТИЧЕСКИ ДОБАВЛЯЕМ ТИП "ДНЕВКА"
         p.append('type', 'Дневка');
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d=>{
-            b.disabled=false; b.innerText="Отметить присутствие";
+            b.disabled=false; b.innerText="ОТПРАВИТЬ";
             if(d.result==="success"){
                 showToast("✅ ОТЧЕТ ПРИНЯТ");
                 setTimeout(()=>{ document.getElementById('wForm').reset(); ns.value=localStorage.getItem('wp_user'); pin.value=localStorage.getItem('wp_pin'); if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count'); else countSelect.value = "1"; }, 1000);
             } else showToast(d.message, true); 
-        }).catch(()=>{ b.disabled=false; b.innerText="Отметить присутствие"; showToast("❌ ОШИБКА СВЯЗИ", true); });
+        }).catch(()=>{ b.disabled=false; b.innerText="ОТПРАВИТЬ"; showToast("❌ ОШИБКА СВЯЗИ", true); });
     };
 
     function showToast(text, isErr=false) { var t = document.getElementById("toast"); t.innerText = text; t.className = "show" + (isErr ? " error" : ""); setTimeout(()=>{ t.className = t.className.replace("show", ""); }, 3000); }
@@ -358,7 +369,7 @@
                 const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name;
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
             } else alert("Ошибка: " + (d.message || "Unknown"));
-        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
+        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети. Попробуйте еще раз."); });
     }
     function showQR() {
         var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url);
