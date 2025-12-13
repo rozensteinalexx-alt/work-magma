@@ -21,6 +21,11 @@
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
+        /* СТИЛИ ДЛЯ СКРЫТОГО ПАРОЛЯ */
+        .password-container { position: relative; width: 100%; }
+        .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2em; user-select: none; opacity: 0.7; transition: 0.2s; z-index: 10; }
+        .password-toggle:hover { opacity: 1; text-shadow: 0 0 10px var(--gold-mid); }
+
         .btn, .gold-btn { 
             width: 100%; padding: 20px; margin-top: 20px; 
             background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); 
@@ -117,7 +122,12 @@
         </div>
 
         <label>🔒 ПИН-код</label>
-        <input type="tel" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" style="text-align:center; letter-spacing:5px; font-size: 1.2em;" oninput="saveUser()">
+        <div class="password-container">
+            <input type="password" id="nPin" name="pin" required placeholder="Придумайте PIN" maxlength="6" 
+                   style="text-align:center; letter-spacing:5px; font-size: 1.2em; padding-right: 40px;" 
+                   oninput="this.value = this.value.replace(/\D/g,''); saveUser()">
+            <span class="password-toggle" onclick="togglePass('nPin', this)">👁️</span>
+        </div>
         
         <label>👥 Количество (Чел.)</label>
         <select name="count" id="countSelect" onchange="saveUser()">
@@ -171,7 +181,13 @@
             <div id="adminDropdown" class="custom-dropdown"></div>
         </div>
 
-        <input type="tel" id="adminPin" style="text-align:center; margin-bottom:30px; font-size:1.4em; letter-spacing: 5px;" placeholder="ПИН" maxlength="6">
+        <div class="password-container" style="margin-bottom:30px;">
+            <input type="password" id="adminPin" 
+                   style="text-align:center; font-size:1.4em; letter-spacing: 5px; padding-right: 40px;" 
+                   placeholder="ПИН" maxlength="6"
+                   oninput="this.value = this.value.replace(/\D/g,'')">
+            <span class="password-toggle" onclick="togglePass('adminPin', this)">👁️</span>
+        </div>
         
         <button class="btn" id="loginBtn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
         <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
@@ -217,7 +233,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbxHnpsFkkThSWn5-A1aofGjftfbgSE7CgLY5H0ekaGy4XYtl0m4e4FV2tl6zl7B4_KUdg/exec";
+    const API = "https://script.google.com/macros/s/AKfycbww48F_WUqNwUxETqf8AcaH4cVnfHkor1pbKrLThH49WI7gqGhWN6Wf-0F01y0aYkaIBg/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -232,6 +248,13 @@
     let statsData = null; 
     let allEmployees = []; 
     let adminList = [];
+
+    // --- НОВАЯ ФУНКЦИЯ ДЛЯ ГЛАЗИКА ---
+    function togglePass(id, el) {
+       var x = document.getElementById(id);
+       if (x.type === "password") { x.type = "tel"; el.innerText = "🐵"; el.style.opacity="1"; }
+       else { x.type = "password"; el.innerText = "👁️"; el.style.opacity="0.7"; }
+    }
 
     window.onload = () => {
         loadEmpSelect();
@@ -496,5 +519,3 @@
 
 </body>
 </html>
-
-
