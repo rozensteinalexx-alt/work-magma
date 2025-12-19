@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WestProm Premium</title>
-    <link rel="icon" type="image/png" href="icon.png?v=2">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/gold-bars.png">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,21 +21,11 @@
         select:focus, input:focus { background: #202020; box-shadow: inset 0 3px 10px rgba(0,0,0,0.9), 0 0 15px rgba(212, 175, 55, 0.2); }
         select option { background-color: #1a1a1a; color: var(--gold-bright); padding: 12px; }
         
-        /* СТИЛИ ДЛЯ СКРЫТОГО ПАРОЛЯ */
         .password-container { position: relative; width: 100%; }
         .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2em; user-select: none; opacity: 0.7; transition: 0.2s; z-index: 10; }
         .password-toggle:hover { opacity: 1; text-shadow: 0 0 10px var(--gold-mid); }
 
-        .btn, .gold-btn { 
-            width: 100%; padding: 20px; margin-top: 20px; 
-            background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); 
-            border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; 
-            font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; 
-            cursor: pointer; color: #3a2a00; text-transform: uppercase; 
-            box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); 
-            transition: all 0.2s ease;
-            position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); 
-        }
+        .btn, .gold-btn { width: 100%; padding: 20px; margin-top: 20px; background: linear-gradient(to bottom, #ffeead 0%, #d4af37 20%, #a0832a 45%, #d4af37 55%, #ffeead 100%); border: 1px solid #a0832a; border-top: 1px solid #ffeead; border-radius: 3px; font-family: 'Cinzel', serif; font-weight: 900; font-size: 18px; letter-spacing: 2px; cursor: pointer; color: #3a2a00; text-transform: uppercase; box-shadow: 0 8px 0 #4a3b0a, 0 15px 20px rgba(0,0,0,0.6), inset 0 2px 3px rgba(255,255,255,0.5); transition: all 0.2s ease; position: relative; top: 0; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
         .btn:hover, .gold-btn:hover { filter: brightness(1.15) contrast(1.1); box-shadow: 0 8px 0 #4a3b0a, 0 0 25px rgba(212, 175, 55, 0.6), inset 0 2px 3px rgba(255,255,255,0.8); transform: translateY(-1px); }
         .btn:active, .gold-btn:active { top: 8px; box-shadow: 0 0 0 #4a3b0a, inset 0 3px 8px rgba(0,0,0,0.6); transform: translateY(0); filter: brightness(0.95); }
         .btn:disabled { background: #333; border:1px solid #444; color: #666; box-shadow: none; top: 4px; text-shadow: none; filter: none; transform: none; cursor: not-allowed;}
@@ -87,10 +77,13 @@
         .cal-day.paid::after { content: '₽'; position: absolute; bottom: 1px; right: 1px; font-size: 8px; color: #fff; }
         
         .staff-item { text-align: left; background: #181818; border-bottom: 1px solid #333; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .staff-name { color: #ccc; font-weight: bold; font-size: 0.9em; }
+        .staff-name { color: #ccc; font-weight: bold; font-size: 0.9em; flex:1; text-align:left;}
         .staff-fired { color: #e57373; text-decoration: line-through; }
-        .is-admin { color: var(--gold-mid); margin-left: 5px; font-size: 0.8em; }
-
+        .role-tag { font-size:0.7em; padding:2px 5px; border-radius:3px; margin-left:5px; vertical-align:middle;}
+        .r-SuperAdmin { background: linear-gradient(45deg, #ffd700, #ff8c00); color:#000; }
+        .r-Director { background: #7b1fa2; color:#fff; }
+        .r-Foreman { background: #1976d2; color:#fff; }
+        
         .search-box { position: relative; }
         #nSearch, #adminSearch { cursor: pointer; } 
         .custom-dropdown {
@@ -103,6 +96,8 @@
         .dd-item { padding: 15px; border-bottom: 1px solid #333; color: #ccc; cursor: pointer; transition: 0.2s; }
         .dd-item:hover { background: #333; color: #fff; border-left: 3px solid var(--gold-mid); padding-left: 12px; }
         .dd-item.selected { background: var(--metallic-gold-gradient); color: #111; font-weight: bold; }
+        
+        .role-select { background: #333; color:#fff; border:1px solid #444; padding:5px; border-radius:3px; font-size:0.7em; margin-right:5px;}
     </style>
 </head>
 <body>
@@ -133,7 +128,6 @@
         <select name="count" id="countSelect" onchange="saveUser()">
             <option value="1" selected>1 (Стандарт)</option>
             <option value="0.5">0.5 (Половина дня)</option>
-            <script>for(let i=2;i<=20;i++)document.write(`<option value="${i}">${i}</option>`)</script>
         </select>
         
         <input type="hidden" name="type" value="Дневка">
@@ -210,6 +204,12 @@
              <input id="newEmpName" placeholder="ФИО нового сотрудника" style="padding:10px; font-size:0.9em;">
              <button class="btn-small" onclick="addEmployee()" style="width:auto; background: #2e7d32; color:#fff;">+</button>
         </div>
+        <div style="color:#666; font-size:0.65em; margin-bottom:10px; text-align:left;">
+            👑 <b>Главный:</b> Виден, Все права.<br>
+            👔 <b>Директор:</b> Скрыт, Все права.<br>
+            👷 <b>Прораб:</b> Виден, Все права.<br>
+            🔨 <b>Рабочий:</b> Виден, Нет прав.
+        </div>
         <div id="staffList" style="max-height: 300px; overflow-y: auto; text-align: left;">Загрузка...</div>
         <button class="btn-small" onclick="document.getElementById('staffModal').style.display='none'" style="margin-top:20px;">ЗАКРЫТЬ</button>
     </div>
@@ -232,7 +232,7 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ССЫЛКУ API 👇👇
+    // 👇👇 ВСТАВЬТЕ ССЫЛКУ ИЗ ШАГА 3 НИЖЕ 👇👇
     const API = "https://script.google.com/macros/s/AKfycbww48F_WUqNwUxETqf8AcaH4cVnfHkor1pbKrLThH49WI7gqGhWN6Wf-0F01y0aYkaIBg/exec";
     // 👆👆 ----------------------- 👆👆
 
@@ -249,18 +249,25 @@
     let allEmployees = []; 
     let adminList = [];
 
-    // --- НОВАЯ ФУНКЦИЯ ДЛЯ ГЛАЗИКА ---
     function togglePass(id, el) {
        var x = document.getElementById(id);
-       if (x.type === "password") { x.type = "tel"; el.innerText = "🐵"; el.style.opacity="1"; }
+       if (x.type === "password") { x.type = "text"; el.innerText = "🐵"; el.style.opacity="1"; }
        else { x.type = "password"; el.innerText = "👁️"; el.style.opacity="0.7"; }
     }
 
     window.onload = () => {
+        // Генерация опций кол-ва
+        for(let i=2; i<=20; i++){
+            let opt = document.createElement('option'); opt.value = i; opt.innerText = i;
+            countSelect.appendChild(opt);
+        }
+
         loadEmpSelect();
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
-        if(localStorage.getItem('wp_admin_token')) { 
+        
+        // Проверяем, есть ли сохраненный админ
+        if(localStorage.getItem('wp_admin_name')) { 
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
@@ -386,7 +393,6 @@
 
     function openAuth() { 
         document.getElementById('authModal').style.display = 'flex'; 
-        // Подгружаем список АДМИНОВ при открытии окна
         document.getElementById('adminSearch').placeholder = "Загрузка...";
         fetch(API+"?action=get_sys_admins").then(r=>r.json()).then(d=>{
              if(d.data) {
@@ -415,7 +421,8 @@
         .then(d => {
             btn.innerText = "Вход"; btn.disabled = false;
             if(d.result === "success") {
-                localStorage.setItem('wp_admin_token', d.token); 
+                localStorage.setItem('wp_admin_name', name);
+                localStorage.setItem('wp_admin_pin', p);
                 document.getElementById('authModal').style.display='none';
                 document.getElementById('adminPanel').style.display='block';
                 loadReq();
@@ -425,11 +432,21 @@
         }).catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Ошибка соединения"); });
     }
     
-    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_token'); location.reload(); } }
+    function logout() { if(confirm("Выйти?")) { localStorage.removeItem('wp_admin_name'); localStorage.removeItem('wp_admin_pin'); location.reload(); } }
+
+    function getAdminParams() {
+        let p = new URLSearchParams();
+        p.append('auth_name', localStorage.getItem('wp_admin_name') || "");
+        p.append('auth_pin', localStorage.getItem('wp_admin_pin') || "");
+        return p;
+    }
 
     function loadReq() {
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
-        fetch(API+"?action=get").then(r=>r.json()).then(d=>{
+        let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
+                   "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
+        
+        fetch(API+"?action=get"+auth).then(r=>r.json()).then(d=>{
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
                 document.getElementById('st-miss').innerText = d.stats.missing;
@@ -452,19 +469,33 @@
         });
     }
 
-    function upd(id, st) { if(!confirm(st+"?")) return; let p = new URLSearchParams(); p.append('action','update'); p.append('id',id); p.append('status',st); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); }
-    function del(id) { if(!confirm("Удалить?")) return; let p = new URLSearchParams(); p.append('action','delete_row'); p.append('id',id); fetch(API,{method:'POST', body:p}).then(()=>loadReq()); }
+    function upd(id, st) { 
+        if(!confirm(st+"?")) return; 
+        let p = getAdminParams(); p.append('action','update'); p.append('id',id); p.append('status',st); 
+        fetch(API,{method:'POST', body:p}).then(()=>loadReq()); 
+    }
+    
+    function del(id) { 
+        if(!confirm("Удалить?")) return; 
+        let p = getAdminParams(); p.append('action','delete_row'); p.append('id',id); 
+        fetch(API,{method:'POST', body:p}).then(()=>loadReq()); 
+    }
+    
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
-        fetch(API + "?action=get_" + type).then(r => r.json()).then(d => {
+        let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
+                   "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
+        
+        fetch(API + "?action=get_" + type + auth).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
                 const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            } else alert("Ошибка");
+            } else alert("Ошибка: " + (d.message || "Неизвестно"));
         }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
     }
+    
     function showQR() {
         var url = window.location.href; var qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url); document.getElementById('qrImage').src = qrUrl; document.getElementById('qrModal').style.display = 'flex';
     }
@@ -473,47 +504,61 @@
     
     function loadStaffList() {
         let sl = document.getElementById('staffList'); sl.innerHTML = "Загрузка...";
-        fetch(API + "?action=get_staff_list").then(r=>r.json()).then(d=>{
+        let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
+                   "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
+                   
+        fetch(API + "?action=get_staff_list" + auth).then(r=>r.json()).then(d=>{
             if(d.result === "success") {
                 sl.innerHTML = "";
                 d.staff.forEach(s => {
                     let isFired = (s.status === "Fired");
-                    let isAdmin = (s.role === "Admin");
                     let nameClass = isFired ? "staff-name staff-fired" : "staff-name";
+                    let roleTag = "";
+                    if(s.role === "SuperAdmin") roleTag = "<span class='role-tag r-SuperAdmin'>👑 Главный</span>";
+                    else if(s.role === "Director") roleTag = "<span class='role-tag r-Director'>👔 Директор</span>";
+                    else if(s.role === "Foreman") roleTag = "<span class='role-tag r-Foreman'>👷 Прораб</span>";
+
                     let btnHtml = "";
                     
                     if(isFired) {
                         btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
                     } else {
-                        btnHtml = `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">УВОЛИТЬ</button>`;
-                        let crownColor = isAdmin ? "#ffd700" : "#444";
-                        let nextRole = isAdmin ? "Worker" : "Admin";
-                        btnHtml += `<button class="btn-small" onclick="setRole('${s.name}', '${nextRole}')" style="width:auto; padding:5px 8px; margin-left:5px; background:none; border:1px solid #333; color:${crownColor}">👑</button>`;
+                        // Селектор ролей
+                        let roles = { "Worker": "Рабочий", "Foreman": "Прораб", "Director": "Директор", "SuperAdmin": "Главный" };
+                        let selectHtml = `<select class="role-select" onchange="changeRole('${s.name}', this.value)">`;
+                        for(let k in roles) {
+                            selectHtml += `<option value="${k}" ${s.role===k?'selected':''}>${roles[k]}</option>`;
+                        }
+                        selectHtml += `</select>`;
+
+                        btnHtml = selectHtml + `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">X</button>`;
                     }
                     
                     let div = document.createElement('div');
                     div.className = "staff-item";
-                    div.innerHTML = `<span class="${nameClass}">${s.name} ${isAdmin ? '<span class="is-admin">(Админ)</span>' : ''}</span> <div style="display:flex">${btnHtml}</div>`;
+                    div.innerHTML = `<span class="${nameClass}">${s.name} ${roleTag}</span> <div style="display:flex; align-items:center;">${btnHtml}</div>`;
                     sl.appendChild(div);
                 });
-            } else sl.innerHTML = "Ошибка загрузки";
+            } else sl.innerHTML = "Ошибка: " + d.message;
         });
     }
     
     function addEmployee() {
         let n = document.getElementById('newEmpName').value; if(!n) return;
         if(!confirm("Добавить сотрудника: " + n + "?")) return;
-        let p = new URLSearchParams(); p.append('action','add_employee'); p.append('name',n);
+        let p = getAdminParams(); p.append('action','add_employee'); p.append('name',n);
         fetch(API, {method:'POST', body:p}).then(() => { document.getElementById('newEmpName').value = ""; loadStaffList(); loadEmpSelect(); });
     }
-    function fireEmp(name) { if(!confirm("Уволить сотрудника " + name + "?")) return; let p = new URLSearchParams(); p.append('action','fire_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
-    function restoreEmp(name) { if(!confirm("Вернуть сотрудника " + name + " в штат?")) return; let p = new URLSearchParams(); p.append('action','restore_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    function fireEmp(name) { if(!confirm("Уволить сотрудника " + name + "?")) return; let p = getAdminParams(); p.append('action','fire_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
+    function restoreEmp(name) { if(!confirm("Вернуть сотрудника " + name + " в штат?")) return; let p = getAdminParams(); p.append('action','restore_employee'); p.append('name',name); fetch(API, {method:'POST', body:p}).then(() => { loadStaffList(); loadEmpSelect(); }); }
     
-    function setRole(name, role) {
-        let title = (role === "Admin") ? "Назначить АДМИНИСТРАТОРОМ" : "Снять права администратора у";
-        if(!confirm(title + " " + name + "?")) return;
-        let p = new URLSearchParams(); p.append('action','set_role'); p.append('name',name); p.append('role', role);
-        fetch(API, {method:'POST', body:p}).then(() => loadStaffList());
+    function changeRole(name, role) {
+        if(!confirm("Изменить роль " + name + " на " + role + "?")) { loadStaffList(); return; }
+        let p = getAdminParams(); p.append('action','set_role'); p.append('name',name); p.append('role', role);
+        fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d => {
+             if(d.result !== "success") alert(d.message);
+             loadStaffList(); loadEmpSelect();
+        });
     }
 </script>
 
