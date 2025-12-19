@@ -233,8 +233,8 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ССЫЛКУ ИЗ ШАГА 3 НИЖЕ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbwg5EHVkF5jsVme5hXVwbOg82q_fUqzKjzewxuC7vaovnCEOEIA5E_7gdWNtiHSKCBCbw/exec";
+    // 👇👇 ВСТАВЬТЕ ВАШУ ССЫЛКУ НИЖЕ 👇👇
+    const API = "https://script.google.com/macros/s/AKfycbwTiI-l804UwEVZ9FlgQVFCDc2dKTsDgnRrxyRUzEq52Sbqwn_KjeYr_AXFXagDoy4TWg/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -279,15 +279,34 @@
              alert("✅ Успех: " + d.message);
         })
         .catch(e => {
-             alert("❌ Ошибка связи! Проверьте ссылку API и разрешения (Anyone/Все). Текст ошибки: " + e);
+             alert("❌ Ошибка связи! Проверьте ссылку API. Ошибка: " + e);
         });
     }
 
     function loadEmpSelect() {
         ns.placeholder = "Загрузка...";
+        
+        // 1. Проверяем кэш (чтобы быстро показать)
+        const cachedData = localStorage.getItem('wp_cache_employees');
+        const cachedTime = localStorage.getItem('wp_cache_time');
+        const now = new Date().getTime();
+
+        if (cachedData && cachedTime && (now - cachedTime < 3600000)) { // 1 час
+            allEmployees = JSON.parse(cachedData);
+            renderDropdown(ns, dd, allEmployees, (name) => { saveUser(); });
+            let saved = localStorage.getItem('wp_user');
+            if(saved) ns.value = saved;
+            else ns.placeholder = "🔍 Введите имя...";
+        }
+
+        // 2. Все равно качаем свежее с сервера
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
             if(d.data) {
                 allEmployees = d.data;
+                // Обновляем кэш
+                localStorage.setItem('wp_cache_employees', JSON.stringify(allEmployees));
+                localStorage.setItem('wp_cache_time', now);
+                
                 renderDropdown(ns, dd, allEmployees, (name) => { saveUser(); });
                 let saved = localStorage.getItem('wp_user');
                 if(saved) ns.value = saved;
@@ -574,4 +593,3 @@
 
 </body>
 </html>
-
