@@ -140,6 +140,7 @@
     </form>
     <div id="msg"></div>
     <div class="admin-link" onclick="openAuth()">Панель Администратора</div>
+    <div class="admin-link" style="font-size:0.6em; margin-top:10px;" onclick="testConn()">⚡ ТЕСТ СВЯЗИ</div>
 </div>
 
 <div id="toast">Отчет отправлен!</div>
@@ -233,7 +234,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ ИЗ ШАГА 3 НИЖЕ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbyjZmKJln3PWNzYc_VRKELD9VTiXP6_35h6S6aV8Rz_OC1KjdI7-Vj6FjqlUmXK1d1dHA/exec";
+    const API = "https://script.google.com/macros/s/AKfycbxabpqBSQo6NLcExbNTeyJPhNgE_skl7u0OVyRzR0BnHduAWDGWdMyzTbmrYO900LKy2Q/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -256,7 +257,6 @@
     }
 
     window.onload = () => {
-        // Генерация опций кол-ва
         for(let i=2; i<=20; i++){
             let opt = document.createElement('option'); opt.value = i; opt.innerText = i;
             countSelect.appendChild(opt);
@@ -266,11 +266,22 @@
         if(localStorage.getItem('wp_pin')) { pin.value = localStorage.getItem('wp_pin'); }
         if(localStorage.getItem('wp_count')) countSelect.value = localStorage.getItem('wp_count');
         
-        // Проверяем, есть ли сохраненный админ
         if(localStorage.getItem('wp_admin_name')) { 
             document.getElementById('adminPanel').style.display = 'block'; loadReq();
         }
     };
+    
+    function testConn() {
+        showToast("Проверка связи...", false);
+        fetch(API+"?action=test_connection")
+        .then(r => r.json())
+        .then(d => {
+             alert("✅ Успех: " + d.message);
+        })
+        .catch(e => {
+             alert("❌ Ошибка связи! Проверьте ссылку API и разрешения (Anyone/Все). Текст ошибки: " + e);
+        });
+    }
 
     function loadEmpSelect() {
         ns.placeholder = "Загрузка...";
@@ -523,7 +534,6 @@
                     if(isFired) {
                         btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
                     } else {
-                        // Селектор ролей
                         let roles = { "Worker": "Рабочий", "Foreman": "Прораб", "Director": "Директор", "SuperAdmin": "Главный" };
                         let selectHtml = `<select class="role-select" onchange="changeRole('${s.name}', this.value)">`;
                         for(let k in roles) {
@@ -564,5 +574,3 @@
 
 </body>
 </html>
-
-
