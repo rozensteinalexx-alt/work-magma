@@ -59,8 +59,8 @@
         .btn-del { width: auto; flex: 0 0 40px; margin-left: 5px; background: #333; color: #666; border: 1px solid #444; font-size: 1.2em; padding: 0; display: flex; align-items: center; justify-content: center;}
         .btn-del:hover { color: #c62828; border-color: #c62828; background: #222;}
         
-        #authModal, #qrModal, #statsModal, #staffModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
-        .auth-box, .qr-box, .stats-box, .staff-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
+        #authModal, #qrModal, #statsModal, #staffModal, #manualModal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .auth-box, .qr-box, .stats-box, .staff-box, .manual-box { background: linear-gradient(135deg, #222 0%, #111 100%); border: 2px solid var(--gold-mid); padding: 40px; width: 340px; text-align: center; border-radius: 4px; box-shadow: 0 0 60px rgba(212, 175, 55, 0.15); max-height: 90vh; overflow-y: auto; }
         .qr-img { width: 250px; height: 250px; border: 5px solid #fff; border-radius: 10px; margin-bottom: 20px; display:block; margin: 0 auto 20px auto; }
         
         .cal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -155,6 +155,7 @@
         <div class="d-item" onclick="showDebtors()"><span class="d-val" id="st-miss" style="color:#e57373">-</span><span class="d-lbl">Не сдали 👁️</span></div>
     </div>
     
+    <button class="gold-btn" onclick="openManualModal()" style="margin-bottom: 10px;">➕ ДОБАВИТЬ ВРУЧНУЮ</button>
     <button class="gold-btn" onclick="openStaffModal()" style="margin-bottom: 15px;">👥 УПРАВЛЕНИЕ ШТАТОМ</button>
 
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
@@ -186,6 +187,28 @@
         
         <button class="btn" id="loginBtn" onclick="login()" style="margin-top:0; padding: 18px;">Вход</button>
         <div style="margin-top:30px; color:#666; cursor:pointer; font-size:0.85em; text-transform:uppercase; letter-spacing: 1px;" onclick="document.getElementById('authModal').style.display='none'">ОТМЕНА</div>
+    </div>
+</div>
+
+<div id="manualModal">
+    <div class="manual-box">
+        <h3 style="color:var(--gold-mid); margin-top:0; font-family:'Cinzel';">ДОБАВИТЬ СМЕНУ</h3>
+        
+        <label>Сотрудник</label>
+        <select id="mName" style="margin-bottom:15px;"></select>
+        
+        <label>Дата</label>
+        <input type="date" id="mDate" style="color-scheme:dark; margin-bottom:15px;">
+        
+        <label>Кол-во</label>
+        <select id="mCount">
+            <option value="1">1</option>
+            <option value="0.5">0.5</option>
+            <option value="2">2</option>
+        </select>
+        
+        <button class="btn" onclick="saveManualShift()" style="margin-top:20px;">СОХРАНИТЬ</button>
+        <div style="margin-top:15px; color:#666; cursor:pointer;" onclick="document.getElementById('manualModal').style.display='none'">ОТМЕНА</div>
     </div>
 </div>
 
@@ -233,7 +256,7 @@
 </div>
 
 <script>
-    // 👇👇 ВСТАВЬТЕ ВАШУ ССЫЛКУ НИЖЕ 👇👇
+    // 👇👇 ВСТАВЬТЕ ССЫЛКУ ИЗ ШАГА 3 НИЖЕ 👇👇
     const API = "https://script.google.com/macros/s/AKfycbwTiI-l804UwEVZ9FlgQVFCDc2dKTsDgnRrxyRUzEq52Sbqwn_KjeYr_AXFXagDoy4TWg/exec";
     // 👆👆 ----------------------- 👆👆
 
@@ -285,13 +308,11 @@
 
     function loadEmpSelect() {
         ns.placeholder = "Загрузка...";
-        
-        // 1. Проверяем кэш (чтобы быстро показать)
         const cachedData = localStorage.getItem('wp_cache_employees');
         const cachedTime = localStorage.getItem('wp_cache_time');
         const now = new Date().getTime();
 
-        if (cachedData && cachedTime && (now - cachedTime < 3600000)) { // 1 час
+        if (cachedData && cachedTime && (now - cachedTime < 3600000)) { 
             allEmployees = JSON.parse(cachedData);
             renderDropdown(ns, dd, allEmployees, (name) => { saveUser(); });
             let saved = localStorage.getItem('wp_user');
@@ -299,14 +320,11 @@
             else ns.placeholder = "🔍 Введите имя...";
         }
 
-        // 2. Все равно качаем свежее с сервера
         fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
             if(d.data) {
                 allEmployees = d.data;
-                // Обновляем кэш
                 localStorage.setItem('wp_cache_employees', JSON.stringify(allEmployees));
                 localStorage.setItem('wp_cache_time', now);
-                
                 renderDropdown(ns, dd, allEmployees, (name) => { saveUser(); });
                 let saved = localStorage.getItem('wp_user');
                 if(saved) ns.value = saved;
@@ -337,7 +355,6 @@
 
     ns.addEventListener('input', function() { showFilter(this, dd, allEmployees, saveUser); });
     ns.addEventListener('focus', function() { renderDropdown(ns, dd, allEmployees, saveUser); dd.style.display='block'; });
-    
     adminS.addEventListener('input', function() { showFilter(this, adminDD, adminList, null); });
     adminS.addEventListener('focus', function() { renderDropdown(adminS, adminDD, adminList, null); adminDD.style.display='block'; });
 
@@ -437,18 +454,13 @@
         let name = document.getElementById('adminSearch').value;
         let p = document.getElementById('adminPin').value;
         if(!name || !p) { alert("Заполните имя и ПИН"); return; }
-        
         let btn = document.getElementById('loginBtn');
         btn.innerText = "Проверка..."; btn.disabled = true;
-
         let params = new URLSearchParams();
         params.append('action', 'login_admin');
         params.append('name', name);
         params.append('pin', p);
-
-        fetch(API, {method:'POST', body:params})
-        .then(r => r.json())
-        .then(d => {
+        fetch(API, {method:'POST', body:params}).then(r => r.json()).then(d => {
             btn.innerText = "Вход"; btn.disabled = false;
             if(d.result === "success") {
                 localStorage.setItem('wp_admin_name', name);
@@ -456,9 +468,7 @@
                 document.getElementById('authModal').style.display='none';
                 document.getElementById('adminPanel').style.display='block';
                 loadReq();
-            } else {
-                alert(d.message);
-            }
+            } else { alert(d.message); }
         }).catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Ошибка соединения"); });
     }
     
@@ -475,7 +485,6 @@
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
                    "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
-        
         fetch(API+"?action=get"+auth).then(r=>r.json()).then(d=>{
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
@@ -517,7 +526,6 @@
         const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
         let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
                    "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
-        
         fetch(API + "?action=get_" + type + auth).then(r => r.json()).then(d => {
             btn.innerText = oldText;
             if(d.result === "success" && d.file) {
@@ -534,9 +542,7 @@
     
     function loadStaffList() {
         let sl = document.getElementById('staffList'); sl.innerHTML = "Загрузка...";
-        let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
-                   "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
-                   
+        let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
         fetch(API + "?action=get_staff_list" + auth).then(r=>r.json()).then(d=>{
             if(d.result === "success") {
                 sl.innerHTML = "";
@@ -549,20 +555,15 @@
                     else if(s.role === "Foreman") roleTag = "<span class='role-tag r-Foreman'>👷 Прораб</span>";
 
                     let btnHtml = "";
-                    
                     if(isFired) {
                         btnHtml = `<button class="btn-small" onclick="restoreEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#2e7d32;">ВЕРНУТЬ</button>`;
                     } else {
                         let roles = { "Worker": "Рабочий", "Foreman": "Прораб", "Director": "Директор", "SuperAdmin": "Главный" };
                         let selectHtml = `<select class="role-select" onchange="changeRole('${s.name}', this.value)">`;
-                        for(let k in roles) {
-                            selectHtml += `<option value="${k}" ${s.role===k?'selected':''}>${roles[k]}</option>`;
-                        }
+                        for(let k in roles) { selectHtml += `<option value="${k}" ${s.role===k?'selected':''}>${roles[k]}</option>`; }
                         selectHtml += `</select>`;
-
                         btnHtml = selectHtml + `<button class="btn-small" onclick="fireEmp('${s.name}')" style="width:auto; padding:5px 10px; background:#c62828;">X</button>`;
                     }
-                    
                     let div = document.createElement('div');
                     div.className = "staff-item";
                     div.innerHTML = `<span class="${nameClass}">${s.name} ${roleTag}</span> <div style="display:flex; align-items:center;">${btnHtml}</div>`;
@@ -587,6 +588,62 @@
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d => {
              if(d.result !== "success") alert(d.message);
              loadStaffList(); loadEmpSelect();
+        });
+    }
+
+    // --- ФУНКЦИИ РУЧНОГО ДОБАВЛЕНИЯ ---
+    function openManualModal() {
+        document.getElementById('manualModal').style.display='flex';
+        document.getElementById('mDate').valueAsDate = new Date(); // Сегодня
+        
+        let sel = document.getElementById('mName');
+        sel.innerHTML = "";
+        
+        // Берем список всех сотрудников (включая тех, кто в кэше)
+        let list = allEmployees.length ? allEmployees : []; 
+        // Добавим и админов, если надо, но лучше просто общий список
+        // Если список пуст, попробуем подгрузить
+        if(!list.length) {
+             fetch(API+"?action=get_employees").then(r=>r.json()).then(d=>{
+                 if(d.data) {
+                     d.data.forEach(n => {
+                         let opt = document.createElement('option'); opt.value=n; opt.innerText=n; sel.appendChild(opt);
+                     });
+                 }
+             });
+        } else {
+             list.forEach(n => {
+                 let opt = document.createElement('option'); opt.value=n; opt.innerText=n; sel.appendChild(opt);
+             });
+        }
+    }
+
+    function saveManualShift() {
+        let name = document.getElementById('mName').value;
+        let date = document.getElementById('mDate').value;
+        let count = document.getElementById('mCount').value;
+        
+        if(!name || !date) { alert("Заполните все поля"); return; }
+        
+        let p = getAdminParams(); 
+        p.append('action','admin_add_record');
+        p.append('target_name', name);
+        p.append('target_date', date);
+        p.append('count', count);
+        
+        // Кнопка сохранения
+        let btn = event.target; 
+        btn.innerText = "⏳";
+        
+        fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d => {
+             btn.innerText = "СОХРАНИТЬ";
+             if(d.result === "success") {
+                 alert("✅ Смена добавлена!");
+                 document.getElementById('manualModal').style.display='none';
+                 loadReq(); // Обновить статистику
+             } else {
+                 alert("Ошибка: " + d.message);
+             }
         });
     }
 </script>
