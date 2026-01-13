@@ -171,15 +171,15 @@
         </select>
         <input type="number" id="repYear" value="2026" style="width:70px;">
     </div>
-    <div style="font-size:0.7em; color:#aaa; margin-bottom:5px;">⚠️ Кнопка ниже сбросит ручные правки:</div>
-    <button class="gold-btn" onclick="generateReport()" style="margin-bottom:15px; font-size:0.8em; padding:10px;">🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ</button>
+    
+    <button class="gold-btn" onclick="generateReport()" style="margin-bottom:15px; font-size:0.8em; padding:10px;">1. СФОРМИРОВАТЬ ТАБЕЛЬ</button>
 
     <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
-        <button class="btn-small" onclick="downloadReport('excel')">💾 2. Скачать Excel</button>
-        <button class="btn-small" onclick="downloadReport('pdf')">📄 2. Скачать PDF</button>
+        <button class="btn-small" onclick="downloadReport('excel')">💾 Скачать Excel</button>
+        <button class="btn-small" onclick="downloadReport('pdf')">📄 Скачать PDF</button>
     </div>
     <div style="font-size:0.65em; color:#666; margin-bottom:15px;">
-        * Кнопки "Скачать" безопасны, они не меняют данные.
+        * Кнопка "Сформировать" создает лист. Если он уже есть, сайт спросит, перезаписать его или нет. Скачивание безопасно.
     </div>
 
     <div class="dashboard-stats">
@@ -283,7 +283,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ ИЗ ШАГА 3 НИЖЕ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbx9X_LtUTnq2YxGPf5oihDpcGZ5qq36rbmpDOswgKzjxBWscxvWkIGpHH8U5fdpkmkNkA/exec";
+    const API = "https://script.google.com/macros/s/AKfycbxjn0n-VZjXBo1ld8lx618Xd86273DRcdLEaw-UOTNgxtg0icvFXheb5njMU5IbgO3_uA/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -558,8 +558,35 @@
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
-        // Мы используем новую логику: сначала выбираем лист (месяц/год), потом качаем
-        downloadReport(type);
+        let m = document.getElementById('repMonth').value;
+        let y = document.getElementById('repYear').value;
+        
+        let btn = event.target;
+        let oldText = btn.innerText;
+        btn.innerText = "⏳";
+        btn.disabled = true;
+
+        let p = getAdminParams();
+        p.append('action', 'download_report');
+        p.append('month', m);
+        p.append('year', y);
+        p.append('type', type);
+
+        fetch(API, {method:'POST', body:p}).then(r => r.json()).then(d => {
+            btn.innerText = oldText;
+            btn.disabled = false;
+            
+            if(d.result === "success" && d.file) {
+                const link = document.createElement('a');
+                link.href = "data:" + d.mime + ";base64," + d.file;
+                link.download = d.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Ошибка: " + (d.message || "Лист не найден. Сначала нажмите Сформировать."));
+            }
+        }).catch(e => { btn.innerText = oldText; btn.disabled = false; alert("Ошибка сети"); });
     }
     
     function showQR() {
@@ -677,28 +704,49 @@
         });
     }
 
-    // --- ГЕНЕРАЦИЯ ---
+    // --- ГЕНЕРАЦИЯ (С ЗАЩИТОЙ) ---
     function generateReport() {
         let m = document.getElementById('repMonth').value;
         let y = document.getElementById('repYear').value;
-        if(!confirm("⚠️ ВНИМАНИЕ: Это создаст/обновит лист за " + y + "/" + (parseInt(m)+1) + ".\nРучные правки в таблице будут СТЕРТЫ! Продолжить?")) return;
+        let btn = event.target;
+        btn.innerText = "⏳ Проверка...";
+        btn.disabled = true;
         
         let p = getAdminParams();
         p.append('action', 'generate_report');
         p.append('month', m);
         p.append('year', y);
-        
-        let btn = event.target;
-        btn.innerText = "⏳ Генерация...";
-        btn.disabled = true;
-        
+        p.append('force', 'false'); // Сначала пробуем безопасно
+
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d => {
-             btn.innerText = "🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ";
-             btn.disabled = false;
-             if(d.result === "success") {
-                 alert("✅ Табель обновлен (Лист: " + d.sheetName + ").\nТеперь можно вносить правки в Google Таблице.");
+             if(d.result === "exists") {
+                 // Лист уже есть. Спрашиваем пользователя.
+                 if(confirm("⚠️ Табель за этот месяц уже существует (Лист: " + d.sheetName + ").\n\nЕсли вы нажмете ОК, все ваши ручные правки в таблице БУДУТ СТЕРТЫ и заменены данными из базы.\n\nНажмите ОТМЕНА, чтобы оставить всё как есть.")) {
+                     // Пользователь согласился стереть правки
+                     let p2 = getAdminParams();
+                     p2.append('action', 'generate_report');
+                     p2.append('month', m);
+                     p2.append('year', y);
+                     p2.append('force', 'true'); // Принудительно
+                     
+                     fetch(API, {method:'POST', body:p2}).then(r2=>r2.json()).then(d2 => {
+                         btn.innerText = "🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ";
+                         btn.disabled = false;
+                         if(d2.result === "success") alert("✅ Табель перезаписан заново!");
+                     });
+                 } else {
+                     // Пользователь отменил - ничего не делаем
+                     btn.innerText = "🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ";
+                     btn.disabled = false;
+                 }
+             } else if(d.result === "success") {
+                 btn.innerText = "🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ";
+                 btn.disabled = false;
+                 alert("✅ Табель создан (Лист: " + d.sheetName + "). Можно править.");
              } else {
                  alert("Ошибка: " + d.message);
+                 btn.innerText = "🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ";
+                 btn.disabled = false;
              }
         });
     }
@@ -707,7 +755,6 @@
     function downloadReport(type) {
         let m = document.getElementById('repMonth').value;
         let y = document.getElementById('repYear').value;
-        
         let btn = event.target;
         let oldText = btn.innerText;
         btn.innerText = "⏳";
