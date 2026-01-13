@@ -171,7 +171,16 @@
         </select>
         <input type="number" id="repYear" value="2026" style="width:70px;">
     </div>
-    <button class="gold-btn" onclick="forceGenerate()" style="margin-bottom:15px; font-size:0.8em; padding:10px;">📅 СФОРМИРОВАТЬ ТАБЕЛЬ</button>
+    <div style="font-size:0.7em; color:#aaa; margin-bottom:5px;">⚠️ Кнопка ниже сбросит ручные правки:</div>
+    <button class="gold-btn" onclick="generateReport()" style="margin-bottom:15px; font-size:0.8em; padding:10px;">🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ</button>
+
+    <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
+        <button class="btn-small" onclick="downloadReport('excel')">💾 2. Скачать Excel</button>
+        <button class="btn-small" onclick="downloadReport('pdf')">📄 2. Скачать PDF</button>
+    </div>
+    <div style="font-size:0.65em; color:#666; margin-bottom:15px;">
+        * Кнопки "Скачать" безопасны, они не меняют данные.
+    </div>
 
     <div class="dashboard-stats">
         <div class="d-item"><span class="d-val" id="st-dnevka">-</span><span class="d-lbl">Сдано смен</span></div>
@@ -180,12 +189,6 @@
     
     <button class="gold-btn" onclick="openManualModal()" style="margin-bottom: 10px;">➕ ДОБАВИТЬ ВРУЧНУЮ</button>
     <button class="gold-btn" onclick="openStaffModal()" style="margin-bottom: 15px;">👥 УПРАВЛЕНИЕ ШТАТОМ</button>
-
-    <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;">
-        <button class="btn-small" onclick="loadReq()">↻</button>
-        <button class="btn-small" onclick="dl('excel')">💾 Excel</button>
-        <button class="btn-small" onclick="dl('pdf')">📄 PDF</button>
-    </div>
     
     <button class="gold-btn" onclick="showQR()" style="margin-top: 10px;">📱 ПОКАЗАТЬ QR-КОД</button>
     <div id="list" style="text-align:center; color:#666; font-size:0.9em; margin-top:20px;">Ожидание данных...</div>
@@ -280,7 +283,7 @@
 
 <script>
     // 👇👇 ВСТАВЬТЕ ССЫЛКУ ИЗ ШАГА 3 НИЖЕ 👇👇
-    const API = "https://script.google.com/macros/s/AKfycbzpNpRiKWYhuFaYRDmSzZaSTDqSyFOc8D2wksD-3XmU0br83kWbBk-aBfJeJCamgTRbRg/exec";
+    const API = "https://script.google.com/macros/s/AKfycbx9X_LtUTnq2YxGPf5oihDpcGZ5qq36rbmpDOswgKzjxBWscxvWkIGpHH8U5fdpkmkNkA/exec";
     // 👆👆 ----------------------- 👆👆
 
     const ns = document.getElementById('nSearch');
@@ -303,7 +306,6 @@
     }
 
     window.onload = () => {
-        // Устанавливаем текущий месяц и год по умолчанию
         let now = new Date();
         document.getElementById('repMonth').value = now.getMonth();
         document.getElementById('repYear').value = now.getFullYear();
@@ -383,7 +385,6 @@
 
     ns.addEventListener('input', function() { showFilter(this, dd, allEmployees, saveUser); });
     ns.addEventListener('focus', function() { renderDropdown(ns, dd, allEmployees, saveUser); dd.style.display='block'; });
-    
     adminS.addEventListener('input', function() { showFilter(this, adminDD, adminList, null); });
     adminS.addEventListener('focus', function() { renderDropdown(adminS, adminDD, adminList, null); adminDD.style.display='block'; });
 
@@ -429,7 +430,6 @@
         let days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
         days.forEach(d => calHtml += `<div class="cal-head">${d}</div>`);
         
-        // 🟢 ИСПРАВЛЕНИЕ: ДОБАВЛЯЕМ ПУСТЫЕ ДНИ В НАЧАЛЕ
         for(let e=0; e<statsData.emptySlots; e++) {
             calHtml += `<div class="cal-day" style="opacity:0; pointer-events:none;"></div>`;
         }
@@ -489,18 +489,13 @@
         let name = document.getElementById('adminSearch').value;
         let p = document.getElementById('adminPin').value;
         if(!name || !p) { alert("Заполните имя и ПИН"); return; }
-        
         let btn = document.getElementById('loginBtn');
         btn.innerText = "Проверка..."; btn.disabled = true;
-
         let params = new URLSearchParams();
         params.append('action', 'login_admin');
         params.append('name', name);
         params.append('pin', p);
-
-        fetch(API, {method:'POST', body:params})
-        .then(r => r.json())
-        .then(d => {
+        fetch(API, {method:'POST', body:params}).then(r => r.json()).then(d => {
             btn.innerText = "Вход"; btn.disabled = false;
             if(d.result === "success") {
                 localStorage.setItem('wp_admin_name', name);
@@ -508,9 +503,7 @@
                 document.getElementById('authModal').style.display='none';
                 document.getElementById('adminPanel').style.display='block';
                 loadReq();
-            } else {
-                alert(d.message);
-            }
+            } else { alert(d.message); }
         }).catch(() => { btn.innerText = "Вход"; btn.disabled = false; alert("Ошибка соединения"); });
     }
     
@@ -527,7 +520,6 @@
         let l = document.getElementById('list'); l.innerHTML="Загрузка...";
         let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
                    "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
-        
         fetch(API+"?action=get"+auth).then(r=>r.json()).then(d=>{
             if(d.stats) {
                 document.getElementById('st-dnevka').innerText = d.stats.dnevka;
@@ -566,16 +558,8 @@
     function showDebtors() { if(debtorsList.length) alert("⚠️ НЕ СДАЛИ:\n\n"+debtorsList.join("\n")); else alert("Все сдали!"); }
     
     function dl(type) {
-        const btn = event.target; const oldText = btn.innerText; btn.innerText = "⏳";
-        let auth = "&auth_name=" + encodeURIComponent(localStorage.getItem('wp_admin_name')) + 
-                   "&auth_pin=" + encodeURIComponent(localStorage.getItem('wp_admin_pin'));
-        
-        fetch(API + "?action=get_" + type + auth).then(r => r.json()).then(d => {
-            btn.innerText = oldText;
-            if(d.result === "success" && d.file) {
-                const link = document.createElement('a'); link.href = "data:" + d.mime + ";base64," + d.file; link.download = d.name; document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            } else alert("Ошибка: " + (d.message || "Неизвестно"));
-        }).catch(e => { btn.innerText = oldText; alert("Ошибка сети"); });
+        // Мы используем новую логику: сначала выбираем лист (месяц/год), потом качаем
+        downloadReport(type);
     }
     
     function showQR() {
@@ -693,29 +677,63 @@
         });
     }
 
-    // --- ФУНКЦИЯ ФОРМИРОВАНИЯ ТАБЕЛЯ ---
-    function forceGenerate() {
+    // --- ГЕНЕРАЦИЯ ---
+    function generateReport() {
         let m = document.getElementById('repMonth').value;
         let y = document.getElementById('repYear').value;
-        
-        if(!confirm("Перестроить табель за " + y + "/" + (parseInt(m)+1) + "? Это затрет ручные правки.")) return;
+        if(!confirm("⚠️ ВНИМАНИЕ: Это создаст/обновит лист за " + y + "/" + (parseInt(m)+1) + ".\nРучные правки в таблице будут СТЕРТЫ! Продолжить?")) return;
         
         let p = getAdminParams();
-        p.append('action', 'force_generate_report');
+        p.append('action', 'generate_report');
         p.append('month', m);
         p.append('year', y);
         
         let btn = event.target;
-        btn.innerText = "⏳ Формирование...";
+        btn.innerText = "⏳ Генерация...";
+        btn.disabled = true;
         
         fetch(API, {method:'POST', body:p}).then(r=>r.json()).then(d => {
-             btn.innerText = "📅 СФОРМИРОВАТЬ ТАБЕЛЬ";
+             btn.innerText = "🔄 1. СФОРМИРОВАТЬ / ОБНОВИТЬ";
+             btn.disabled = false;
              if(d.result === "success") {
-                 alert("✅ Табель обновлен!");
+                 alert("✅ Табель обновлен (Лист: " + d.sheetName + ").\nТеперь можно вносить правки в Google Таблице.");
              } else {
                  alert("Ошибка: " + d.message);
              }
         });
+    }
+
+    // --- СКАЧИВАНИЕ ---
+    function downloadReport(type) {
+        let m = document.getElementById('repMonth').value;
+        let y = document.getElementById('repYear').value;
+        
+        let btn = event.target;
+        let oldText = btn.innerText;
+        btn.innerText = "⏳";
+        btn.disabled = true;
+
+        let p = getAdminParams();
+        p.append('action', 'download_report');
+        p.append('month', m);
+        p.append('year', y);
+        p.append('type', type);
+
+        fetch(API, {method:'POST', body:p}).then(r => r.json()).then(d => {
+            btn.innerText = oldText;
+            btn.disabled = false;
+            
+            if(d.result === "success" && d.file) {
+                const link = document.createElement('a');
+                link.href = "data:" + d.mime + ";base64," + d.file;
+                link.download = d.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert("Ошибка: " + (d.message || "Лист не найден. Сначала нажмите Сформировать."));
+            }
+        }).catch(e => { btn.innerText = oldText; btn.disabled = false; alert("Ошибка сети"); });
     }
 </script>
 
